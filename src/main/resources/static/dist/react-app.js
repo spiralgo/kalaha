@@ -30456,6 +30456,11 @@ var Main = /*#__PURE__*/function (_Component) {
   _createClass(Main, [{
     key: "componentDidMount",
     value: function componentDidMount() {
+      this.fetchFriends();
+    }
+  }, {
+    key: "fetchFriends",
+    value: function fetchFriends() {
       var _this2 = this;
 
       fetch("/api/friends").then(function (res) {
@@ -30469,13 +30474,44 @@ var Main = /*#__PURE__*/function (_Component) {
       });
     }
   }, {
+    key: "handleSubmit",
+    value: function handleSubmit(evt) {
+      var _this3 = this;
+
+      evt.preventDefault();
+      fetch("/api/friends", {
+        method: "POST",
+        body: new FormData(evt.target)
+      }).then(function (response) {
+        if (response.ok) {
+          _this3.fetchFriends();
+        } else {
+          alert("Failed to create friend");
+        }
+      })["catch"](function (error) {
+        // Network errors
+        alert(error);
+      });
+      evt.target.reset();
+      return false;
+    }
+  }, {
     key: "render",
     value: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
         id: "main"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("h1", null, "My Best Friends"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_FriendList__WEBPACK_IMPORTED_MODULE_2__.default, {
         friends: this.state.friends
-      }));
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("form", {
+        onSubmit: this.handleSubmit.bind(this)
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", {
+        id: "name",
+        name: "name",
+        type: "text",
+        placeholder: "Enter name"
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", {
+        type: "submit"
+      }, "Create")));
     }
   }]);
 
