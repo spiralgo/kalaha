@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react'
 import {connect} from "react-redux";
-function GameList(props) {
+import {fetchGames} from "../actions/games-action";
+const GameList = ({ fetchGames, games, player}) =>  {
     const [selectedClient,setSelectedClient] = React.useState({
         value: "havuç"
     })
@@ -10,26 +11,8 @@ function GameList(props) {
     useEffect(() => {
         fetchGames();
     }, []);
-    function updateGameList(games) {
-        const { dispatch } = props
-        const action = {
-            type: "UPDATE_GAME_LIST",
-            games: games
-        }
-        dispatch(action)
-    }
-    function fetchGames() {
-        fetch("/game")
-            .then(res => res.json())
-            .then(
-                (response) => {
-                   updateGameList(response);
-                },
-                (error) => {
-                    alert(error);
-                }
-            )
-    }
+
+
 
     function handleSubmit(evt) {
 
@@ -48,9 +31,7 @@ function GameList(props) {
             },
             body:  JSON.stringify({"id": playerId})
         }).then((response) => {
-                if (response.ok) {
-                    fetchGames();
-                } else {
+                if (!response.ok) {
                     alert("Failed to create a game.");
                 }
             }
@@ -61,8 +42,6 @@ function GameList(props) {
         evt.target.reset();
         return false;
     }
-
-    const games = props.games;
     const listItems = games.map((game, i) =>
         <li key={i}>{game.id}</li>
     );
@@ -70,10 +49,10 @@ function GameList(props) {
         <div>
         <ul>{listItems}</ul>
         <form onSubmit={handleSubmit.bind(this)}>
-            <input id="name" name="name" type="text" placeholder="Enter name"/>
-            <button type='submit'>Create Game</button>
+            <input id="name" name="name" type="text" placeholder="Enter Name"/>
+            <button type='submit'>Start a Game</button>
         </form>
-
+            <p>Games you can join:</p>
             <select value={selectedClient} onChange={handleSelectChange}> //set value here
                 <option value="one">One</option>
                 <option value="two">Two</option>
@@ -89,4 +68,8 @@ const mapStateToProps = state => {
         player: state.player
     }
 }
-export default connect(mapStateToProps)(GameList);
+
+const mapDispatchToProps = dispatch => ({
+    fetchGames: () => dispatch(fetchGames())
+});
+export default connect(mapStateToProps, mapDispatchToProps)(GameList);
