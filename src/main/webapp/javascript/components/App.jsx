@@ -1,5 +1,5 @@
 import React from 'react'
-import Game from './Game'
+import '../../css/Main.css'
 import Player from "./Player";
 import {
     Switch,

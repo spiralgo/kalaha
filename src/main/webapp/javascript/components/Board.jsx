@@ -1,5 +1,7 @@
 import React from 'react'
-import Pocket from './Pocket';
+import Pit from './Pit';
+import {Table} from "react-bootstrap";
+import Mancala from "./Mancala";
 
 function Board(props){
     var inlineStyle = {
@@ -7,31 +9,38 @@ function Board(props){
         height: '300px',
         verticalAlign: 'top'
     }
-    function makePlayRow(rowArray, rowIndex){
-        let rowCopy = rowArray.slice();
-        if(rowIndex === 0){
-            rowCopy.reverse();
-            console.log(rowCopy);
-        }
+    function addPit(pit){
+
         return(
-            <div key={rowIndex}>
-                {rowCopy.map((content, index) =><Pocket count={content} id={`${rowIndex}-${rowIndex === 0 ? rowArray.length -1 - index : index}`} key={`${rowIndex}-${index}`} onPocketClick={props.onPocketClick}/>)}
-            </div>
+
+             <td>
+                <Pit content = {pit}/>
+            </td>
         )
     }
-    return (
+    if(props.gameBoard == null) return <div></div>;
+
+        return (
         <div style={inlineStyle}>
-            <div id='player2-score' style={inlineStyle}>
-                <Pocket count={props.player2Score} />
-            </div>
-            <div id='play-area' style={inlineStyle}>
-                {props.gameBoard.map((playerSideArray, index) => {
-                    return(makePlayRow(playerSideArray, index));
-                })}
-            </div>
-            <div id='player1-score' style={inlineStyle} >
-                <Pocket count={props.player1Score}/>
-            </div>
+            <Table striped bordered hover variant="dark">
+                <tbody>
+                <tr>
+                    <td rowSpan={2}><Mancala count={props.player2Score}  label = {"Kalaha 1:"} score = {props.gameBoard.pits[13].value}/></td>
+                    {props.gameBoard.pits.slice(7,13).map((playerSideArray) => {
+                        return(addPit(playerSideArray));
+
+                    })}
+                    <td rowSpan={2}><Mancala count={props.player1Score} label = {"Kalaha 2:" } score = {props.gameBoard.pits[6].value} /></td>
+                </tr>
+                <tr>
+                    {props.gameBoard.pits.slice(0,6).map((playerSideArray) => {
+                        return(addPit(playerSideArray));
+
+                    })}
+                </tr>
+                </tbody>
+            </Table>
+
         </div>
     )
 }

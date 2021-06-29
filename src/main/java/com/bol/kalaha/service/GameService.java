@@ -63,10 +63,7 @@ public class GameService {
 	}
 	
 	public List<Game> getGamesToJoin() {
-	    List<Game> games = gameRepository.findAll()
-                .stream().filter(
-                        game -> (((!game.isOver()) && game.getPlayerOne().equals(game.getPlayerTwo()))) 
-                ).collect(Collectors.toList());		
+	    List<Game> games = gameRepository.findAll();
 	    return games;
 	}
 

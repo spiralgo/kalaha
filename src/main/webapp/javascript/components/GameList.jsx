@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react'
 import {connect} from "react-redux";
-import {fetchGames, joinAGame} from "../actions/games-action";
+import {fetchGames, getBoard, joinAGame} from "../actions/games-action";
 import SockJsClient from 'react-stomp';
+import Board from "./Board";
 const SOCKET_URL = "http://localhost:8080/websocket";
+import Button from 'react-bootstrap/Button';
 
-const GameList = ({ fetchGames, games, joinAGame, gameToJoin}) =>  {
+const GameList = ({ fetchGames, games, joinAGame, gameToJoin, board, getBoard}) =>  {
 
     let onConnected = () => {
         console.log("Connected!!")
@@ -17,11 +19,11 @@ const GameList = ({ fetchGames, games, joinAGame, gameToJoin}) =>  {
     function handleSelectChange(event) {
         setSelectedGame(event.target.value);
         joinAGame(event.target.value);
+        getBoard(event.target.value);
     }
     useEffect(() => {
         fetchGames();
      }, []);
-
 
 
     function handleSubmit(evt) {
@@ -59,6 +61,7 @@ const GameList = ({ fetchGames, games, joinAGame, gameToJoin}) =>  {
     );
     return (
         <div>
+
             <SockJsClient
                 url={SOCKET_URL}
                 topics={['/update']}
@@ -67,16 +70,18 @@ const GameList = ({ fetchGames, games, joinAGame, gameToJoin}) =>  {
                 onMessage={msg => onMessageReceived(msg)}
                 debug={true}
             />
-
-            <p>Games you can join:</p>
+            <p>You can either start a new game...</p>
+            <form onSubmit={handleSubmit.bind(this)}>
+                <Button type={"submit"}>Start a Game</Button>
+            </form>
+            <p>or join am existing game:</p>
 
             <select value={selectedGame} onChange={handleSelectChange}> //set value here
                 {listItems}
             </select>
 
-        <form onSubmit={handleSubmit.bind(this)}>
-            <button type='submit'>Start a Game</button>
-        </form>
+
+            <Board gameBoard={board} player1Score="0" player2Score="0" />
 
         </div>
     );
@@ -84,6 +89,7 @@ const GameList = ({ fetchGames, games, joinAGame, gameToJoin}) =>  {
 
 const mapStateToProps = state => {
     return {
+        board: state.board,
         games: state.games,
         gameToJoin: state.gameToJoin
     }
@@ -91,6 +97,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
     fetchGames: () => dispatch(fetchGames()),
-    joinAGame: (gameId) => dispatch(joinAGame(gameId))
+    joinAGame: (gameId) => dispatch(joinAGame(gameId)),
+    getBoard: (gameId) => dispatch(getBoard(gameId)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(GameList);

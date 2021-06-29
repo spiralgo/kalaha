@@ -1,19 +1,22 @@
 import React from 'react';
 
-function Pocket(props){
+function Mancala(props){
     var inlineStyle = {
         display: 'inline-block',
-        border: '1px solid black',
-        minHeight: '150px',
+        border: '1px solid white',
+        minHeight: '330px',
         width: '150px',
         height: 'inherit',
         textAlign: 'center'
     }
     return (
         <div style={inlineStyle} onClick={() => props.onPocketClick(props.id)}>
-            {props.count}
+             {props.label}
+             <br></br>
+            {props.score}
         </div>
     )
+
 }
 
-export default Pocket;
+export default Mancala;
