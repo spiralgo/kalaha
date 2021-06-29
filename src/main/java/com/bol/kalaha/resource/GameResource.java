@@ -68,8 +68,8 @@ public class GameResource {
 		}
 		// KAHALA PLAYER ONE
 		pitService.createNewPit(board, PlayService.KALAHA_PLAYER_TWO, ZERO);
-		
-		//simpMessagingTemplate.convertAndSend("/update/lobby", "update");
+
+		webSocketResource.publishWebSocket( "refresh_game_list");
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{gameId}")
 				.buildAndExpand (createdGame.getId()).toUri();
 		response.setHeader("Location", uri.toASCIIString());

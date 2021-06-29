@@ -14,11 +14,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer{
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/update");
         config.setApplicationDestinationPrefixes("/");
+
     }
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/kalaha-ws").setAllowedOrigins("*");
+        registry.addEndpoint("/websocket").setAllowedOriginPatterns("*").withSockJS();
     }
 
 	

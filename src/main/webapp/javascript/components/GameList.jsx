@@ -1,16 +1,26 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {connect} from "react-redux";
-import {fetchGames} from "../actions/games-action";
-const GameList = ({ fetchGames, games, player}) =>  {
-    const [selectedClient,setSelectedClient] = React.useState({
-        value: "havuç"
-    })
+import {fetchGames, joinAGame} from "../actions/games-action";
+import SockJsClient from 'react-stomp';
+const SOCKET_URL = "http://localhost:8080/websocket";
+
+const GameList = ({ fetchGames, games, joinAGame, gameToJoin}) =>  {
+
+    let onConnected = () => {
+        console.log("Connected!!")
+    }
+
+    let onMessageReceived = (msg) => {
+         if(msg="refresh_game_list") fetchGames();
+    }
+    const [selectedGame,setSelectedGame] = React.useState({})
     function handleSelectChange(event) {
-        setSelectedClient(event.target.value);
+        setSelectedGame(event.target.value);
+        joinAGame(event.target.value);
     }
     useEffect(() => {
         fetchGames();
-    }, []);
+     }, []);
 
 
 
@@ -43,21 +53,31 @@ const GameList = ({ fetchGames, games, player}) =>  {
         return false;
     }
     const listItems = games.map((game, i) =>
-        <li key={i}>{game.id}</li>
+
+        <option value={game.id}>#{game.id} by {game.playerOne.name}</option>
+
     );
     return (
         <div>
-        <ul>{listItems}</ul>
+            <SockJsClient
+                url={SOCKET_URL}
+                topics={['/update']}
+                onConnect={onConnected}
+                onDisconnect={console.log("Disconnected!")}
+                onMessage={msg => onMessageReceived(msg)}
+                debug={true}
+            />
+
+            <p>Games you can join:</p>
+
+            <select value={selectedGame} onChange={handleSelectChange}> //set value here
+                {listItems}
+            </select>
+
         <form onSubmit={handleSubmit.bind(this)}>
-            <input id="name" name="name" type="text" placeholder="Enter Name"/>
             <button type='submit'>Start a Game</button>
         </form>
-            <p>Games you can join:</p>
-            <select value={selectedClient} onChange={handleSelectChange}> //set value here
-                <option value="one">One</option>
-                <option value="two">Two</option>
-                <option value="three">Three</option>
-            </select>
+
         </div>
     );
 }
@@ -65,11 +85,12 @@ const GameList = ({ fetchGames, games, player}) =>  {
 const mapStateToProps = state => {
     return {
         games: state.games,
-        player: state.player
+        gameToJoin: state.gameToJoin
     }
 }
 
 const mapDispatchToProps = dispatch => ({
-    fetchGames: () => dispatch(fetchGames())
+    fetchGames: () => dispatch(fetchGames()),
+    joinAGame: (gameId) => dispatch(joinAGame(gameId))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(GameList);
