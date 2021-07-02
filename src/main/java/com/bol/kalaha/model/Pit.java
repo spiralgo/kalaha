@@ -1,33 +1,31 @@
 package com.bol.kalaha.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Table (name="pit")
-public class Pit {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+@RequiredArgsConstructor
+public class Pit extends BasicModel{
 
-	@ManyToOne
+	@ManyToOne(
+			fetch = FetchType.LAZY
+	)
+	@JoinColumn(name = "board_id")
 	@JsonBackReference
 	private Board board;
 
+	@NotNull
 	@Column (name="pit_number_in_game")
 	private Integer position;
-	
+
+	@NotNull
 	@Column (name = "value")
 	private Integer value;
-	
-	public Long getId() {
-		return id;
-	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public Board getBoard() {
 		return board;
@@ -51,18 +49,6 @@ public class Pit {
 
 	public void setValue(Integer value) {
 		this.value = value;
-	}
-
-
-	public Pit(Board board, Integer position, Integer value) {
-		super();
-		this.board = board;
-		this.position = position;
-		this.value = value;
-	}
-
-	public Pit() {
-		super();
 	}
 
 }

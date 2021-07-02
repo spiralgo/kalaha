@@ -13,6 +13,9 @@ import java.util.List;
 class GameRulesTest {
     public static final Integer KALAHA_PLAYER_ONE = 7;
     public static final Integer KALAHA_PLAYER_TWO = 14;
+    public static final Integer NUMBER_OF_STONES = 6;
+    public static final Integer EMPTY_KALAHA = 0;
+
     GameRules gameRules = new GameRules();
     Board board;
 
@@ -39,7 +42,7 @@ class GameRulesTest {
         System.out.println(Arrays.toString(pits.toArray()));
         //TODO:  pits.forEach(a -> System.out.println(a.getValue()));
          assertEquals(0, pits.get(positionOfPitToPlay-1).getValue());
-        assertEquals(1, pits.get(KALAHA_PLAYER_TWO-1).getValue());
+         assertEquals(1, pits.get(KALAHA_PLAYER_TWO-1).getValue());
     }
 
     void setUp(){
@@ -48,9 +51,15 @@ class GameRulesTest {
         List<Pit> pits = new ArrayList<>();
         for (int i = 1; i <=KALAHA_PLAYER_TWO; i++){
             if(i == KALAHA_PLAYER_ONE || i == KALAHA_PLAYER_TWO){
-                pits.add(new Pit(board, i, 0));
+                Pit kalaha = new Pit();
+                kalaha.setPosition(i);
+                kalaha.setValue(EMPTY_KALAHA);
+                pits.add(kalaha);
             } else {
-                pits.add(new Pit(board, i, 6));
+                Pit pit = new Pit();
+                pit.setPosition(i);
+                pit.setValue(NUMBER_OF_STONES);
+                pits.add(pit);
 
             }
         }

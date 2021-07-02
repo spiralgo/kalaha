@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.bol.kalaha.config.WebSocketActionEnum;
 import com.bol.kalaha.exception.ResourceException;
+import com.bol.kalaha.util.BoardUtil;
 import com.bol.kalaha.util.WebSocketUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,13 +34,12 @@ import com.bol.kalaha.model.Player;
 import com.bol.kalaha.service.BoardService;
 import com.bol.kalaha.service.GameService;
 import com.bol.kalaha.service.PitService;
-import com.bol.kalaha.service.PlayService;
+
 
 @RestController
 @RequestMapping ("/game")
 public class GameResource {
-	public static final Integer NUMBER_OF_STONES = 6;
-	public static final Integer ZERO = 0;
+
 	@Autowired
 	private GameService gameService;
 	@Autowired
@@ -52,24 +52,11 @@ public class GameResource {
 	@PostMapping(value="/create")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Game> createNewGame (@RequestBody Player pOne, HttpServletResponse response) {
-	 	Game createdGame;
-		Board board;
-		createdGame = gameService.createNewGame(pOne, pOne);
-		board = boardService.createNewBoard(createdGame);
-		// PITS PLAYER ONE
-		for (int i = PlayService.PIT_0_PLAYER_ONE; i < PlayService.KALAHA_PLAYER_ONE; i++) {
-			pitService.createNewPit(board, i, NUMBER_OF_STONES);
-		}
-		// KAHALA PLAYER ONE
-		pitService.createNewPit(board, PlayService.KALAHA_PLAYER_ONE, ZERO);
-		
-		// PITS PLAYER ONE
-		for (int i = PlayService.PIT_0_PLAYER_TWO; i < PlayService.KALAHA_PLAYER_TWO; i++) {
-			pitService.createNewPit(board, i, NUMBER_OF_STONES);
-		}
-		// KAHALA PLAYER ONE
-		pitService.createNewPit(board, PlayService.KALAHA_PLAYER_TWO, ZERO);
-
+	 	Game createdGame= new Game(pOne, pOne);
+		gameService.createNewGame(createdGame);
+		Board board = BoardUtil.initiateABoard();
+		board.setGame(createdGame);
+		boardService.createNewBoard(board);
 
 		webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_GAME_LIST,
 				"Game #"+ createdGame.getId() +" is created by " + pOne.getName() ));

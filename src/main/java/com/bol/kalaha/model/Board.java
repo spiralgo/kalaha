@@ -2,70 +2,25 @@ package com.bol.kalaha.model;
 
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table (name = "board")
-public class Board {
+public class Board extends BasicModel{
 
-	@Id
-	@GeneratedValue (strategy = GenerationType.IDENTITY)
-	@Column (name="id")
-	private Long id;
-	
-	@OneToOne
+ 	@OneToOne
 	@JoinColumn (name = "game_id")
 	@JsonBackReference
+	@Getter @Setter
 	private Game game;
-	
-	@OneToMany (mappedBy = "board")
+
+	@OneToMany(mappedBy = "board", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+	@Getter @Setter
 	private List<Pit> pits;
-	
-	
-	public Board() {
-	}
-	public Board (Game game) {
-		this.game = game;
-	}
-	public Board(Long id, Game game, List<Pit> pits) {
-		super();
-		this.id = id;
-		this.game = game;
-		this.pits = pits;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Game getGame() {
-		return game;
-	}
-
-	public void setGame(Game game) {
-		this.game = game;
-	}
-
-	public List<Pit> getPits() {
-		return pits;
-	}
-
-	public void setPits(List<Pit> pits) {
-		this.pits = pits;
-	}
 
 }

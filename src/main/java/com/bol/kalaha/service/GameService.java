@@ -2,7 +2,6 @@ package com.bol.kalaha.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,9 +29,8 @@ public class GameService {
 
 
 
-	public Game createNewGame (Player playerOne, Player playerTwo) {		
-		Game game = new Game (playerOne, playerTwo);
-		gameRepository.save(game);
+	public Game createNewGame(Game game) {
+ 	    gameRepository.save(game);
 		return game;
 	}
 
@@ -41,7 +39,7 @@ public class GameService {
 	}
 	
 	public Game changeTurn(Game game) {
-		if (game.getTurnOfWithId().equals(game.getPlayerOne())) 
+		if (game.getTurnOfWithId().getId().equals(game.getPlayerOne().getId()))
 			game.setTurnOfWithId(game.getPlayerTwo());
 		else
 			game.setTurnOfWithId(game.getPlayerOne());		

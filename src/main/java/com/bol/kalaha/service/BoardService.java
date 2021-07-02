@@ -19,8 +19,7 @@ public class BoardService {
         this.boardRepository = boardRepositoryMock;
     }
 
-    public Board createNewBoard(Game game) {
-        Board board = new Board(game);
+    public Board createNewBoard(Board board) {
         boardRepository.save(board);
         return board;
 

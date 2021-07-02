@@ -53,7 +53,7 @@ public class PlayResource {
 				
 				ResponseEntity <Board> response = validateMove(game.get(),board.get(), player.get(), position); 
 				if (response == null) {
-					boolean isPlayerOne = (player.get().equals(game.get().getPlayerOne()));
+					boolean isPlayerOne = (player.get().getId().equals(game.get().getPlayerOne().getId()));
 					resultBoard = playService.movePlay(board.get(), isPlayerOne, position);
 					if (resultBoard == null) return ResponseEntity.badRequest().build();
 					
@@ -93,12 +93,14 @@ public class PlayResource {
 
 		if (!MoveValidationUtil.isMyTurn(game, player))
 			throw new ResourceException(HttpStatus.BAD_REQUEST, "It is not your turn.");
-		if (game.getPlayerOne().equals(game.getPlayerTwo()))
+		if (game.getPlayerOne().getId().equals(game.getPlayerTwo().getId()))
 			throw new ResourceException(HttpStatus.BAD_REQUEST, "You need an opponent.");
 
-		if (game.getPlayerOne().equals(game.getTurnOfWithId()) && (position < PlayService.PIT_0_PLAYER_ONE || position >= PlayService.KALAHA_PLAYER_ONE))
+		if (game.getPlayerOne().getId().equals(game.getTurnOfWithId().getId())
+				&& (position < PlayService.PIT_0_PLAYER_ONE || position >= PlayService.KALAHA_PLAYER_ONE))
 			throw new ResourceException(HttpStatus.BAD_REQUEST, "Your pits are on the top row.");
-		else if (game.getPlayerTwo().equals(game.getTurnOfWithId()) && (position < PlayService.PIT_0_PLAYER_TWO || position >= PlayService.KALAHA_PLAYER_TWO))
+		else if (game.getPlayerTwo().getId().equals(game.getTurnOfWithId().getId())
+				&& (position < PlayService.PIT_0_PLAYER_TWO || position >= PlayService.KALAHA_PLAYER_TWO))
 			throw new ResourceException(HttpStatus.BAD_REQUEST, "Your pits are on the bottom row.");
 
 		return null;

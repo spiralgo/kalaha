@@ -19,12 +19,6 @@ public class PitService {
 		this.pitRepository = pitRepositoryMock;
 	}
 
-	public Pit createNewPit(Board board, Integer position, Integer value) {
-		Pit pit = new Pit(board, position, value);
-		pitRepository.save(pit);
-		return pit;
-	}
-
 	public Pit updatePitNumberOfStones(Board board, Integer position, Integer newValue, boolean isToSum) {
 		Pit toMergePit = pitRepository.findByBoardAndPosition(board, position);
 

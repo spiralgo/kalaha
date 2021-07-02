@@ -1,25 +1,21 @@
 package com.bol.kalaha.model;
 
-import java.io.Serializable;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 
 
 @Entity
 @Table (name="game")
-public class Game implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
-	
-	@Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-	private Long id;	
+@RequiredArgsConstructor
+public class Game extends BasicModel {
+
 	
 	@ManyToOne
 		@JoinColumn (
 				name="player_one_id",
 
-				referencedColumnName = "id")		
+				referencedColumnName = "id")
 	private Player playerOne;
 	@ManyToOne
 		@JoinColumn (
@@ -48,29 +44,19 @@ public class Game implements Serializable {
 
 	
 	
-	public Game(Long id, Player playerOne, Player playerTwo, Player turnOfWithId, boolean isOver) {
+	public Game(Player playerOne, Player playerTwo, Player turnOfWithId, boolean isOver) {
 		super();
-		this.id = id;
+
 		this.playerOne = playerOne;
 		this.playerTwo = playerTwo;
 		this.turnOfWithId = turnOfWithId;
 		this.isOver = isOver;
 	}
 
-
-
-	public Game() {
-		super();
-	}
 	public Player getPlayerOne () {
 		return playerOne;
 	}
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
+
 	public Player getPlayerTwo() {
 		return playerTwo;
 	}
