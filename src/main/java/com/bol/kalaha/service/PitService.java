@@ -15,10 +15,6 @@ public class PitService {
 	@Autowired
 	private PitRepository pitRepository;
 
-	public PitService() {
-		// TODO Auto-generated constructor stub
-	}
-
 	public PitService(PitRepository pitRepositoryMock) {
 		this.pitRepository = pitRepositoryMock;
 	}
@@ -41,16 +37,7 @@ public class PitService {
 		pitRepository.save(toMergePit);
 		return toMergePit;
 	}
-	public Pit updatePitNumberOfStones(Pit toMergePit, Integer newValue, boolean isToSum) {
-	    if (isToSum) {
-			toMergePit.setValue(toMergePit.getValue() + newValue);
-		} else {
-			toMergePit.setValue(newValue);
-		}
 
-		pitRepository.save(toMergePit);
-		return toMergePit;
-	}	
 
 	public Pit updatePitIncrement(Board board, Integer position) {
 		Pit toMergePit = pitRepository.findByBoardAndPosition(board, position);

@@ -3,35 +3,58 @@ import {connect} from "react-redux";
 import {fetchGames, getBoard, joinAGame} from "../actions/games-action";
 import SockJsClient from 'react-stomp';
 import Board from "./Board";
+
 const SOCKET_URL = "http://localhost:8080/websocket";
 import Button from 'react-bootstrap/Button';
+import {Alert} from "react-bootstrap";
 
-const GameList = ({ fetchGames, games, joinAGame, gameToJoin, board, getBoard}) =>  {
+const GameList = ({fetchGames, games, joinAGame, gameToJoin, board, getBoard}) => {
 
     let onConnected = () => {
         console.log("Connected!!")
     }
 
     let onMessageReceived = (msg) => {
-         if(msg="refresh_game_list") fetchGames();
+        switch (msg.action) {
+            case "refresh_game_list":
+                fetchGames();
+                break;
+
+            case "refresh_board":
+                getBoard(gameToJoin.id);
+                break;
+
+            case "end":
+                getBoard(gameToJoin.id);
+                break;
+        }
+        showMessage(msg.message, "primary");
     }
-    const [selectedGame,setSelectedGame] = React.useState({})
+    const [selectedGame, setSelectedGame] = React.useState({})
+    const [type, setType] = useState("");
+    const [message, setMessage] = useState("");
     function handleSelectChange(event) {
         setSelectedGame(event.target.value);
         joinAGame(event.target.value);
         getBoard(event.target.value);
     }
+
     useEffect(() => {
         fetchGames();
-     }, []);
+    }, []);
 
-
+    function showMessage(message, type){
+     setMessage(message);
+     setType(type);
+    }
     function handleSubmit(evt) {
 
         evt.preventDefault();
         const playerId = localStorage.getItem("playerId");
-        if(playerId==null) {
-            alert("You need to create player first.");
+        const playerName = localStorage.getItem("playerName");
+
+        if (playerId == null) {
+            showMessage("You need to create player first.", "warning");
             return;
         }
         fetch("/game/create", {
@@ -41,23 +64,24 @@ const GameList = ({ fetchGames, games, joinAGame, gameToJoin, board, getBoard}) 
                 'Authorization': 'Bearer my-token',
                 'My-Custom-Header': 'foobar'
             },
-            body:  JSON.stringify({"id": playerId})
+            body: JSON.stringify({"id": playerId, "name": playerName})
         }).then((response) => {
                 if (!response.ok) {
-                    alert("Failed to create a game.");
+                    showMessage("Failed to create a game.", "danger");
+
                 }
             }
         ).catch((error) => {
-            // Network errors
-            alert(error);
+            showMessage(error, "danger");
+
         });
         evt.target.reset();
         return false;
     }
+
     const listItems = games.map((game, i) =>
 
         <option value={game.id}>#{game.id} by {game.playerOne.name}</option>
-
     );
     return (
         <div>
@@ -70,6 +94,11 @@ const GameList = ({ fetchGames, games, joinAGame, gameToJoin, board, getBoard}) 
                 onMessage={msg => onMessageReceived(msg)}
                 debug={true}
             />
+
+            <Alert variant={type}>
+              {message}
+            </Alert>
+
             <p>You can either start a new game...</p>
             <form onSubmit={handleSubmit.bind(this)}>
                 <Button type={"submit"}>Start a Game</Button>
@@ -81,7 +110,7 @@ const GameList = ({ fetchGames, games, joinAGame, gameToJoin, board, getBoard}) 
             </select>
 
 
-            <Board gameBoard={board} player1Score="0" player2Score="0" />
+            <Board gameBoard={board} gameToJoin={gameToJoin} player1Score="0" player2Score="0"/>
 
         </div>
     );

@@ -9,32 +9,35 @@ function Board(props){
         height: '300px',
         verticalAlign: 'top'
     }
-    function addPit(pit){
+    function addPit(pit, gameToJoin){
 
         return(
 
              <td>
-                <Pit content = {pit}/>
+                <Pit content = {pit} gameToJoin = {gameToJoin}/>
             </td>
         )
     }
-    if(props.gameBoard == null) return <div></div>;
+    if(props.gameToJoin == null || props.gameBoard == null) return <div></div>;
 
         return (
         <div style={inlineStyle}>
             <Table striped bordered hover variant="dark">
                 <tbody>
                 <tr>
-                    <td rowSpan={2}><Mancala count={props.player2Score}  label = {"Kalaha 1:"} score = {props.gameBoard.pits[13].value}/></td>
-                    {props.gameBoard.pits.slice(7,13).map((playerSideArray) => {
-                        return(addPit(playerSideArray));
+                    <td rowSpan={2}><Mancala count={props.player1Score} label = {"Kalaha 1:" } score = {props.gameBoard.pits[6].value} /></td>
+
+
+                    {props.gameBoard.pits.slice(0,6).reverse().map((playerSideArray) => {
+                        return(addPit(playerSideArray, props.gameToJoin));
 
                     })}
-                    <td rowSpan={2}><Mancala count={props.player1Score} label = {"Kalaha 2:" } score = {props.gameBoard.pits[6].value} /></td>
+                    <td rowSpan={2}><Mancala count={props.player2Score}  label = {"Kalaha 2:"} score = {props.gameBoard.pits[13].value}/></td>
+
                 </tr>
                 <tr>
-                    {props.gameBoard.pits.slice(0,6).map((playerSideArray) => {
-                        return(addPit(playerSideArray));
+                    {props.gameBoard.pits.slice(7,13).map((playerSideArray) => {
+                        return(addPit(playerSideArray, props.gameToJoin));
 
                     })}
                 </tr>

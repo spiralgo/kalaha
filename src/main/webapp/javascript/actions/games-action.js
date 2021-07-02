@@ -43,7 +43,7 @@ export const move = (gameId, pitPosition) => {
         axios
             .post(MOVE_API+"/"+gameId+"/"+localStorage.getItem("playerId")+"/"+pitPosition, {})
             .then(response => dispatch(updateBoard(response.data)))
-            .catch(error =>  alert("It is your opponent's turn."));
+            .catch(error =>  alert(error.response.data));
     };
 };
 

@@ -26,6 +26,10 @@ public class BoardService {
 
     }
 
+    public void updateBoard(Board board) {
+        boardRepository.save(board);
+    }
+
     public Optional<Board> getBoardById(Long id) {
         return boardRepository.findById(id);
     }

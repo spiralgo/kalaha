@@ -16,7 +16,7 @@ function Pit(props){
      }
      return (
         <div style={inlineStyle} onClick={() => onPitClick() }>
-             Pit {props.content.position}
+             Pit {props.content.position%7}
              <br/>
              {props.content.value}
         </div>
@@ -25,9 +25,7 @@ function Pit(props){
 }
 
 const mapStateToProps = state => {
-    return {
-        gameToJoin: state.gameToJoin
-    }
+    return {};
 }
 
 const mapDispatchToProps = dispatch => ({

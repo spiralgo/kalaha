@@ -40,13 +40,11 @@ public class GameService {
 		return gameRepository.findById(gameId);
 	}
 	
-	public Game changeTurn (Game game) {
+	public Game changeTurn(Game game) {
 		if (game.getTurnOfWithId().equals(game.getPlayerOne())) 
 			game.setTurnOfWithId(game.getPlayerTwo());
 		else
 			game.setTurnOfWithId(game.getPlayerOne());		
-		
-		
 		return game;
 	}
 

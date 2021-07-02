@@ -3,7 +3,13 @@ package com.bol.kalaha.resource;
 import java.util.Optional;
 
 
+import com.bol.kalaha.config.WebSocketActionEnum;
+import com.bol.kalaha.exception.ResourceException;
+import com.bol.kalaha.util.GameRules;
+import com.bol.kalaha.util.MoveValidationUtil;
+import com.bol.kalaha.util.WebSocketUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,15 +52,25 @@ public class PlayResource {
 			if (!playService.checkGameOver(board.get())) {
 				
 				ResponseEntity <Board> response = validateMove(game.get(),board.get(), player.get(), position); 
-				if (response == null) {					
-					resultBoard = playService.movePlay(board.get(), player.get(), position);
+				if (response == null) {
+					boolean isPlayerOne = (player.get().equals(game.get().getPlayerOne()));
+					resultBoard = playService.movePlay(board.get(), isPlayerOne, position);
 					if (resultBoard == null) return ResponseEntity.badRequest().build();
 					
 					if (playService.checkGameOver(board.get())) {
 						playService.finishGame(board.get().getGame());
-						webSocketResource.publishWebSocket("end");
-					} else 
-						webSocketResource.publishWebSocket("update");
+						webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(WebSocketActionEnum.END,
+																	"The game ends."));
+					} else {
+						GameRules gameRules = new GameRules();
+						if(!gameRules.checkExtraMove(isPlayerOne, board.get().getPits())){
+							gameService.changeTurn(game.get());
+						}
+						webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_BOARD,
+													"It is the turn of " + game.get().getTurnOfWithId().getName()));
+
+					}
+					 boardService.updateBoard(board.get());
 					return ResponseEntity.ok(resultBoard);
 				}
 			}			
@@ -70,14 +86,21 @@ public class PlayResource {
 
         // Return board
         return board;
-    }	
-	
+    }
+
+
 	public ResponseEntity<Board> validateMove (Game game, Board board, Player player, Integer position) {
-		if (game.getPlayerOne().equals(game.getPlayerTwo())) return ResponseEntity.badRequest().build();
+
+		if (!MoveValidationUtil.isMyTurn(game, player))
+			throw new ResourceException(HttpStatus.BAD_REQUEST, "It is not your turn.");
+		if (game.getPlayerOne().equals(game.getPlayerTwo()))
+			throw new ResourceException(HttpStatus.BAD_REQUEST, "You need an opponent.");
+
 		if (game.getPlayerOne().equals(game.getTurnOfWithId()) && (position < PlayService.PIT_0_PLAYER_ONE || position >= PlayService.KALAHA_PLAYER_ONE))
-			return ResponseEntity.badRequest().build();
+			throw new ResourceException(HttpStatus.BAD_REQUEST, "Your pits are on the top row.");
 		else if (game.getPlayerTwo().equals(game.getTurnOfWithId()) && (position < PlayService.PIT_0_PLAYER_TWO || position >= PlayService.KALAHA_PLAYER_TWO))
-			return ResponseEntity.badRequest().build();
+			throw new ResourceException(HttpStatus.BAD_REQUEST, "Your pits are on the bottom row.");
+
 		return null;
 	}
 }

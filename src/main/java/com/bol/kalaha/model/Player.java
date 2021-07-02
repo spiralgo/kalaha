@@ -14,11 +14,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table (name = "player")
 public class Player implements Serializable {
-    
-    
-    /**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -29,9 +25,7 @@ public class Player implements Serializable {
 	@Size(min = 3, max = 50)
     private String name;
     
-	@NotNull
-	private String password;
-	
+
     public Player () {
     	
     }
@@ -59,21 +53,7 @@ public class Player implements Serializable {
 	public Long getId() {
         return id;
     }
-	
-	
-	public String getPassword() {
-		return password;
-	}
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public Player(@NotNull @Size(min = 3, max = 50) String name, @NotNull String password) {
-		super();
-		this.name = name;
-		this.password = password;
-	}
 
 	@Override
 	public int hashCode() {

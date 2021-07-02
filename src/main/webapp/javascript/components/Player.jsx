@@ -55,11 +55,8 @@ function Player(props) {
                    value={state.name}
                    onChange={handleChange}
                    type="text" placeholder="Enter a nickname"/>
-            <input id="password" name="password"
-                   value={state.password}
-                   onChange={handleChange}
-                   type="password" placeholder="Password"/>
-            <button type='submit'>Create a User</button>
+
+            <button type='submit'>Create a player</button>
         </form>
         </div>
     );

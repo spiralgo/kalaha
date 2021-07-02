@@ -6,6 +6,9 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.bol.kalaha.config.WebSocketActionEnum;
+import com.bol.kalaha.exception.ResourceException;
+import com.bol.kalaha.util.WebSocketUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -49,9 +52,7 @@ public class GameResource {
 	@PostMapping(value="/create")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Game> createNewGame (@RequestBody Player pOne, HttpServletResponse response) {
-		//Optional <Player> playerOne = playerService.findById(pOne.getId());
-		
-		Game createdGame;
+	 	Game createdGame;
 		Board board;
 		createdGame = gameService.createNewGame(pOne, pOne);
 		board = boardService.createNewBoard(createdGame);
@@ -69,13 +70,11 @@ public class GameResource {
 		// KAHALA PLAYER ONE
 		pitService.createNewPit(board, PlayService.KALAHA_PLAYER_TWO, ZERO);
 
-		webSocketResource.publishWebSocket( "refresh_game_list");
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{gameId}")
-				.buildAndExpand (createdGame.getId()).toUri();
-		response.setHeader("Location", uri.toASCIIString());
-		
-		
-		return ResponseEntity.created(uri).body(createdGame);	
+
+		webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_GAME_LIST,
+				"Game #"+ createdGame.getId() +" is created by " + pOne.getName() ));
+
+		return ResponseEntity.ok(createdGame);
 		
 	}
 	
@@ -95,11 +94,11 @@ public class GameResource {
 	@ResponseBody
  	public ResponseEntity<Game> joinGame (@PathVariable Long gameId, @RequestBody Player player) {
 		Optional<Game> game = gameService.findById(gameId);		
-		ResponseEntity <Game> answer = validateJoin(game);
+		ResponseEntity <Game> answer = validateJoin(game, player.getId());
 		if (answer == null) {
 			Game savedGame = game.get();
 			savedGame.setPlayerTwo(player);	
-			webSocketResource.publishWebSocket("update");
+			//TODO: webSocketResource.publishWebSocket(WebSocketActionEnum.REFRESH_BOARD.getValue());
 			return ResponseEntity.ok(gameService.joinGame(savedGame));
 		}
 		
@@ -119,10 +118,16 @@ public class GameResource {
         return games;
     }
 	
-	private ResponseEntity <Game> validateJoin (Optional<Game> game) {
-		if (!game.isPresent()) return ResponseEntity.notFound().build();		
-		if (!game.get().getPlayerOne().equals(game.get().getPlayerTwo()))
-			return ResponseEntity.status(HttpStatus.FORBIDDEN).build(); //if game is already full
+	private ResponseEntity <Game> validateJoin(Optional<Game> game, Long id) {
+		if (!game.isPresent())
+		throw new ResourceException(HttpStatus.BAD_REQUEST, "You need to create a game first.");
+
+		long playerOneId = game.get().getPlayerOne().getId();
+		long playerTwoId = game.get().getPlayerTwo().getId();
+		if (playerOneId == id || playerTwoId == id)
+			return ResponseEntity.ok(game.get());
+		if (playerTwoId != id && playerOneId!=playerTwoId)
+			return ResponseEntity.ok(game.get());
 		
 		return null;
 	}
