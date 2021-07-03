@@ -1,4 +1,4 @@
-# A humble documentation on the case project.
+# A humble documentation on the Kahala project.
 
 
 # Database configuration:
