@@ -32,7 +32,7 @@ http://localhost:8080/swagger-ui.html
 
  
  # How is the code test implemented?
-TDD is used as much as possible, in order to achieve a nice percent of coverage.
+TDD is used as much as possible, in order to achieve a nice percent of test coverage, a readble, meaningful but quite a minimalistic code.
 
 GameRulesTest is the starting point to code the project as a test-case is provided for each rule of the game.
  
