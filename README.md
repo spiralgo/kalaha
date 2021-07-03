@@ -1,5 +1,13 @@
 # A humble documentation on the Kahala project.
 
+ # Run the project using Docker:
+
+ - `docker build --tag=kalaha:latest .`
+ - `docker-compose up --build`
+
+  In order to stop the project: 
+ - `docker-compose down`
+ 
 
 # Database configuration:
  The reviewer can find the basic database configuration in `application.properties`:
@@ -13,16 +21,6 @@ spring.datasource.url=jdbc:mysql://myapp-mysql:3306/gameStateDB?createDatabaseIf
 >
 >spring.datasource.url=jdbc:mysql://localhost:3306/gameStateDB?createDatabaseIfNotExist=true
 
-
- # Run the project using Docker:
-
- - `docker build --tag=kalaha:latest .`
- - `docker-compose up --build`
-
-  In order to stop the project: 
- - `docker-compose down`
- 
- 
   
  # API Documentation:
 The documentation for APIs has been created using Swagger.
