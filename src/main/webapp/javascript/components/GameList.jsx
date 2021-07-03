@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {connect} from "react-redux";
-import {fetchGames, getBoard, joinAGame} from "../actions/games-action";
+import {fetchGames, joinAGame} from "../actions/games-action";
 import SockJsClient from 'react-stomp';
 import Board from "./Board";
 
@@ -8,7 +8,7 @@ const SOCKET_URL = "http://localhost:8080/websocket";
 import Button from 'react-bootstrap/Button';
 import {Alert} from "react-bootstrap";
 
-const GameList = ({fetchGames, games, joinAGame, gameToJoin, board, getBoard}) => {
+const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
 
     let onConnected = () => {
         console.log("Connected!!")
@@ -21,11 +21,11 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin, board, getBoard}) =
                 break;
 
             case "refresh_board":
-                getBoard(gameToJoin.id);
+                joinAGame(gameToJoin.id);
                 break;
 
             case "end":
-                getBoard(gameToJoin.id);
+                joinAGame(gameToJoin.id);
                 break;
         }
         showMessage(msg.message, "primary");
@@ -36,7 +36,6 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin, board, getBoard}) =
     function handleSelectChange(event) {
         setSelectedGame(event.target.value);
         joinAGame(event.target.value);
-        getBoard(event.target.value);
     }
 
     useEffect(() => {
@@ -110,7 +109,7 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin, board, getBoard}) =
             </select>
 
 
-            <Board gameBoard={board} gameToJoin={gameToJoin} player1Score="0" player2Score="0"/>
+            <Board gameToJoin={gameToJoin} player1Score="0" player2Score="0"/>
 
         </div>
     );
@@ -118,7 +117,6 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin, board, getBoard}) =
 
 const mapStateToProps = state => {
     return {
-        board: state.board,
         games: state.games,
         gameToJoin: state.gameToJoin
     }
@@ -127,6 +125,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     fetchGames: () => dispatch(fetchGames()),
     joinAGame: (gameId) => dispatch(joinAGame(gameId)),
-    getBoard: (gameId) => dispatch(getBoard(gameId)),
+
 });
 export default connect(mapStateToProps, mapDispatchToProps)(GameList);

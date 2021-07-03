@@ -28,10 +28,7 @@ public class GameResource {
 
 	@Autowired
 	private GameService gameService;
-	@Autowired
-	private BoardService boardService;
-	@Autowired
-	private PitService pitService;
+
 	@Autowired
     private WebSocketResource webSocketResource;
 	
@@ -51,19 +48,7 @@ public class GameResource {
 		return ResponseEntity.ok(createdGame);
 		
 	}
-	
-	
-	@GetMapping(value="/{gameId}")
-	@ResponseBody
- 	public ResponseEntity<Optional<Game>> findGame(@PathVariable Long gameId) {
-		Optional<Game> game = gameService.findById(gameId);
-		
-		if (game.isPresent()) {
-			return ResponseEntity.ok(game);
-		}
-		return ResponseEntity.notFound().build();	
-	}
-	
+
 	@PatchMapping(value="/join/{gameId}")
 	@ResponseBody
  	public ResponseEntity<Game> joinGame(@PathVariable Long gameId, @RequestBody Player player) {
@@ -98,7 +83,7 @@ public class GameResource {
 
 		Player playerOne = game.get().getPlayerOne();
 		Player playerTwo = game.get().getPlayerTwo();
-		if (player.equals(playerOne)  || player.equals(playerTwo)  ||  playerTwo == null)
+		if (player.equals(playerOne)  || player.equals(playerTwo))
 	 		return ResponseEntity.ok(game.get());
 
 		return null;

@@ -38,13 +38,13 @@ public class GameRules {
             if(isPlayerOne && theLastPosition>=1 && theLastPosition < KALAHA_PLAYER_ONE) {
                 pits.get(theLastIndex).setValue(0);
                 pits.get(opponentIndex).setValue(0);
-                int currentKahalaValue = pits.get(KALAHA_PLAYER_ONE-1).getValue();
-                pits.get(KALAHA_PLAYER_ONE-1).setValue(currentKahalaValue + opponentsPitValue+ 1);
+                int currentKalahaValue = pits.get(KALAHA_PLAYER_ONE-1).getValue();
+                pits.get(KALAHA_PLAYER_ONE-1).setValue(currentKalahaValue + opponentsPitValue+ 1);
             }else if(theLastPosition>KALAHA_PLAYER_ONE && theLastPosition < KALAHA_PLAYER_TWO) {
                 pits.get(theLastIndex).setValue(0);
                 pits.get(opponentIndex).setValue(0);
-                int currentKahalaValue = pits.get(KALAHA_PLAYER_TWO-1).getValue();
-                pits.get(KALAHA_PLAYER_TWO-1).setValue(currentKahalaValue+ opponentsPitValue + 1);
+                int currentKalahaValue = pits.get(KALAHA_PLAYER_TWO-1).getValue();
+                pits.get(KALAHA_PLAYER_TWO-1).setValue(currentKalahaValue+ opponentsPitValue + 1);
             }
 
      }

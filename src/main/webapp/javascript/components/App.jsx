@@ -7,20 +7,12 @@ import {
     Link
 } from "react-router-dom";
 import GameList from "./GameList";
+import NavbarComponent from "./Navbar";
 
 function App(){
     return (
     <div>
-        <ul>
-            <li>
-                <Link to="/">Create Player</Link>
-            </li>
-            <li>
-                <Link to="/games">Game List</Link>
-            </li>
-        </ul>
-
-        <hr />
+        <NavbarComponent></NavbarComponent>
 
         <Switch>
             <Route exact path="/">
