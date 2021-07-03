@@ -1,39 +1,25 @@
 package com.bol.kalaha.resource;
 
-import java.net.URI;
-import java.util.List;
-import java.util.Optional;
-
-import javax.servlet.http.HttpServletResponse;
-
 import com.bol.kalaha.config.WebSocketActionEnum;
-import com.bol.kalaha.exception.ResourceException;
-import com.bol.kalaha.util.BoardUtil;
-import com.bol.kalaha.util.WebSocketUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import com.bol.kalaha.config.WebSocketResource;
+import com.bol.kalaha.exception.ResourceException;
 import com.bol.kalaha.model.Board;
 import com.bol.kalaha.model.Game;
 import com.bol.kalaha.model.Player;
 import com.bol.kalaha.service.BoardService;
 import com.bol.kalaha.service.GameService;
 import com.bol.kalaha.service.PitService;
+import com.bol.kalaha.util.BoardUtil;
+import com.bol.kalaha.util.WebSocketUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -51,15 +37,16 @@ public class GameResource {
 	
 	@PostMapping(value="/create")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Game> createNewGame (@RequestBody Player pOne, HttpServletResponse response) {
-	 	Game createdGame= new Game(pOne, pOne);
-		gameService.createNewGame(createdGame);
+	public ResponseEntity<Game> createNewGame(@RequestBody Player playerOne, HttpServletResponse response) {
+		Game createdGame= new Game();
+		createdGame.setPlayerOne(playerOne);
 		Board board = BoardUtil.initiateABoard();
 		board.setGame(createdGame);
-		boardService.createNewBoard(board);
-
+		createdGame.setBoard(board);
+		createdGame.setTurnOfWithId(playerOne);
+		gameService.createNewGame(createdGame);
 		webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_GAME_LIST,
-				"Game #"+ createdGame.getId() +" is created by " + pOne.getName() ));
+				"Game #"+ createdGame.getId() +" is created by " + playerOne.getName()));
 
 		return ResponseEntity.ok(createdGame);
 		
@@ -68,7 +55,7 @@ public class GameResource {
 	
 	@GetMapping(value="/{gameId}")
 	@ResponseBody
- 	public ResponseEntity<Optional<Game>> findGame (@PathVariable Long gameId) {
+ 	public ResponseEntity<Optional<Game>> findGame(@PathVariable Long gameId) {
 		Optional<Game> game = gameService.findById(gameId);
 		
 		if (game.isPresent()) {
@@ -79,13 +66,13 @@ public class GameResource {
 	
 	@PatchMapping(value="/join/{gameId}")
 	@ResponseBody
- 	public ResponseEntity<Game> joinGame (@PathVariable Long gameId, @RequestBody Player player) {
+ 	public ResponseEntity<Game> joinGame(@PathVariable Long gameId, @RequestBody Player player) {
 		Optional<Game> game = gameService.findById(gameId);		
-		ResponseEntity <Game> answer = validateJoin(game, player.getId());
+		ResponseEntity <Game> answer = validateJoin(game, player);
 		if (answer == null) {
 			Game savedGame = game.get();
 			savedGame.setPlayerTwo(player);	
-			//TODO: webSocketResource.publishWebSocket(WebSocketActionEnum.REFRESH_BOARD.getValue());
+
 			return ResponseEntity.ok(gameService.joinGame(savedGame));
 		}
 		
@@ -105,17 +92,15 @@ public class GameResource {
         return games;
     }
 	
-	private ResponseEntity <Game> validateJoin(Optional<Game> game, Long id) {
+	private ResponseEntity <Game> validateJoin(Optional<Game> game, Player player) {
 		if (!game.isPresent())
 		throw new ResourceException(HttpStatus.BAD_REQUEST, "You need to create a game first.");
 
-		long playerOneId = game.get().getPlayerOne().getId();
-		long playerTwoId = game.get().getPlayerTwo().getId();
-		if (playerOneId == id || playerTwoId == id)
-			return ResponseEntity.ok(game.get());
-		if (playerTwoId != id && playerOneId!=playerTwoId)
-			return ResponseEntity.ok(game.get());
-		
+		Player playerOne = game.get().getPlayerOne();
+		Player playerTwo = game.get().getPlayerTwo();
+		if (player.equals(playerOne)  || player.equals(playerTwo)  ||  playerTwo == null)
+	 		return ResponseEntity.ok(game.get());
+
 		return null;
 	}
 	

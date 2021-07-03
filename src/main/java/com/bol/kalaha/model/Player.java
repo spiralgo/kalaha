@@ -21,4 +21,21 @@ public class Player extends BasicModel {
     @Getter @Setter
 	private String name;
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+
+		if (!(o instanceof Player))
+			return false;
+
+		Player other = (Player) o;
+
+		return getId() != null &&
+				getId().equals(other.getId());
+	}
+
+	@Override
+	public int hashCode() {
+		return getClass().hashCode();
+	}
 }

@@ -13,9 +13,9 @@ import lombok.Setter;
 @Table (name = "board")
 public class Board extends BasicModel{
 
- 	@OneToOne
-	@JoinColumn (name = "game_id")
-	@JsonBackReference
+
+	@OneToOne(mappedBy = "board")
+    @JsonBackReference
 	@Getter @Setter
 	private Game game;
 

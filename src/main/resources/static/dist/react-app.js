@@ -2423,10 +2423,7 @@ function Mancala(props) {
     textAlign: 'center'
   };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", {
-    style: inlineStyle,
-    onClick: function onClick() {
-      return props.onPocketClick(props.id);
-    }
+    style: inlineStyle
   }, props.label, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("br", null), props.score);
 }
 

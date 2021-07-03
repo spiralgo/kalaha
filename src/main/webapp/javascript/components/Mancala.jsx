@@ -1,7 +1,7 @@
 import React from 'react';
 
 function Mancala(props){
-    var inlineStyle = {
+    const inlineStyle = {
         display: 'inline-block',
         border: '1px solid white',
         minHeight: '330px',
@@ -10,7 +10,7 @@ function Mancala(props){
         textAlign: 'center'
     }
     return (
-        <div style={inlineStyle} onClick={() => props.onPocketClick(props.id)}>
+        <div style={inlineStyle}>
              {props.label}
              <br></br>
             {props.score}

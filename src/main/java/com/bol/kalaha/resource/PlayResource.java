@@ -44,8 +44,11 @@ public class PlayResource {
 	
 	@RequestMapping(value="/{gameId}/{playerId}/{position}", method = RequestMethod.POST)
 	public ResponseEntity<Board> movePlay (@PathVariable Long gameId, @PathVariable Long playerId, @PathVariable Integer position) {
-		Optional<Player> player = playerRepository.findById(playerId);
 		Optional<Game> game = gameService.findById(gameId);
+		if (game.get().getPlayerTwo() == null)
+			throw new ResourceException(HttpStatus.BAD_REQUEST, "You need an opponent.");
+
+		Optional<Player> player = playerRepository.findById(playerId);
 		Optional <Board> board = boardService.getBoardByGame(game.get());
 		Board resultBoard;
 		if (player.isPresent() && game.isPresent() && board.isPresent())  {
@@ -53,7 +56,7 @@ public class PlayResource {
 				
 				ResponseEntity <Board> response = validateMove(game.get(),board.get(), player.get(), position); 
 				if (response == null) {
-					boolean isPlayerOne = (player.get().getId().equals(game.get().getPlayerOne().getId()));
+					boolean isPlayerOne = (player.get().equals(game.get().getPlayerOne()));
 					resultBoard = playService.movePlay(board.get(), isPlayerOne, position);
 					if (resultBoard == null) return ResponseEntity.badRequest().build();
 					
@@ -93,13 +96,11 @@ public class PlayResource {
 
 		if (!MoveValidationUtil.isMyTurn(game, player))
 			throw new ResourceException(HttpStatus.BAD_REQUEST, "It is not your turn.");
-		if (game.getPlayerOne().getId().equals(game.getPlayerTwo().getId()))
-			throw new ResourceException(HttpStatus.BAD_REQUEST, "You need an opponent.");
 
-		if (game.getPlayerOne().getId().equals(game.getTurnOfWithId().getId())
+		if (game.getTurnOfWithId().equals(game.getPlayerOne())
 				&& (position < PlayService.PIT_0_PLAYER_ONE || position >= PlayService.KALAHA_PLAYER_ONE))
 			throw new ResourceException(HttpStatus.BAD_REQUEST, "Your pits are on the top row.");
-		else if (game.getPlayerTwo().getId().equals(game.getTurnOfWithId().getId())
+		else if (game.getTurnOfWithId().equals(game.getPlayerTwo())
 				&& (position < PlayService.PIT_0_PLAYER_TWO || position >= PlayService.KALAHA_PLAYER_TWO))
 			throw new ResourceException(HttpStatus.BAD_REQUEST, "Your pits are on the bottom row.");
 

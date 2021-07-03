@@ -39,7 +39,7 @@ public class GameService {
 	}
 	
 	public Game changeTurn(Game game) {
-		if (game.getTurnOfWithId().getId().equals(game.getPlayerOne().getId()))
+		if (game.getTurnOfWithId().equals(game.getPlayerOne()))
 			game.setTurnOfWithId(game.getPlayerTwo());
 		else
 			game.setTurnOfWithId(game.getPlayerOne());		
