@@ -10,7 +10,7 @@
  
 
 # Database configuration:
- The reviewer can find the basic database configuration in `application.properties`:
+ The reviewer can find the basic database configuration in `application.properties` file.
  
 If Docker will be used:
 spring.datasource.url=jdbc:mysql://myapp-mysql:3306/gameStateDB?createDatabaseIfNotExist=true
