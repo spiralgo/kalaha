@@ -2328,8 +2328,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_games_action__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../actions/games-action */ "./src/main/webapp/javascript/actions/games-action.js");
 /* harmony import */ var react_stomp__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-stomp */ "./node_modules/react-stomp/dist/client.js");
 /* harmony import */ var _Board__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Board */ "./src/main/webapp/javascript/components/Board.jsx");
-/* harmony import */ var react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-bootstrap/Button */ "./node_modules/react-bootstrap/esm/Button.js");
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Alert.js");
+/* harmony import */ var react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-bootstrap/Button */ "./node_modules/react-bootstrap/esm/Button.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Alert.js");
+/* harmony import */ var _config_properties__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../config/properties */ "./src/main/webapp/javascript/config/properties.js");
 var _this = undefined;
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
@@ -2351,7 +2352,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var SOCKET_URL = "http://localhost:8080/websocket";
+
 
 var GameList = function GameList(_ref) {
   var fetchGames = _ref.fetchGames,
@@ -2448,7 +2449,7 @@ var GameList = function GameList(_ref) {
     }, "#", game.id, " by ", game.playerOne.name);
   });
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_stomp__WEBPACK_IMPORTED_MODULE_3__.default, {
-    url: SOCKET_URL,
+    url: _config_properties__WEBPACK_IMPORTED_MODULE_5__.properties.webSocketUrl,
     topics: ['/update'],
     onConnect: onConnected,
     onDisconnect: console.log("Disconnected!"),
@@ -2456,11 +2457,11 @@ var GameList = function GameList(_ref) {
       return onMessageReceived(msg);
     },
     debug: true
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_5__.default, {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_6__.default, {
     variant: type
   }, message), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "You can either start a new game..."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("form", {
     onSubmit: handleSubmit.bind(_this)
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_6__.default, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_7__.default, {
     type: "submit"
   }, "Start a Game")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "or join am existing game:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("select", {
     value: selectedGame,
@@ -2748,6 +2749,24 @@ var mapStateToProps = function mapStateToProps(state) {
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_redux__WEBPACK_IMPORTED_MODULE_2__.connect)(mapStateToProps)(Player));
+
+/***/ }),
+
+/***/ "./src/main/webapp/javascript/config/properties.js":
+/*!*********************************************************!*\
+  !*** ./src/main/webapp/javascript/config/properties.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "properties": () => (/* binding */ properties)
+/* harmony export */ });
+properties = {
+  webSocketUrl: {"NODE_ENV":"production","WEBSOCKET_URL":"http://localhost:8080/websocket"}.WEBSOCKET_URL
+};
+var properties;
 
 /***/ }),
 
@@ -50706,7 +50725,7 @@ function load() {
 
 
   if (!r && typeof process !== 'undefined' && 'env' in process) {
-    r = process.env.DEBUG;
+    r = {"NODE_ENV":"production","WEBSOCKET_URL":"http://localhost:8080/websocket"}.DEBUG;
   }
 
   return r;
