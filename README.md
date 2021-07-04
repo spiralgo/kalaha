@@ -38,6 +38,7 @@ GameRulesTest is the starting point to code the project as a test-case is provid
  
  
 # TODO: further possible improvements
+ - Seperating the monolith into microservices. Creating another repo for the React UI.
  - A user management system to construct an authorization and authentication system starting with a login and register form.
  - Publishing websocket messages to specific users or specific "game rooms", instead of broadcasting the message to all players online.
  - A more easy-to-use UI with sounds and animations.
