@@ -50,7 +50,7 @@ public class PlayResource {
         if (player.isPresent() && game.isPresent() && board.isPresent()) {
             if (!playService.checkGameOver(board.get())) {
 
-                ResponseEntity<Board> response = validateMove(game.get(), board.get(), player.get(), position);
+                ResponseEntity<Board> response = validateMove(game.get(), player.get(), position);
                 if (response == null) {
                     boolean isPlayerOne = (player.get().equals(game.get().getPlayerOne()));
                     resultBoard = playService.movePlay(board.get(), isPlayerOne, position);
@@ -77,19 +77,7 @@ public class PlayResource {
         return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping(value = "/board/{gameId}")
-    public Board getBoard(@PathVariable Long gameId) {
-
-        // Get info
-        Game game = gameService.findById(gameId).get();
-        Board board = boardService.getBoardByGame(game).get();
-
-        // Return board
-        return board;
-    }
-
-
-    public ResponseEntity<Board> validateMove(Game game, Board board, Player player, Integer position) {
+    public ResponseEntity<Board> validateMove(Game game, Player player, Integer position) {
 
         if (!MoveValidationUtil.isMyTurn(game, player))
             throw new ResourceException(HttpStatus.BAD_REQUEST, "It is not your turn.");
