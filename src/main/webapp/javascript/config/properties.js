@@ -1,4 +1,4 @@
 properties = {
-    webSocketUrl: process.env.REACT_APP_WEBSOCKET_URL,
+    webSocketUrl: process.env.WEBSOCKET_URL,
  };
 export var properties;
