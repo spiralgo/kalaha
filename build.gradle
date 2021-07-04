@@ -17,6 +17,9 @@ node {
 bootJar {
     launchScript()
 }
+jar {
+    enabled = false
+}
 repositories {
     mavenCentral()
 }
