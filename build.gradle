@@ -11,6 +11,7 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 node {
+    download = true
     version = '14.17.1'
 }
 
