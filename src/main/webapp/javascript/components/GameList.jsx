@@ -5,8 +5,7 @@ import SockJsClient from 'react-stomp';
 import Board from "./Board";
 import Button from 'react-bootstrap/Button';
 import {Alert} from "react-bootstrap";
-
-const SOCKET_URL = "http://localhost:8080/websocket";
+import {properties} from "../config/properties";
 
 const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
 
@@ -88,7 +87,7 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
         <div>
 
             <SockJsClient
-                url={SOCKET_URL}
+                url={properties.webSocketUrl}
                 topics={['/update']}
                 onConnect={onConnected}
                 onDisconnect={console.log("Disconnected!")}
