@@ -14,7 +14,9 @@ node {
     download = true
     version = '14.17.1'
 }
-
+springBoot {
+    executable = true
+}
 repositories {
     mavenCentral()
 }
