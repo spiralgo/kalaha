@@ -5,7 +5,7 @@ module.exports = {
     plugins: [
 
         new webpack.DefinePlugin({
-            'process.env': JSON.stringify(dotenv.config().parsed) // it will automatically pick up key values from .env file
+            'process.env': JSON.stringify(dotenv.config().parsed) // it will automatically pick up key values from .env.local file
         })
 
     ],
