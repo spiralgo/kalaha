@@ -36,4 +36,10 @@ minimalistic code.
 
 GameRulesTest is the starting point to code the project as a test-case is provided for each rule of the game.
  
-
+ 
+# TODO: Possible further improvements
+ - A user management system to construct an authorization and authentication system starting with a login and register form.
+ - Publishing websocket messages to specific users or specific "game rooms", instead of broadcasting the message to all players online.
+ - A more easy-to-use UI with sounds and animations.
+ - A mobile client preferable coded with Flutter. That will use the same Spring Boot server via REST services and WebSocket.
+ 
