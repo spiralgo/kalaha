@@ -2,8 +2,8 @@ import React from 'react';
 import {move} from "../actions/games-action";
 import {connect} from "react-redux";
 
-function Pit(props){
-     const inlineStyle = {
+function Pit(props) {
+    const inlineStyle = {
         display: 'inline-block',
         border: '1px solid black',
         minHeight: '150px',
@@ -11,14 +11,16 @@ function Pit(props){
         height: 'inherit',
         textAlign: 'center',
     }
-     function onPitClick(){
-         props.move(props.gameToJoin.id, props.content.position);
-     }
-     return (
-        <div style={inlineStyle} onClick={() => onPitClick() }>
-             Pit {props.content.position%7}
-             <br/>
-             {props.content.value}
+
+    function onPitClick() {
+        props.move(props.gameToJoin.id, props.content.position);
+    }
+
+    return (
+        <div style={inlineStyle} onClick={() => onPitClick()}>
+            Pit {props.content.position % 7}
+            <br/>
+            {props.content.value}
         </div>
     )
 

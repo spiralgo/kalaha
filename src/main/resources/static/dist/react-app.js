@@ -2349,9 +2349,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
 var SOCKET_URL = "http://localhost:8080/websocket";
-
-
 
 var GameList = function GameList(_ref) {
   var fetchGames = _ref.fetchGames,
@@ -2540,7 +2540,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Navbar.js");
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Nav.js");
-
 
 
 
@@ -2938,7 +2937,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "#home {\r\n    font-size: 30px;\r\n    margin: 20px 100px 20px 100px;\r\n    display: inline-block;\r\n}\r\n#home a {background: #ffffff;\r\n    border: 4px solid #00a651;\r\n    padding: 10px 20px 10px 20px;\r\n    color: #00a651;\r\n    text-align: center;\r\n}\r\n#home a:hover {background: #00a651;\r\n    color: #ffffff;\r\n}", "",{"version":3,"sources":["webpack://./src/main/webapp/css/Main.css"],"names":[],"mappings":"AAAA;IACI,eAAe;IACf,6BAA6B;IAC7B,qBAAqB;AACzB;AACA,SAAS,mBAAmB;IACxB,yBAAyB;IACzB,4BAA4B;IAC5B,cAAc;IACd,kBAAkB;AACtB;AACA,eAAe,mBAAmB;IAC9B,cAAc;AAClB","sourcesContent":["#home {\r\n    font-size: 30px;\r\n    margin: 20px 100px 20px 100px;\r\n    display: inline-block;\r\n}\r\n#home a {background: #ffffff;\r\n    border: 4px solid #00a651;\r\n    padding: 10px 20px 10px 20px;\r\n    color: #00a651;\r\n    text-align: center;\r\n}\r\n#home a:hover {background: #00a651;\r\n    color: #ffffff;\r\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "#home {\r\n    font-size: 30px;\r\n    margin: 20px 100px 20px 100px;\r\n    display: inline-block;\r\n}\r\n\r\n#home a {\r\n    background: #ffffff;\r\n    border: 4px solid #00a651;\r\n    padding: 10px 20px 10px 20px;\r\n    color: #00a651;\r\n    text-align: center;\r\n}\r\n\r\n#home a:hover {\r\n    background: #00a651;\r\n    color: #ffffff;\r\n}", "",{"version":3,"sources":["webpack://./src/main/webapp/css/Main.css"],"names":[],"mappings":"AAAA;IACI,eAAe;IACf,6BAA6B;IAC7B,qBAAqB;AACzB;;AAEA;IACI,mBAAmB;IACnB,yBAAyB;IACzB,4BAA4B;IAC5B,cAAc;IACd,kBAAkB;AACtB;;AAEA;IACI,mBAAmB;IACnB,cAAc;AAClB","sourcesContent":["#home {\r\n    font-size: 30px;\r\n    margin: 20px 100px 20px 100px;\r\n    display: inline-block;\r\n}\r\n\r\n#home a {\r\n    background: #ffffff;\r\n    border: 4px solid #00a651;\r\n    padding: 10px 20px 10px 20px;\r\n    color: #00a651;\r\n    text-align: center;\r\n}\r\n\r\n#home a:hover {\r\n    background: #00a651;\r\n    color: #ffffff;\r\n}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

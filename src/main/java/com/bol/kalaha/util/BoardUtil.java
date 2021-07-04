@@ -13,27 +13,27 @@ public class BoardUtil {
     public static final Integer EMPTY_KALAHA = 0;
 
     public static Board initiateABoard() {
-            Board board = new Board();
+        Board board = new Board();
 
-            List<Pit> pits = new ArrayList<>();
-            for (int i = 1; i <=KALAHA_PLAYER_TWO; i++){
-                if(i == KALAHA_PLAYER_ONE || i == KALAHA_PLAYER_TWO){
-                    Pit kalaha = new Pit();
-                    kalaha.setPosition(i);
-                    kalaha.setValue(EMPTY_KALAHA);
-                    kalaha.setBoard(board);
-                    pits.add(kalaha);
-                } else {
-                    Pit pit = new Pit();
-                    pit.setPosition(i);
-                    pit.setValue(NUMBER_OF_STONES);
-                    pit.setBoard(board);
-                    pits.add(pit);
+        List<Pit> pits = new ArrayList<>();
+        for (int i = 1; i <= KALAHA_PLAYER_TWO; i++) {
+            if (i == KALAHA_PLAYER_ONE || i == KALAHA_PLAYER_TWO) {
+                Pit kalaha = new Pit();
+                kalaha.setPosition(i);
+                kalaha.setValue(EMPTY_KALAHA);
+                kalaha.setBoard(board);
+                pits.add(kalaha);
+            } else {
+                Pit pit = new Pit();
+                pit.setPosition(i);
+                pit.setValue(NUMBER_OF_STONES);
+                pit.setBoard(board);
+                pits.add(pit);
 
-                }
             }
-            board.setPits(pits);
-            return board;
         }
+        board.setPits(pits);
+        return board;
+    }
 
 }

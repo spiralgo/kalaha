@@ -8,8 +8,9 @@ import javax.persistence.*;
 @MappedSuperclass
 public class BasicModel {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    @Getter @Setter
+    @Getter
+    @Setter
     private Long id;
 }

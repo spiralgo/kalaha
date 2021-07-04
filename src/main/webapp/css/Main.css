@@ -3,12 +3,16 @@
     margin: 20px 100px 20px 100px;
     display: inline-block;
 }
-#home a {background: #ffffff;
+
+#home a {
+    background: #ffffff;
     border: 4px solid #00a651;
     padding: 10px 20px 10px 20px;
     color: #00a651;
     text-align: center;
 }
-#home a:hover {background: #00a651;
+
+#home a:hover {
+    background: #00a651;
     color: #ffffff;
 }

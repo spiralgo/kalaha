@@ -2,11 +2,13 @@ import React from 'react'
 import "regenerator-runtime/runtime";
 
 import {connect} from "react-redux";
+
 function Player(props) {
     const [state, setState] = React.useState({
         name: "",
         password: ""
     })
+
     function handleChange(evt) {
         const value = evt.target.value;
         setState({
@@ -14,7 +16,6 @@ function Player(props) {
             [evt.target.name]: value
         });
     }
-
 
 
     function handleSubmit(evt) {
@@ -26,7 +27,7 @@ function Player(props) {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer my-token'
             },
-            body:  JSON.stringify({"name": state.name, "password": state.password })
+            body: JSON.stringify({"name": state.name, "password": state.password})
         }).then(async (response) => {
                 if (response.ok) {
                     const body = await response.json();
@@ -50,14 +51,14 @@ function Player(props) {
     return (
         <div>
 
-        <form onSubmit={handleSubmit.bind(this)}>
-            <input id="name" name="name"
-                   value={state.name}
-                   onChange={handleChange}
-                   type="text" placeholder="Enter a nickname"/>
+            <form onSubmit={handleSubmit.bind(this)}>
+                <input id="name" name="name"
+                       value={state.name}
+                       onChange={handleChange}
+                       type="text" placeholder="Enter a nickname"/>
 
-            <button type='submit'>Create a player</button>
-        </form>
+                <button type='submit'>Create a player</button>
+            </form>
         </div>
     );
 }

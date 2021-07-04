@@ -26,7 +26,7 @@ public class Game extends BasicModel {
     private Player playerTwo;
 
     @ManyToOne
-    @JoinColumn( name = "turn_of_with_id", referencedColumnName = "id")
+    @JoinColumn(name = "turn_of_with_id", referencedColumnName = "id")
     @Getter
     @Setter
     private Player turnOfWithId;
@@ -35,10 +35,10 @@ public class Game extends BasicModel {
     @Setter
     private boolean isOver;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "board_id", referencedColumnName = "id")
-	@Getter
-	@Setter
-	private Board board;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "board_id", referencedColumnName = "id")
+    @Getter
+    @Setter
+    private Board board;
 
 }

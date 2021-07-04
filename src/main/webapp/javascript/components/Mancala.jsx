@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Mancala(props){
+function Mancala(props) {
     const inlineStyle = {
         display: 'inline-block',
         border: '1px solid white',
@@ -11,8 +11,8 @@ function Mancala(props){
     }
     return (
         <div style={inlineStyle}>
-             {props.label}
-             <br></br>
+            {props.label}
+            <br></br>
             {props.score}
         </div>
     )

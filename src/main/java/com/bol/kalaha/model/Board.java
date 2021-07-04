@@ -1,26 +1,26 @@
 package com.bol.kalaha.model;
 
-import java.util.List;
-
-import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.*;
+import java.util.List;
+
 @Entity
-@Table (name = "board")
-public class Board extends BasicModel{
+@Table(name = "board")
+public class Board extends BasicModel {
 
 
-	@OneToOne(mappedBy = "board")
+    @OneToOne(mappedBy = "board")
     @JsonBackReference
-	@Getter @Setter
-	private Game game;
+    @Getter
+    @Setter
+    private Game game;
 
-	@OneToMany(mappedBy = "board", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
-	@Getter @Setter
-	private List<Pit> pits;
+    @OneToMany(mappedBy = "board", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    @Getter
+    @Setter
+    private List<Pit> pits;
 
 }

@@ -1,15 +1,13 @@
 package com.bol.kalaha.service;
 
-import javax.transaction.Transactional;
-
+import com.bol.kalaha.model.Board;
+import com.bol.kalaha.model.Game;
 import com.bol.kalaha.util.GameRules;
 import com.bol.kalaha.util.MoveValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bol.kalaha.model.Board;
-import com.bol.kalaha.model.Game;
-import com.bol.kalaha.model.Player;
+import javax.transaction.Transactional;
 
 @Service
 @Transactional
@@ -50,8 +48,6 @@ public class PlayService {
         return true;
 
     }
-
-
 
 
     public void finishGame(Game game) {

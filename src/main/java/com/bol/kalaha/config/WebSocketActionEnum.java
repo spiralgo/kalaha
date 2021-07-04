@@ -7,7 +7,7 @@ public enum WebSocketActionEnum {
     END("end");
     private final String value;
 
-    WebSocketActionEnum(String value){
+    WebSocketActionEnum(String value) {
         this.value = value;
     }
 

@@ -3,10 +3,10 @@ import {connect} from "react-redux";
 import {fetchGames, joinAGame} from "../actions/games-action";
 import SockJsClient from 'react-stomp';
 import Board from "./Board";
-
-const SOCKET_URL = "http://localhost:8080/websocket";
 import Button from 'react-bootstrap/Button';
 import {Alert} from "react-bootstrap";
+
+const SOCKET_URL = "http://localhost:8080/websocket";
 
 const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
 
@@ -33,6 +33,7 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
     const [selectedGame, setSelectedGame] = React.useState({})
     const [type, setType] = useState("");
     const [message, setMessage] = useState("");
+
     function handleSelectChange(event) {
         setSelectedGame(event.target.value);
         joinAGame(event.target.value);
@@ -42,10 +43,11 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
         fetchGames();
     }, []);
 
-    function showMessage(message, type){
-     setMessage(message);
-     setType(type);
+    function showMessage(message, type) {
+        setMessage(message);
+        setType(type);
     }
+
     function handleSubmit(evt) {
 
         evt.preventDefault();
@@ -95,7 +97,7 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
             />
 
             <Alert variant={type}>
-              {message}
+                {message}
             </Alert>
 
             <p>You can either start a new game...</p>

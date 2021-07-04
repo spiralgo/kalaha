@@ -1,29 +1,26 @@
 import React from 'react'
 import '../../css/Main.css'
 import Player from "./Player";
-import {
-    Switch,
-    Route,
-    Link
-} from "react-router-dom";
+import {Route, Switch} from "react-router-dom";
 import GameList from "./GameList";
 import NavbarComponent from "./Navbar";
 
-function App(){
+function App() {
     return (
-    <div>
-        <NavbarComponent></NavbarComponent>
+        <div>
+            <NavbarComponent></NavbarComponent>
 
-        <Switch>
-            <Route exact path="/">
-                <Player />
-            </Route>
+            <Switch>
+                <Route exact path="/">
+                    <Player/>
+                </Route>
 
-            <Route exact path="/games">
-                <GameList></GameList>
-            </Route>
-        </Switch>
-    </div>
+                <Route exact path="/games">
+                    <GameList></GameList>
+                </Route>
+            </Switch>
+        </div>
     )
 }
+
 export default App
