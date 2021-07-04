@@ -5,8 +5,6 @@ plugins {
     id "com.github.node-gradle.node" version "3.0.1"
 
 }
-apply plugin: 'java'
-apply plugin: 'io.spring.dependency-management'
 
 group = 'com.bol'
 version = '0.0.1-SNAPSHOT'
@@ -16,8 +14,8 @@ node {
     download = true
     version = '14.17.1'
 }
-springBoot {
-    executable = true
+bootJar {
+    launchScript()
 }
 repositories {
     mavenCentral()
