@@ -1,27 +1,22 @@
 import React from 'react';
 import {move} from "../actions/games-action";
 import {connect} from "react-redux";
+import {Card} from "react-bootstrap";
 
 function Pit(props) {
-    const inlineStyle = {
-        display: 'inline-block',
-        border: '1px solid black',
-        minHeight: '150px',
-        width: '150px',
-        height: 'inherit',
-        textAlign: 'center',
-    }
 
     function onPitClick() {
         props.move(props.gameToJoin.id, props.content.position);
     }
 
     return (
-        <div style={inlineStyle} onClick={() => onPitClick()}>
-            Pit {props.content.position % 7}
-            <br/>
-            {props.content.value}
-        </div>
+
+        <Card style={{ width: '90px', height: '120px' }}  onClick={() => onPitClick()} className="text-center bg-dark text-white">
+            <Card.Header>  Pit {props.content.position % 7} </Card.Header>
+            <Card.Body>
+                <Card.Title>{props.content.value}</Card.Title>
+            </Card.Body>
+        </Card>
     )
 
 }

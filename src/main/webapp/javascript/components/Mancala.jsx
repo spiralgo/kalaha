@@ -1,20 +1,21 @@
 import React from 'react';
+import {Card} from "react-bootstrap";
 
 function Mancala(props) {
-    const inlineStyle = {
-        display: 'inline-block',
-        border: '1px solid white',
-        minHeight: '330px',
-        width: '150px',
-        height: 'inherit',
-        textAlign: 'center'
-    }
+
     return (
-        <div style={inlineStyle}>
-            {props.label}
-            <br></br>
-            {props.score}
-        </div>
+
+    <Card style={{ width: '120px', height: '270px' }} className="text-center bg-dark text-white">
+        <Card.Header> {props.label}</Card.Header>
+        <Card.Body>
+            <Card.Title>{props.score}</Card.Title>
+            <Card.Text>
+                {props.playerName}
+            </Card.Text>
+
+        </Card.Body>
+     </Card>
+
     )
 
 }

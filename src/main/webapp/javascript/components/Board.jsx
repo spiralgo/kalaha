@@ -4,11 +4,6 @@ import {Table} from "react-bootstrap";
 import Mancala from "./Mancala";
 
 function Board(props) {
-    var inlineStyle = {
-        display: 'inline-block',
-        height: '300px',
-        verticalAlign: 'top'
-    }
 
     function addPit(pit, gameToJoin) {
 
@@ -28,11 +23,10 @@ function Board(props) {
     }
 
     return (
-        <div style={inlineStyle}>
-            <Table striped bordered hover variant="dark">
+             <Table striped bordered hover variant="dark" responsive="sm">
                 <tbody>
                 <tr>
-                    <td rowSpan={2}><Mancala count={props.player1Score} label={"Kalaha 1:"}
+                    <td rowSpan={2} colSpan={1}><Mancala playerName={props.gameToJoin.playerOne==null?'': props.gameToJoin.playerOne.name} label={"Kalaha 1:"}
                                              score={board.pits[6].value}/></td>
 
 
@@ -40,7 +34,7 @@ function Board(props) {
                         return (addPit(playerSideArray, props.gameToJoin));
 
                     })}
-                    <td rowSpan={2}><Mancala count={props.player2Score} label={"Kalaha 2:"}
+                    <td rowSpan={2} colSpan={1}><Mancala playerName={props.gameToJoin.playerTwo==null?'': props.gameToJoin.playerTwo.name} label={"Kalaha 2:"}
                                              score={board.pits[13].value}/></td>
 
                 </tr>
@@ -53,7 +47,6 @@ function Board(props) {
                 </tbody>
             </Table>
 
-        </div>
     )
 }
 

@@ -1,7 +1,6 @@
 package com.bol.kalaha.service;
 
 import com.bol.kalaha.model.Game;
-import com.bol.kalaha.model.Player;
 import com.bol.kalaha.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,15 +57,8 @@ public class GameService {
     }
 
     public List<Game> getGamesToJoin() {
-        List<Game> games = gameRepository.findAll();
+        List<Game> games = gameRepository.findAllByOrderByIdDesc();
         return games;
-    }
-
-    public List<Game> getPlayerGames(Player player) {
-        List<Game> gamesAsPlayerOne = gameRepository.findByPlayerOne(player);
-        List<Game> gamesAsPlayerTwo = gameRepository.findByPlayerTwo(player);
-        gamesAsPlayerOne.addAll(gamesAsPlayerTwo);
-        return gamesAsPlayerOne;
     }
 
 

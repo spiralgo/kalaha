@@ -2,10 +2,12 @@ import React, {useEffect, useState} from 'react'
 import {connect} from "react-redux";
 import {fetchGames, joinAGame} from "../actions/games-action";
 import SockJsClient from 'react-stomp';
-import Board from "./Board";
 import Button from 'react-bootstrap/Button';
 import {properties} from "../config/properties";
 import {showNotification} from "../config/notification";
+import TableScrollbar from 'react-table-scrollbar';
+import {Container, Col, Row, Table} from "react-bootstrap";
+import Board from "./Board";
 
 const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
 
@@ -35,13 +37,8 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
         }
 
     }
-    const [selectedGame, setSelectedGame] = React.useState({})
-    const [type, setType] = useState("");
-    const [message, setMessage] = useState("");
-
-    function handleSelectChange(event) {
-        setSelectedGame(event.target.value);
-        joinAGame(event.target.value);
+    function handleSelectChange(gameId) {
+         joinAGame(gameId);
     }
 
     useEffect(() => {
@@ -83,8 +80,10 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
     }
 
     const listItems = games.map((game, i) =>
-
-        <option value={game.id}>#{game.id} by {game.playerOne.name}</option>
+        <tr   onClick={() => handleSelectChange(game.id)}>
+            <td>#{game.id}</td>
+            <td colSpan="1">{game.playerOne.name}</td>
+        </tr>
     );
     return (
         <div>
@@ -98,20 +97,31 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
                 debug={true}
             />
 
-
-            <p>You can either start a new game...</p>
             <form onSubmit={handleSubmit.bind(this)}>
                 <Button type={"submit"}>Start a Game</Button>
             </form>
-            <p>or join am existing game:</p>
-
-            <select value={selectedGame} onChange={handleSelectChange}> //set value here
-                {listItems}
-            </select>
-
-
-            <Board gameToJoin={gameToJoin} player1Score="0" player2Score="0"/>
-
+             <Container fluid>
+                <Row>
+                    <Col sm={3}>
+                        <TableScrollbar  rows={18}>
+                            <Table striped bordered hover size="sm">
+                                <thead>
+                                <tr>
+                                    <th>Game:</th>
+                                    <th>By</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {listItems}
+                                </tbody>
+                            </Table>
+                        </TableScrollbar>
+                    </Col>
+                    <Col sm={9}>
+                        <Board gameToJoin={gameToJoin}></Board>
+                    </Col>
+                </Row>
+            </Container>
         </div>
     );
 }
