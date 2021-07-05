@@ -1,10 +1,21 @@
 const Dotenv = require('dotenv-webpack');
+function path(env){
+    console.log(env);
+    let path = __dirname + "/.env";
+    if(env.production === undefined){
+        path+= ".development";
 
+    }else{
+        path+= ".production";
+    }
+    console.log(path);
+    return path;
+}
 module.exports = (env) =>( {
     plugins: [
 
         new Dotenv({
-            path: `./.env.${env}`
+            path: path(env)
         }),
 
     ],

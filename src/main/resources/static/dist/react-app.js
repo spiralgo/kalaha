@@ -2790,7 +2790,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "properties": () => (/* binding */ properties)
 /* harmony export */ });
 properties = {
-  webSocketUrl: "MISSING_ENV_VAR".WEBSOCKET_URL
+  webSocketUrl: "http://localhost:8080/websocket"
 };
 var properties;
 
