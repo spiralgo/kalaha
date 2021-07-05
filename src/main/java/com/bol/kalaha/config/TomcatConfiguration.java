@@ -11,8 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class TomcatConfiguration {
-    @Value("${PORT:8080}")
-    int port;
+
 
     @Bean
     public ServletWebServerFactory servletContainer() {
@@ -24,7 +23,7 @@ public class TomcatConfiguration {
     private Connector createSslConnector() {
         Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
         connector.setScheme("http");
-        connector.setPort(port);
+        connector.setPort(8081);
         connector.setSecure(false);
         // Monitor 8080 port forward to 443 port
         connector.setRedirectPort(443);
