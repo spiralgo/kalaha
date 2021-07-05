@@ -4,10 +4,14 @@ import Player from "./Player";
 import {Route, Switch} from "react-router-dom";
 import GameList from "./GameList";
 import NavbarComponent from "./Navbar";
+import ReactNotification from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
 
 function App() {
     return (
         <div>
+            <ReactNotification />
+
             <NavbarComponent></NavbarComponent>
 
             <Switch>

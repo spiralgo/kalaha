@@ -1,12 +1,11 @@
-const webpack = require("webpack");
-const dotenv = require("dotenv");
+const Dotenv = require('dotenv-webpack');
 
-module.exports = {
+module.exports = (env) =>( {
     plugins: [
 
-        new webpack.DefinePlugin({
-            'process.env': JSON.stringify(dotenv.config().parsed) // it will automatically pick up key values from .env.local file
-        })
+        new Dotenv({
+            path: `./.env.${env}`
+        }),
 
     ],
     devtool: 'source-map',
@@ -24,7 +23,6 @@ module.exports = {
         },
             {
                 test: /\.css$/,
-                exclude: /node_modules/,
                 use: ['style-loader', 'css-loader']
             },
         ]
@@ -32,4 +30,4 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.jsx']
     }
-};
+});

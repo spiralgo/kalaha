@@ -1,4 +1,6 @@
 import axios from "axios";
+import { store } from 'react-notifications-component';
+import {showNotification} from "../config/notification";
 
 const API = '';
 const GAME_API = API + "/game";
@@ -15,7 +17,7 @@ export const fetchGames = () => {
         axios
             .get(GAME_API)
             .then(response => dispatch(updateGameList(response.data)))
-            .catch(error => alert(error));
+            .catch(error => console.log(error));
     };
 };
 
@@ -30,20 +32,13 @@ export const joinAGame = (gameId) => {
             .catch(error => console.log(error));
     };
 };
-export const getBoard = (gameId) => {
-    return dispatch => {
-        axios
-            .get(GAME_GET_BOARD + "/" + gameId)
-            .then(response => dispatch(updateBoard(response.data)))
-            .catch(error => console.log(error));
-    };
-};
+
 export const move = (gameId, pitPosition) => {
     return dispatch => {
         axios
             .post(MOVE_API + "/" + gameId + "/" + localStorage.getItem("playerId") + "/" + pitPosition, {})
             .then(response => dispatch(updateBoard(response.data)))
-            .catch(error => alert(error.response.data));
+            .catch(error => showNotification("Move warning", "warning", error.response.data));
     };
 };
 

@@ -4,8 +4,8 @@ import {fetchGames, joinAGame} from "../actions/games-action";
 import SockJsClient from 'react-stomp';
 import Board from "./Board";
 import Button from 'react-bootstrap/Button';
-import {Alert} from "react-bootstrap";
 import {properties} from "../config/properties";
+import {showNotification} from "../config/notification";
 
 const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
 
@@ -17,17 +17,23 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
         switch (msg.action) {
             case "refresh_game_list":
                 fetchGames();
+                showNotification("Game Message", "success", msg.message) ;
+
                 break;
 
             case "refresh_board":
                 joinAGame(gameToJoin.id);
+                showNotification("Game Message", "default", msg.message) ;
+
                 break;
 
             case "end":
                 joinAGame(gameToJoin.id);
+                showNotification("Game Message", "warning", msg.message) ;
+
                 break;
         }
-        showMessage(msg.message, "primary");
+
     }
     const [selectedGame, setSelectedGame] = React.useState({})
     const [type, setType] = useState("");
@@ -42,10 +48,6 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
         fetchGames();
     }, []);
 
-    function showMessage(message, type) {
-        setMessage(message);
-        setType(type);
-    }
 
     function handleSubmit(evt) {
 
@@ -54,7 +56,7 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
         const playerName = localStorage.getItem("playerName");
 
         if (playerId == null) {
-            showMessage("You need to create player first.", "warning");
+            showNotification("Warning", "warning", "You need to create player first.") ;
             return;
         }
         fetch("/game/create", {
@@ -67,12 +69,13 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
             body: JSON.stringify({"id": playerId, "name": playerName})
         }).then((response) => {
                 if (!response.ok) {
-                    showMessage("Failed to create a game.", "danger");
+
+                    console.log("Failed to create a game.", "danger");
 
                 }
             }
         ).catch((error) => {
-            showMessage(error, "danger");
+            console.log(error, "danger");
 
         });
         evt.target.reset();
@@ -95,9 +98,6 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
                 debug={true}
             />
 
-            <Alert variant={type}>
-                {message}
-            </Alert>
 
             <p>You can either start a new game...</p>
             <form onSubmit={handleSubmit.bind(this)}>
