@@ -2,14 +2,15 @@ package com.bol.kalaha.util;
 
 import com.bol.kalaha.model.Board;
 import com.bol.kalaha.model.Pit;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class GameRulesTest {
     public static final Integer KALAHA_PLAYER_ONE = 7;
@@ -21,24 +22,25 @@ class GameRulesTest {
     Board board;
 
     @Test
+    @DisplayName("Test pit sowing.")
     void sowPit() {
         setUp();
         // PLAYER 1's TURN
         int positionOfPitToPlay = 1;
-        gameRules.sowPit(board, positionOfPitToPlay);
+        gameRules.sowPit(board, positionOfPitToPlay, true);
         List<Pit> pits = board.getPits();
         assertEquals(0, pits.get(positionOfPitToPlay - 1).getValue());
         assertEquals(1, pits.get(KALAHA_PLAYER_ONE - 1).getValue());
 
         positionOfPitToPlay = 2;
-        gameRules.sowPit(board, positionOfPitToPlay);
+        gameRules.sowPit(board, positionOfPitToPlay, true);
         pits = board.getPits();
         assertEquals(0, pits.get(positionOfPitToPlay - 1).getValue());
         assertEquals(2, pits.get(KALAHA_PLAYER_ONE - 1).getValue());
 
         // PLAYER 2's TURN
         positionOfPitToPlay = 13;
-        gameRules.sowPit(board, positionOfPitToPlay);
+        gameRules.sowPit(board, positionOfPitToPlay, false);
         pits = board.getPits();
         System.out.println(Arrays.toString(pits.toArray()));
         //TODO:  pits.forEach(a -> System.out.println(a.getValue()));
@@ -68,6 +70,7 @@ class GameRulesTest {
     }
 
     @Test
+    @DisplayName("Test the check for capture.")
     void checkAndCapture() {
         //PLAYER 1's MOVE
         boolean isPlayerOne = true;
@@ -112,18 +115,54 @@ class GameRulesTest {
     }
 
     @Test
+    @DisplayName("Test the check for extra move.")
     void checkExtraMove() {
         boolean isPlayerOne = true;
-        Pit[] pitsArray = new Pit[14];
+        int theLastPosition = KALAHA_PLAYER_ONE;
 
-        pitsArray[KALAHA_PLAYER_ONE - 1] = new Pit();
-        pitsArray[KALAHA_PLAYER_ONE - 1].setValue(1);
+        assertTrue(gameRules.checkExtraMove(isPlayerOne, theLastPosition));
 
-        pitsArray[KALAHA_PLAYER_TWO - 1] = new Pit();
-        pitsArray[KALAHA_PLAYER_TWO - 1].setValue(1);
-        List<Pit> pits = Arrays.asList(pitsArray);
 
-        assertTrue(gameRules.checkExtraMove(isPlayerOne, pits));
+        isPlayerOne = true;
+        theLastPosition = 3;
+
+        assertFalse(gameRules.checkExtraMove(isPlayerOne, theLastPosition));
+
+
+        isPlayerOne = false;
+        theLastPosition = KALAHA_PLAYER_ONE;
+
+        assertFalse(gameRules.checkExtraMove(isPlayerOne, theLastPosition));
+
+
+        isPlayerOne = false;
+        theLastPosition = KALAHA_PLAYER_TWO;
+
+        assertTrue(gameRules.checkExtraMove(isPlayerOne, theLastPosition));
+    }
+
+
+    @Test
+    @DisplayName("Test the check for game over.")
+    void checkGameOver(){
+
+        Pit[] pitsArray = Stream.generate(Pit::new).limit(14).toArray(Pit[]::new);
+
+        pitsArray[KALAHA_PLAYER_ONE-1].setValue(40);
+        pitsArray[KALAHA_PLAYER_TWO-1].setValue(17);
+
+        pitsArray[7].setValue(1);
+        pitsArray[8].setValue(14);
+
+        Board board = new Board();
+        board.setPits(Arrays.asList(pitsArray));
+
+        assertTrue(gameRules.checkGameOver(board));
+
+        assertEquals(32,board.getPits().get(KALAHA_PLAYER_TWO-1).getValue());
+
+        assertEquals(0,board.getPits().get(7).getValue());
+        assertEquals(0,board.getPits().get(8).getValue());
 
     }
 }

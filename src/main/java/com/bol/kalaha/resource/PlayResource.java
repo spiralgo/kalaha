@@ -41,28 +41,25 @@ public class PlayResource {
     @RequestMapping(value = "/{gameId}/{playerId}/{position}", method = RequestMethod.POST)
     public ResponseEntity<Board> movePlay(@PathVariable Long gameId, @PathVariable Long playerId, @PathVariable Integer position) {
         Optional<Game> game = gameService.findById(gameId);
-        if (game.get().getPlayerTwo() == null)
-            throw new ResourceException(HttpStatus.BAD_REQUEST, "You need an opponent.");
-
         Optional<Player> player = playerRepository.findById(playerId);
         Optional<Board> board = boardService.getBoardByGame(game.get());
         Board resultBoard;
         if (player.isPresent() && game.isPresent() && board.isPresent()) {
-            if (!playService.checkGameOver(board.get())) {
 
                 ResponseEntity<Board> response = validateMove(game.get(), player.get(), position);
                 if (response == null) {
                     boolean isPlayerOne = (player.get().equals(game.get().getPlayerOne()));
-                    resultBoard = playService.movePlay(board.get(), isPlayerOne, position);
+                    resultBoard = board.get();
+                    int theLastPosition = playService.movePlay(resultBoard, isPlayerOne, position);
                     if (resultBoard == null) return ResponseEntity.badRequest().build();
-
-                    if (playService.checkGameOver(board.get())) {
+                    GameRules gameRules = new GameRules();
+                    if (gameRules.checkGameOver(board.get())) {
                         playService.finishGame(board.get().getGame());
                         webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(WebSocketActionEnum.END,
                                 "The game ends."));
                     } else {
-                        GameRules gameRules = new GameRules();
-                        if (!gameRules.checkExtraMove(isPlayerOne, board.get().getPits())) {
+
+                        if (!gameRules.checkExtraMove(isPlayerOne, theLastPosition)) {
                             gameService.changeTurn(game.get());
                         }
                         webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_BOARD,
@@ -73,21 +70,33 @@ public class PlayResource {
                     return ResponseEntity.ok(resultBoard);
                 }
             }
-        }
+
         return ResponseEntity.badRequest().build();
     }
 
+    //TODO: messages should be taken from an i18n properties file instead of hard-coding. Reduce if-else statements if possible.
     public ResponseEntity<Board> validateMove(Game game, Player player, Integer position) {
+        String message = "";
 
-        if (!MoveValidationUtil.isMyTurn(game, player))
-            throw new ResourceException(HttpStatus.BAD_REQUEST, "It is not your turn.");
+        if (game.isOver()){
+             message = "The game is over.";
+        }else if (game.getPlayerTwo() == null){
+             message = "You need an opponent.";
+        }else if (!MoveValidationUtil.isMyTurn(game, player)){
+            message = "It is not your turn.";
+        }else if (game.getTurnOfWithId().equals(game.getPlayerOne())
+                && (position < PlayService.PIT_0_PLAYER_ONE || position >= PlayService.KALAHA_PLAYER_ONE)){
+            message = "Your pits are on the top row.";
+        } else if (game.getTurnOfWithId().equals(game.getPlayerTwo())
+                && (position < PlayService.PIT_0_PLAYER_TWO || position >= PlayService.KALAHA_PLAYER_TWO)){
+            message = "Your pits are on the bottom row.";
+        } else if (game.getBoard().getPits().get(position-1).getValue()==0){
+            message=  "This pit is empty.";
+        }
 
-        if (game.getTurnOfWithId().equals(game.getPlayerOne())
-                && (position < PlayService.PIT_0_PLAYER_ONE || position >= PlayService.KALAHA_PLAYER_ONE))
-            throw new ResourceException(HttpStatus.BAD_REQUEST, "Your pits are on the top row.");
-        else if (game.getTurnOfWithId().equals(game.getPlayerTwo())
-                && (position < PlayService.PIT_0_PLAYER_TWO || position >= PlayService.KALAHA_PLAYER_TWO))
-            throw new ResourceException(HttpStatus.BAD_REQUEST, "Your pits are on the bottom row.");
+         if(message.length()>0)
+         throw new ResourceException(HttpStatus.BAD_REQUEST,  message);
+
 
         return null;
     }
