@@ -10,6 +10,13 @@ function NavbarComponent(props) {
                 <Nav.Link href="#/">Create Player</Nav.Link>
                 <Nav.Link href="#/games">Games</Nav.Link>
             </Nav>
+            <Navbar.Collapse className="justify-content-end">
+                <Navbar.Text>
+                    {(localStorage.getItem("playerName")==null? '':   "Welcome " +localStorage.getItem("playerName")+"!")}
+                </Navbar.Text>
+            </Navbar.Collapse>
+
+
         </Navbar>
     )
 

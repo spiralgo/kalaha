@@ -54,8 +54,11 @@ public class GameResource {
         if (answer == null) {
             Game savedGame = game.get();
             savedGame.setPlayerTwo(player);
+            gameService.joinGame(savedGame);
+            webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_BOARD,
+                    player.getName() +" joins the game as the opponent."), savedGame.getId());
 
-            return ResponseEntity.ok(gameService.joinGame(savedGame));
+            return ResponseEntity.ok(savedGame);
         }
 
         return answer;

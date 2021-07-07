@@ -2155,7 +2155,8 @@ var fetchGames = function fetchGames() {
 var joinAGame = function joinAGame(gameId) {
   return function (dispatch) {
     axios__WEBPACK_IMPORTED_MODULE_0___default().patch(GAME_JOIN + "/" + gameId, {
-      "id": localStorage.getItem("playerId")
+      "id": localStorage.getItem("playerId"),
+      "name": localStorage.getItem("playerName")
     }).then(function (response) {
       dispatch(updateJoinAGame(response.data));
     })["catch"](function (error) {
@@ -2286,6 +2287,7 @@ function Board(props) {
     rowSpan: 2,
     colSpan: 1
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Mancala__WEBPACK_IMPORTED_MODULE_2__.default, {
+    isTurn: props.gameToJoin.playerOne.id == props.gameToJoin.turnOfWithId.id,
     playerName: props.gameToJoin.playerOne == null ? '' : props.gameToJoin.playerOne.name,
     label: "Kalaha 1:",
     score: board.pits[6].value
@@ -2295,6 +2297,7 @@ function Board(props) {
     rowSpan: 2,
     colSpan: 1
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Mancala__WEBPACK_IMPORTED_MODULE_2__.default, {
+    isTurn: props.gameToJoin.playerTwo !== null && props.gameToJoin.playerTwo.id == props.gameToJoin.turnOfWithId.id,
     playerName: props.gameToJoin.playerTwo == null ? '' : props.gameToJoin.playerTwo.name,
     label: "Kalaha 2:",
     score: board.pits[13].value
@@ -2425,7 +2428,7 @@ var GameList = function GameList(_ref) {
   });
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_stomp__WEBPACK_IMPORTED_MODULE_3__.default, {
     url: _config_properties__WEBPACK_IMPORTED_MODULE_4__.properties.webSocketUrl,
-    topics: ['/update'],
+    topics: ['/update', '/update/' + (gameToJoin == null ? '' : gameToJoin.id)],
     onConnect: onConnected,
     onDisconnect: console.log("Disconnected!"),
     onMessage: function onMessage(msg) {
@@ -2499,7 +2502,7 @@ function Mancala(props) {
       height: '270px'
     },
     className: "text-center bg-dark text-white"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__.default.Header, null, " ", props.label), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__.default.Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__.default.Title, null, props.score), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__.default.Text, null, props.playerName)));
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__.default.Header, null, " ", props.label), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__.default.Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__.default.Title, null, props.score), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__.default.Text, null, props.playerName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__.default.Footer, null, props.isTurn == true ? '🟢' : '')));
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Mancala);
@@ -2533,7 +2536,9 @@ function NavbarComponent(props) {
     href: "#/"
   }, "Create Player"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__.default.Link, {
     href: "#/games"
-  }, "Games")));
+  }, "Games")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__.default.Collapse, {
+    className: "justify-content-end"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__.default.Text, null, localStorage.getItem("playerName") == null ? '' : "Welcome " + localStorage.getItem("playerName") + "!")));
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (NavbarComponent);
@@ -2747,8 +2752,8 @@ function showNotification(title, type, message) {
     title: title,
     message: message,
     type: type,
-    insert: "top",
-    container: "top-right",
+    insert: "bottom",
+    container: "bottom-left",
     animationIn: ["animate__animated", "animate__fadeIn"],
     animationOut: ["animate__animated", "animate__fadeOut"],
     dismiss: {

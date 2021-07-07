@@ -18,13 +18,12 @@ public class WebSocketResource {
         this.template = template;
     }
 
-    @MessageMapping("/refresh")
-    public void onReceivedMessage(String message) {
-        this.template.convertAndSend("/game", message);
-    }
 
     public void publishWebSocket(String data) {
         template.convertAndSend("/update", data);
+    }
+    public void publishWebSocket(String data, Long gameId) {
+        template.convertAndSend("/update/"+gameId, data);
     }
 
 

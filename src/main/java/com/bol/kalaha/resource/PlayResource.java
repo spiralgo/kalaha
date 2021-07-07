@@ -56,14 +56,14 @@ public class PlayResource {
                     if (gameRules.checkGameOver(board.get())) {
                         playService.finishGame(board.get().getGame());
                         webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(WebSocketActionEnum.END,
-                                "The game ends."));
+                                "The game ends."), board.get().getGame().getId());
                     } else {
 
                         if (!gameRules.checkExtraMove(isPlayerOne, theLastPosition)) {
                             gameService.changeTurn(game.get());
                         }
                         webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_BOARD,
-                                "It is the turn of " + game.get().getTurnOfWithId().getName()));
+                                "It is the turn of " + game.get().getTurnOfWithId().getName()), game.get().getId());
 
                     }
                     boardService.updateBoard(board.get());

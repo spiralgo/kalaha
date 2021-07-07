@@ -90,7 +90,7 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
 
             <SockJsClient
                 url={properties.webSocketUrl}
-                topics={['/update']}
+                topics={['/update', '/update/'+(gameToJoin==null? '': gameToJoin.id)]}
                 onConnect={onConnected}
                 onDisconnect={console.log("Disconnected!")}
                 onMessage={msg => onMessageReceived(msg)}

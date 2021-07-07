@@ -25,7 +25,7 @@ export const joinAGame = (gameId) => {
     return dispatch => {
         axios
             .patch(GAME_JOIN + "/" + gameId,
-                {"id": localStorage.getItem("playerId")})
+                {"id": localStorage.getItem("playerId"), "name": localStorage.getItem("playerName")})
             .then(response => {
                 dispatch(updateJoinAGame(response.data))
             })
