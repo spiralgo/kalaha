@@ -1,6 +1,6 @@
 export default (state = null, action) => {
     switch (action.type) {
-        case 'UPDATE_JOIN_A_GAME':
+        case 'REFRESH_THE_GAME':
             return action.game;
 
         default:

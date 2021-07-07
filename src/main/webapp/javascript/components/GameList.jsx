@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {connect} from "react-redux";
-import {fetchGames, joinAGame} from "../actions/games-action";
+import {fetchGames, joinAGame, refreshGame} from "../actions/games-action";
 import SockJsClient from 'react-stomp';
 import Button from 'react-bootstrap/Button';
 import {properties} from "../config/properties";
@@ -9,7 +9,7 @@ import TableScrollbar from 'react-table-scrollbar';
 import {Container, Col, Row, Table} from "react-bootstrap";
 import Board from "./Board";
 
-const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
+const GameList = ({fetchGames, games, joinAGame, gameToJoin, refreshGame}) => {
 
     let onConnected = () => {
         console.log("Connected!!")
@@ -23,20 +23,25 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
 
                 break;
 
-            case "refresh_board":
-                joinAGame(gameToJoin.id);
+            case "refresh_game":
+                if(msg.game!=""){
+                    refreshGame(msg.game);
+                }
                 showNotification("Game Message", "default", msg.message) ;
 
                 break;
 
             case "end":
-                joinAGame(gameToJoin.id);
+                if(msg.game!=""){
+                    refreshGame(msg.game);
+                }
                 showNotification("Game Message", "warning", msg.message) ;
 
                 break;
         }
 
     }
+
     function handleSelectChange(gameId) {
          joinAGame(gameId);
     }
@@ -46,9 +51,8 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
     }, []);
 
 
-    function handleSubmit(evt) {
+    function handleSubmit() {
 
-        evt.preventDefault();
         const playerId = localStorage.getItem("playerId");
         const playerName = localStorage.getItem("playerName");
 
@@ -75,7 +79,6 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin}) => {
             console.log(error, "danger");
 
         });
-        evt.target.reset();
         return false;
     }
 
@@ -136,6 +139,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     fetchGames: () => dispatch(fetchGames()),
     joinAGame: (gameId) => dispatch(joinAGame(gameId)),
-
+    refreshGame: (game) => dispatch(refreshGame(game))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(GameList);

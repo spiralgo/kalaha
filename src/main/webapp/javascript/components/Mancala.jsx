@@ -12,11 +12,7 @@ function Mancala(props) {
             <Card.Text>
                 {props.playerName}
             </Card.Text>
-            <Card.Footer>
                 {props.isTurn==true? '🟢' : ''}
-
-            </Card.Footer>
-
         </Card.Body>
      </Card>
 

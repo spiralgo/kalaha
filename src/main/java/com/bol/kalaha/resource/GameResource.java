@@ -8,6 +8,7 @@ import com.bol.kalaha.model.Game;
 import com.bol.kalaha.model.Player;
 import com.bol.kalaha.service.GameService;
 import com.bol.kalaha.util.BoardUtil;
+import com.bol.kalaha.util.JoinAGameValidationEnum;
 import com.bol.kalaha.util.WebSocketUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,7 @@ public class GameResource {
         createdGame.setTurnOfWithId(playerOne);
         gameService.createNewGame(createdGame);
         webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_GAME_LIST,
-                "Game #" + createdGame.getId() + " is created by " + playerOne.getName()));
+                "Game #" + createdGame.getId() + " is created by " + playerOne.getName(), null));
 
         return ResponseEntity.ok(createdGame);
 
@@ -49,19 +50,33 @@ public class GameResource {
     @PatchMapping(value = "/join/{gameId}")
     @ResponseBody
     public ResponseEntity<Game> joinGame(@PathVariable Long gameId, @RequestBody Player player) {
-        Optional<Game> game = gameService.findById(gameId);
-        ResponseEntity<Game> answer = validateJoin(game, player);
-        if (answer == null) {
-            Game savedGame = game.get();
-            savedGame.setPlayerTwo(player);
-            gameService.joinGame(savedGame);
-            webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_BOARD,
-                    player.getName() +" joins the game as the opponent."), savedGame.getId());
+        Optional<Game> gameOptional = gameService.findById(gameId);
+        Game game = gameOptional.get();
+        if(gameOptional.isPresent()){
+            String message = "You need to create a user first.";
 
-            return ResponseEntity.ok(savedGame);
+            JoinAGameValidationEnum answer = validateJoin(game, player);
+
+            if (answer == JoinAGameValidationEnum.NEED_TO_CREATE_A_PLAYER) {
+                throw new ResourceException(HttpStatus.BAD_REQUEST, message);
+            }else if (answer == JoinAGameValidationEnum.JOIN_AS_THE_PLAYER_TWO) {
+                game.setPlayerTwo(player);
+                gameService.joinGame(game);
+                message = player.getName() +" joins the game as the opponent.";
+            }else if (answer == JoinAGameValidationEnum.ALREADY_A_PLAYER) {
+                message = player.getName() +" rejoins the game.";
+            }else{
+                message = player.getName() +" joins the game as a viewer.";
+             }
+            webSocketResource.publishWebSocket(
+                    WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_GAME,message, game), game.getId());
+
+        }else {
+            throw new ResourceException(HttpStatus.BAD_REQUEST, "Game not found.");
         }
 
-        return answer;
+
+        return ResponseEntity.ok(game);
     }
 
     @GetMapping
@@ -72,16 +87,24 @@ public class GameResource {
     }
 
 
-    private ResponseEntity<Game> validateJoin(Optional<Game> game, Player player) {
-        if (!game.isPresent())
-            throw new ResourceException(HttpStatus.BAD_REQUEST, "You need to create a game first.");
+    private JoinAGameValidationEnum validateJoin(Game game, Player player) throws ResourceException {
+        JoinAGameValidationEnum result = JoinAGameValidationEnum.NEED_TO_CREATE_A_PLAYER;
 
-        Player playerOne = game.get().getPlayerOne();
-        Player playerTwo = game.get().getPlayerTwo();
-        if (player.equals(playerOne) || player.equals(playerTwo))
-            return ResponseEntity.ok(game.get());
+        if (player.getId() == null)
+            return result;
 
-        return null;
+        Player playerOne = game.getPlayerOne();
+        Player playerTwo = game.getPlayerTwo();
+
+        if (player.equals(playerOne) || player.equals(playerTwo)){
+                result = JoinAGameValidationEnum.ALREADY_A_PLAYER;
+        }else if(playerTwo == null){
+            result = JoinAGameValidationEnum.JOIN_AS_THE_PLAYER_TWO;
+        }else {
+            result = JoinAGameValidationEnum.JOIN_AS_A_WIEVER;
+
+        }
+        return result;
     }
 
 }

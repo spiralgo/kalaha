@@ -3,7 +3,7 @@ package com.bol.kalaha.config;
 public enum WebSocketActionEnum {
 
     REFRESH_GAME_LIST("refresh_game_list"),
-    REFRESH_BOARD("refresh_board"),
+    REFRESH_GAME("refresh_game"),
     END("end");
     private final String value;
 

@@ -12,20 +12,12 @@ import java.util.Optional;
 @Service
 @Transactional
 public class GameService {
-
-
-    @Autowired
     private GameRepository gameRepository;
 
-    public GameService() {
-
-    }
-
-
+    @Autowired
     public GameService(GameRepository gameRepository) {
         this.gameRepository = gameRepository;
     }
-
 
     public Game createNewGame(Game game) {
         gameRepository.save(game);
@@ -33,39 +25,21 @@ public class GameService {
     }
 
     public Optional<Game> findById(Long gameId) {
+
         return gameRepository.findById(gameId);
     }
-
-    public Game changeTurn(Game game) {
-        if (game.getTurnOfWithId().equals(game.getPlayerOne()))
-            game.setTurnOfWithId(game.getPlayerTwo());
-        else
-            game.setTurnOfWithId(game.getPlayerOne());
-        return game;
-    }
-
     public Game joinGame(Game game) {
-        Game result = saveGame(game);
+        Game result = gameRepository.save(game);
         return result;
     }
-
     public Game finishGame(Game game) {
         game.setOver(true);
         Game result = gameRepository.save(game);
         return result;
 
     }
-
     public List<Game> getGamesToJoin() {
         List<Game> games = gameRepository.findAllByOrderByIdDesc();
         return games;
     }
-
-
-    public Game saveGame(Game game) {
-        Game result = gameRepository.save(game);
-        return result;
-
-    }
-
 }

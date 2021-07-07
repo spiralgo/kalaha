@@ -11,15 +11,9 @@ import java.util.Optional;
 @Service
 @Transactional
 public class PlayerService {
-
-
-    @Autowired
     private PlayerRepository playerRepository;
 
-    public PlayerService() {
-        // TODO Auto-generated constructor stub
-    }
-
+    @Autowired
     public PlayerService(PlayerRepository playerRepoository) {
         this.playerRepository = playerRepoository;
     }
@@ -29,7 +23,6 @@ public class PlayerService {
         return player;
 
     }
-
     public Optional<Player> findById(Long id) {
         return playerRepository.findById(id);
     }

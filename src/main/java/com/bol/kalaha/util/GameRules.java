@@ -1,6 +1,7 @@
 package com.bol.kalaha.util;
 
 import com.bol.kalaha.model.Board;
+import com.bol.kalaha.model.Game;
 import com.bol.kalaha.model.Pit;
 
 import java.util.ArrayList;
@@ -113,4 +114,11 @@ public class GameRules {
 
     }
 
+    public Game changeTurn(Game game) {
+        if (game.getTurnOfWithId().equals(game.getPlayerOne()))
+            game.setTurnOfWithId(game.getPlayerTwo());
+        else
+            game.setTurnOfWithId(game.getPlayerOne());
+        return game;
+    }
 }

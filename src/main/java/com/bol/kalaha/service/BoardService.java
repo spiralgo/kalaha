@@ -10,10 +10,9 @@ import java.util.Optional;
 
 @Service
 public class BoardService {
-
-    @Autowired
     private BoardRepository boardRepository;
 
+    @Autowired
     public BoardService(BoardRepository boardRepositoryMock) {
         this.boardRepository = boardRepositoryMock;
     }

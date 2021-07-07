@@ -6,10 +6,10 @@ import com.bol.kalaha.exception.ResourceException;
 import com.bol.kalaha.model.Board;
 import com.bol.kalaha.model.Game;
 import com.bol.kalaha.model.Player;
-import com.bol.kalaha.repository.PlayerRepository;
 import com.bol.kalaha.service.BoardService;
 import com.bol.kalaha.service.GameService;
 import com.bol.kalaha.service.PlayService;
+import com.bol.kalaha.service.PlayerService;
 import com.bol.kalaha.util.GameRules;
 import com.bol.kalaha.util.MoveValidationUtil;
 import com.bol.kalaha.util.WebSocketUtil;
@@ -23,25 +23,27 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/play")
 public class PlayResource {
-    @Autowired
     private GameService gameService;
-
-    @Autowired
-    private PlayerRepository playerRepository;
-
-    @Autowired
+    private PlayerService playerService;
     private BoardService boardService;
-
-    @Autowired
     private PlayService playService;
+    private WebSocketResource webSocketResource;
 
     @Autowired
-    private WebSocketResource webSocketResource;
+    public PlayResource(GameService gameService, PlayerService playerService,
+                        BoardService boardService, PlayService playService,
+                        WebSocketResource webSocketResource) {
+        this.gameService = gameService;
+        this.playerService = playerService;
+        this.boardService = boardService;
+        this.playService = playService;
+        this.webSocketResource = webSocketResource;
+    }
 
     @RequestMapping(value = "/{gameId}/{playerId}/{position}", method = RequestMethod.POST)
     public ResponseEntity<Board> movePlay(@PathVariable Long gameId, @PathVariable Long playerId, @PathVariable Integer position) {
         Optional<Game> game = gameService.findById(gameId);
-        Optional<Player> player = playerRepository.findById(playerId);
+        Optional<Player> player = playerService.findById(playerId);
         Optional<Board> board = boardService.getBoardByGame(game.get());
         Board resultBoard;
         if (player.isPresent() && game.isPresent() && board.isPresent()) {
@@ -54,16 +56,16 @@ public class PlayResource {
                     if (resultBoard == null) return ResponseEntity.badRequest().build();
                     GameRules gameRules = new GameRules();
                     if (gameRules.checkGameOver(board.get())) {
-                        playService.finishGame(board.get().getGame());
+                        gameService.finishGame(game.get());
                         webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(WebSocketActionEnum.END,
-                                "The game ends."), board.get().getGame().getId());
+                                "The game ends.", game.get()), game.get().getId());
                     } else {
 
                         if (!gameRules.checkExtraMove(isPlayerOne, theLastPosition)) {
-                            gameService.changeTurn(game.get());
+                            gameRules.changeTurn(game.get());
                         }
-                        webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_BOARD,
-                                "It is the turn of " + game.get().getTurnOfWithId().getName()), game.get().getId());
+                        webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_GAME,
+                                "It is the turn of " + game.get().getTurnOfWithId().getName(), game.get()), game.get().getId());
 
                     }
                     boardService.updateBoard(board.get());

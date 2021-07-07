@@ -9,8 +9,6 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class WebSocketResource {
-
-    @Autowired
     private final SimpMessagingTemplate template;
 
     @Autowired

@@ -27,32 +27,29 @@ export const joinAGame = (gameId) => {
             .patch(GAME_JOIN + "/" + gameId,
                 {"id": localStorage.getItem("playerId"), "name": localStorage.getItem("playerName")})
             .then(response => {
-                dispatch(updateJoinAGame(response.data))
+                dispatch(refreshTheGame(response.data))
             })
             .catch(error => console.log(error));
     };
 };
-
+export const refreshGame = (game) => {
+    return dispatch => {
+        dispatch(refreshTheGame(game));
+    };
+};
 export const move = (gameId, pitPosition) => {
     return dispatch => {
         axios
             .post(MOVE_API + "/" + gameId + "/" + localStorage.getItem("playerId") + "/" + pitPosition, {})
-            .then(response => dispatch(updateBoard(response.data)))
+            .then(response => console.log("data received."))
             .catch(error => showNotification("Move warning", "warning", error.response.data));
     };
 };
 
-function updateJoinAGame(game) {
+function refreshTheGame(game) {
     return {
-        type: "UPDATE_JOIN_A_GAME",
+        type: "REFRESH_THE_GAME",
         game: game
-    }
-}
-
-function updateBoard(board) {
-    return {
-        type: "UPDATE_BOARD",
-        board: board
     }
 }
 
