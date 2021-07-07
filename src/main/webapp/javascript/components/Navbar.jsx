@@ -16,8 +16,8 @@ function NavbarComponent(props) {
     </Navbar.Collapse>;
 
     function handleSubmit() {
-        localStorage.setItem("playerId", null);
-        localStorage.setItem("playerName", null);
+        localStorage.removeItem("playerId");
+        localStorage.removeItem("playerName");
         location.reload();
     }
     return (
