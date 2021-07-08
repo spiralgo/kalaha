@@ -1,7 +1,8 @@
 import {store} from "react-notifications-component";
 
 export function showNotification(title, type, message){
-    store.addNotification({
+    if (typeof message === 'string' || message instanceof String)
+        store.addNotification({
         title: title,
         message: message,
         type: type,

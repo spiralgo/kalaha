@@ -17,8 +17,8 @@ public class Game extends BasicModel {
     @JoinColumn(name = "player_one_id", referencedColumnName = "id")
     @Getter
     @Setter
-
     private Player playerOne;
+
     @ManyToOne
     @JoinColumn(name = "player_two_id", referencedColumnName = "id")
     @Getter
@@ -26,10 +26,10 @@ public class Game extends BasicModel {
     private Player playerTwo;
 
     @ManyToOne
-    @JoinColumn(name = "turn_of_with_id", referencedColumnName = "id")
+    @JoinColumn(name = "turn_of", referencedColumnName = "id")
     @Getter
     @Setter
-    private Player turnOfWithId;
+    private Player turnOf;
 
     @Getter
     @Setter

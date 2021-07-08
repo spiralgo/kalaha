@@ -4,11 +4,8 @@ import com.bol.kalaha.model.Board;
 import com.bol.kalaha.model.Game;
 import com.bol.kalaha.model.Pit;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public class GameRules {
 
@@ -115,10 +112,10 @@ public class GameRules {
     }
 
     public Game changeTurn(Game game) {
-        if (game.getTurnOfWithId().equals(game.getPlayerOne()))
-            game.setTurnOfWithId(game.getPlayerTwo());
+        if (game.getTurnOf().equals(game.getPlayerOne()))
+            game.setTurnOf(game.getPlayerTwo());
         else
-            game.setTurnOfWithId(game.getPlayerOne());
+            game.setTurnOf(game.getPlayerOne());
         return game;
     }
 }

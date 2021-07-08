@@ -65,7 +65,7 @@ public class PlayResource {
                             gameRules.changeTurn(game.get());
                         }
                         webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_GAME,
-                                "It is the turn of " + game.get().getTurnOfWithId().getName(), game.get()), game.get().getId());
+                                "It is the turn of " + game.get().getTurnOf().getName(), game.get()), game.get().getId());
 
                     }
                     boardService.updateBoard(board.get());
@@ -86,10 +86,10 @@ public class PlayResource {
              message = "You need an opponent.";
         }else if (!MoveValidationUtil.isMyTurn(game, player)){
             message = "It is not your turn.";
-        }else if (game.getTurnOfWithId().equals(game.getPlayerOne())
+        }else if (game.getTurnOf().equals(game.getPlayerOne())
                 && (position < PlayService.PIT_0_PLAYER_ONE || position >= PlayService.KALAHA_PLAYER_ONE)){
             message = "Your pits are on the top row.";
-        } else if (game.getTurnOfWithId().equals(game.getPlayerTwo())
+        } else if (game.getTurnOf().equals(game.getPlayerTwo())
                 && (position < PlayService.PIT_0_PLAYER_TWO || position >= PlayService.KALAHA_PLAYER_TWO)){
             message = "Your pits are on the bottom row.";
         } else if (game.getBoard().getPits().get(position-1).getValue()==0){

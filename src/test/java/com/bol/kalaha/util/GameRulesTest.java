@@ -1,7 +1,9 @@
 package com.bol.kalaha.util;
 
 import com.bol.kalaha.model.Board;
+import com.bol.kalaha.model.Game;
 import com.bol.kalaha.model.Pit;
+import com.bol.kalaha.model.Player;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -164,5 +166,25 @@ class GameRulesTest {
         assertEquals(0,board.getPits().get(7).getValue());
         assertEquals(0,board.getPits().get(8).getValue());
 
+    }
+
+    @Test
+    void getOpponentIndex() {
+         assertEquals(KALAHA_PLAYER_ONE, gameRules.getOpponentIndex(KALAHA_PLAYER_ONE-1));
+    }
+
+    @Test
+    void changeTurn() {
+        Game game = new Game();
+
+        Player player1 = new Player();
+        player1.setId(1L);
+        Player player2 = new Player();
+        player2.setId(2L);
+        game.setPlayerOne(player1);
+        game.setPlayerOne(player2);
+        game.setTurnOf(player1);
+        gameRules.changeTurn(game);
+        assertEquals(player2, game.getTurnOf());
     }
 }

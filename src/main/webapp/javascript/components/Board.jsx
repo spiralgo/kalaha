@@ -26,7 +26,7 @@ function Board(props) {
              <Table striped bordered hover variant="dark" responsive="sm">
                 <tbody>
                 <tr>
-                    <td rowSpan={2} colSpan={1}><Mancala isTurn = {props.gameToJoin.playerOne.id == props.gameToJoin.turnOfWithId.id} playerName={props.gameToJoin.playerOne==null?'': props.gameToJoin.playerOne.name} label={"Kalaha 1:"}
+                    <td rowSpan={2} colSpan={1}><Mancala isTurn = {props.gameToJoin.playerOne.id == props.gameToJoin.turnOf.id} playerName={props.gameToJoin.playerOne==null?'': props.gameToJoin.playerOne.name} label={"Kalaha 1:"}
                                              score={board.pits[6].value}/></td>
 
 
@@ -34,7 +34,7 @@ function Board(props) {
                         return (addPit(playerSideArray, props.gameToJoin));
 
                     })}
-                    <td rowSpan={2} colSpan={1}><Mancala  isTurn = {props.gameToJoin.playerTwo!==null && props.gameToJoin.playerTwo.id == props.gameToJoin.turnOfWithId.id} playerName={props.gameToJoin.playerTwo==null?'': props.gameToJoin.playerTwo.name} label={"Kalaha 2:"}
+                    <td rowSpan={2} colSpan={1}><Mancala  isTurn = {props.gameToJoin.playerTwo!==null && props.gameToJoin.playerTwo.id == props.gameToJoin.turnOf.id} playerName={props.gameToJoin.playerTwo==null?'': props.gameToJoin.playerTwo.name} label={"Kalaha 2:"}
                                              score={board.pits[13].value}/></td>
 
                 </tr>

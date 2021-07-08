@@ -45,7 +45,7 @@ public class GameResource {
         Board board = BoardUtil.initiateABoard();
         board.setGame(createdGame);
         createdGame.setBoard(board);
-        createdGame.setTurnOfWithId(playerOne);
+        createdGame.setTurnOf(playerOne);
         gameService.createNewGame(createdGame);
         webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_GAME_LIST,
                 "Game #" + createdGame.getId() + " is created by " + playerOne.getName(), null));
