@@ -57,9 +57,8 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin, refreshGame}) => {
         const playerId = localStorage.getItem("playerId");
         const playerName = localStorage.getItem("playerName");
 
-        axios.post("/game/create", {
-            data: JSON.stringify({"id": playerId, "name": playerName})
-        }).then((response) => {
+        axios.post("/game/create",                 {"id": localStorage.getItem("playerId"), "name": localStorage.getItem("playerName")})
+            .then((response) => {
                 if (!response.ok) {
 
                     console.log("Failed to create a game.", "danger");
