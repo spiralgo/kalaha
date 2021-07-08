@@ -24,15 +24,22 @@ import java.util.Optional;
 @RequestMapping("/game")
 public class GameResource {
 
-    @Autowired
     private GameService gameService;
 
-    @Autowired
     private WebSocketResource webSocketResource;
+
+    @Autowired
+    public GameResource(GameService gameService, WebSocketResource webSocketResource) {
+        this.gameService = gameService;
+        this.webSocketResource = webSocketResource;
+    }
 
     @PostMapping(value = "/create")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Game> createNewGame(@RequestBody Player playerOne, HttpServletResponse response) {
+         if (playerOne.getId() == null)
+            throw new ResourceException(HttpStatus.BAD_REQUEST,  "You need to create a user first.");
+
         Game createdGame = new Game();
         createdGame.setPlayerOne(playerOne);
         Board board = BoardUtil.initiateABoard();

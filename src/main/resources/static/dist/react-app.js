@@ -2161,7 +2161,7 @@ var joinAGame = function joinAGame(gameId) {
     }).then(function (response) {
       dispatch(refreshTheGame(response.data));
     })["catch"](function (error) {
-      return console.log(error);
+      return (0,_config_notification__WEBPACK_IMPORTED_MODULE_2__.showNotification)("Game warning", "warning", error.response.data);
     });
   };
 };
@@ -2324,17 +2324,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _actions_games_action__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../actions/games-action */ "./src/main/webapp/javascript/actions/games-action.js");
 /* harmony import */ var react_stomp__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-stomp */ "./node_modules/react-stomp/dist/client.js");
-/* harmony import */ var react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-bootstrap/Button */ "./node_modules/react-bootstrap/esm/Button.js");
+/* harmony import */ var react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-bootstrap/Button */ "./node_modules/react-bootstrap/esm/Button.js");
 /* harmony import */ var _config_properties__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../config/properties */ "./src/main/webapp/javascript/config/properties.js");
 /* harmony import */ var _config_notification__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../config/notification */ "./src/main/webapp/javascript/config/notification.js");
 /* harmony import */ var react_table_scrollbar__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-table-scrollbar */ "./node_modules/react-table-scrollbar/build/index.js");
 /* harmony import */ var react_table_scrollbar__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react_table_scrollbar__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Container.js");
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Row.js");
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Col.js");
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Table.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Container.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Row.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Col.js");
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/Table.js");
 /* harmony import */ var _Board__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Board */ "./src/main/webapp/javascript/components/Board.jsx");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_8__);
 var _this = undefined;
+
 
 
 
@@ -2391,23 +2394,11 @@ var GameList = function GameList(_ref) {
     fetchGames();
   }, []);
 
-  function handleSubmit() {
+  function startAGame() {
     var playerId = localStorage.getItem("playerId");
     var playerName = localStorage.getItem("playerName");
-
-    if (playerId == null) {
-      (0,_config_notification__WEBPACK_IMPORTED_MODULE_5__.showNotification)("Warning", "warning", "You need to create player first.");
-      return;
-    }
-
-    fetch("/game/create", {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer my-token',
-        'My-Custom-Header': 'foobar'
-      },
-      body: JSON.stringify({
+    axios__WEBPACK_IMPORTED_MODULE_8___default().post("/game/create", {
+      data: JSON.stringify({
         "id": playerId,
         "name": playerName
       })
@@ -2416,7 +2407,7 @@ var GameList = function GameList(_ref) {
         console.log("Failed to create a game.", "danger");
       }
     })["catch"](function (error) {
-      console.log(error, "danger");
+      (0,_config_notification__WEBPACK_IMPORTED_MODULE_5__.showNotification)("Game warning", "warning", error.response.data);
     });
     return false;
   }
@@ -2439,22 +2430,20 @@ var GameList = function GameList(_ref) {
       return onMessageReceived(msg);
     },
     debug: true
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("form", {
-    onSubmit: handleSubmit.bind(_this)
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_8__.default, {
-    type: "submit"
-  }, "Start a Game")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_9__.default, {
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_9__.default, {
+    onClick: startAGame.bind(_this)
+  }, "Start a Game"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default, {
     fluid: true
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_10__.default, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_11__.default, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_11__.default, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_12__.default, {
     sm: 3
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement((react_table_scrollbar__WEBPACK_IMPORTED_MODULE_6___default()), {
     rows: 18
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_12__.default, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_13__.default, {
     striped: true,
     bordered: true,
     hover: true,
     size: "sm"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Game:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "By"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", null, listItems)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_11__.default, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "Game:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("th", null, "By"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("tbody", null, listItems)))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_12__.default, {
     sm: 9
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Board__WEBPACK_IMPORTED_MODULE_7__.default, {
     gameToJoin: gameToJoin
@@ -2539,15 +2528,13 @@ function NavbarComponent(props) {
   var endPart = '';
   if (localStorage.getItem("playerName") != null) endPart = /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__.default.Collapse, {
     className: "justify-content-end"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__.default.Text, null, "Welcome " + localStorage.getItem("playerName") + "!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement("form", {
-    onSubmit: handleSubmit.bind(this)
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_2__.default, {
-    type: "submit"
-  }, "Logout")));
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__.default.Text, null, "Welcome " + localStorage.getItem("playerName") + "!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0__.createElement(react_bootstrap_Button__WEBPACK_IMPORTED_MODULE_2__.default, {
+    onClick: logout.bind(this)
+  }, "Logout"));
 
-  function handleSubmit() {
-    localStorage.setItem("playerId", null);
-    localStorage.setItem("playerName", null);
+  function logout() {
+    localStorage.removeItem("playerId");
+    localStorage.removeItem("playerName");
     location.reload();
   }
 

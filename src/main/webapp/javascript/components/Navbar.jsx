@@ -10,12 +10,11 @@ function NavbarComponent(props) {
         <Navbar.Text>
             { "Welcome " +localStorage.getItem("playerName")+"!"}
         </Navbar.Text>
-        <form onSubmit={handleSubmit.bind(this)}>
-            <Button type={"submit"}>Logout</Button>
-        </form>
+        <Button onClick={logout.bind(this)}>Logout</Button>
+
     </Navbar.Collapse>;
 
-    function handleSubmit() {
+    function logout() {
         localStorage.removeItem("playerId");
         localStorage.removeItem("playerName");
         location.reload();

@@ -8,6 +8,7 @@ import {showNotification} from "../config/notification";
 import TableScrollbar from 'react-table-scrollbar';
 import {Container, Col, Row, Table} from "react-bootstrap";
 import Board from "./Board";
+import axios from "axios";
 
 const GameList = ({fetchGames, games, joinAGame, gameToJoin, refreshGame}) => {
 
@@ -51,23 +52,13 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin, refreshGame}) => {
     }, []);
 
 
-    function handleSubmit() {
+    function startAGame() {
 
         const playerId = localStorage.getItem("playerId");
         const playerName = localStorage.getItem("playerName");
 
-        if (playerId == null) {
-            showNotification("Warning", "warning", "You need to create player first.") ;
-            return;
-        }
-        fetch("/game/create", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer my-token',
-                'My-Custom-Header': 'foobar'
-            },
-            body: JSON.stringify({"id": playerId, "name": playerName})
+        axios.post("/game/create", {
+            data: JSON.stringify({"id": playerId, "name": playerName})
         }).then((response) => {
                 if (!response.ok) {
 
@@ -76,7 +67,7 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin, refreshGame}) => {
                 }
             }
         ).catch((error) => {
-            console.log(error, "danger");
+            showNotification("Game warning", "warning", error.response.data)
 
         });
         return false;
@@ -100,9 +91,9 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin, refreshGame}) => {
                 debug={true}
             />
 
-            <form onSubmit={handleSubmit.bind(this)}>
-                <Button type={"submit"}>Start a Game</Button>
-            </form>
+
+                <Button  onClick={startAGame.bind(this)}>Start a Game</Button>
+
              <Container fluid>
                 <Row>
                     <Col sm={3}>

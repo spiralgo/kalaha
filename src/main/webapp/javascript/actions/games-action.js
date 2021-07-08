@@ -29,7 +29,7 @@ export const joinAGame = (gameId) => {
             .then(response => {
                 dispatch(refreshTheGame(response.data))
             })
-            .catch(error => console.log(error));
+            .catch(error => showNotification("Game warning", "warning", error.response.data));
     };
 };
 export const refreshGame = (game) => {
