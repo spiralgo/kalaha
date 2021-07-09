@@ -1,14 +1,8 @@
 import axios from "axios";
-import { store } from 'react-notifications-component';
 import {showNotification} from "../config/notification";
 
-const API = '';
-const GAME_API = API + "/game";
-const MOVE_API = API + "/play";
-const GAME_GET_BOARD = MOVE_API + "/board/";
-const GAME_CREATE_API = GAME_API + "/create";
-const GAME_GET_ALL = API;
-const GAME_GET_ALL_AVAILABLE_GAMES = GAME_API + "/gameslist";
+const GAME_API = "/game";
+const MOVE_API = "/move";;
 const GAME_JOIN = GAME_API + "/join";
 
 export const fetchGames = () => {

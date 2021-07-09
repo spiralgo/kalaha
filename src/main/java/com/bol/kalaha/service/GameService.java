@@ -4,13 +4,11 @@ import com.bol.kalaha.model.Game;
 import com.bol.kalaha.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional
 public class GameService {
     private GameRepository gameRepository;
 
@@ -20,13 +18,12 @@ public class GameService {
     }
 
     public Game createNewGame(Game game) {
-        gameRepository.save(game);
+        game = gameRepository.save(game);
         return game;
     }
 
     public Optional<Game> findById(Long gameId) {
-
-        return gameRepository.findById(gameId);
+           return gameRepository.findById(gameId);
     }
     public Game joinGame(Game game) {
         Game result = gameRepository.save(game);
@@ -38,7 +35,7 @@ public class GameService {
         return result;
 
     }
-    public List<Game> getGamesToJoin() {
+    public List<Game> getGames() {
         List<Game> games = gameRepository.findAllByOrderByIdDesc();
         return games;
     }

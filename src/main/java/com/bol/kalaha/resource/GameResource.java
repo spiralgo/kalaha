@@ -89,7 +89,7 @@ public class GameResource {
     @GetMapping
     @ResponseBody
     public List<Game> getGamesToJoin() {
-        List<Game> games = gameService.getGamesToJoin();
+        List<Game> games = gameService.getGames();
         return games;
     }
 

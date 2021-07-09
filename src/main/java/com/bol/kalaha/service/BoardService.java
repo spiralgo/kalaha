@@ -17,18 +17,8 @@ public class BoardService {
         this.boardRepository = boardRepositoryMock;
     }
 
-    public Board createNewBoard(Board board) {
-        boardRepository.save(board);
-        return board;
-
-    }
-
     public void updateBoard(Board board) {
         boardRepository.save(board);
-    }
-
-    public Optional<Board> getBoardById(Long id) {
-        return boardRepository.findById(id);
     }
 
     public Optional<Board> getBoardByGame(Game game) {

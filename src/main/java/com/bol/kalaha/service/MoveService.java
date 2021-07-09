@@ -4,11 +4,8 @@ import com.bol.kalaha.model.Board;
 import com.bol.kalaha.util.GameRules;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-
 @Service
-@Transactional
-public class PlayService {
+public class MoveService {
     public static final Integer PIT_0_PLAYER_ONE = 1;
     public static final Integer PIT_0_PLAYER_TWO = 8;
     public static final Integer KALAHA_PLAYER_ONE = 7;

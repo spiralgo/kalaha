@@ -8,7 +8,7 @@ import com.bol.kalaha.model.Game;
 import com.bol.kalaha.model.Player;
 import com.bol.kalaha.service.BoardService;
 import com.bol.kalaha.service.GameService;
-import com.bol.kalaha.service.PlayService;
+import com.bol.kalaha.service.MoveService;
 import com.bol.kalaha.service.PlayerService;
 import com.bol.kalaha.util.GameRules;
 import com.bol.kalaha.util.MoveValidationUtil;
@@ -21,22 +21,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/play")
-public class PlayResource {
+@RequestMapping("/move")
+public class MoveResource {
     private GameService gameService;
     private PlayerService playerService;
     private BoardService boardService;
-    private PlayService playService;
+    private MoveService moveService;
     private WebSocketResource webSocketResource;
 
     @Autowired
-    public PlayResource(GameService gameService, PlayerService playerService,
-                        BoardService boardService, PlayService playService,
+    public MoveResource(GameService gameService, PlayerService playerService,
+                        BoardService boardService, MoveService moveService,
                         WebSocketResource webSocketResource) {
         this.gameService = gameService;
         this.playerService = playerService;
         this.boardService = boardService;
-        this.playService = playService;
+        this.moveService = moveService;
         this.webSocketResource = webSocketResource;
     }
 
@@ -44,18 +44,19 @@ public class PlayResource {
     public ResponseEntity<Board> movePlay(@PathVariable Long gameId, @PathVariable Long playerId, @PathVariable Integer position) {
         Optional<Game> game = gameService.findById(gameId);
         Optional<Player> player = playerService.findById(playerId);
-        Optional<Board> board = boardService.getBoardByGame(game.get());
-        Board resultBoard;
-        if (player.isPresent() && game.isPresent() && board.isPresent()) {
 
-                ResponseEntity<Board> response = validateMove(game.get(), player.get(), position);
-                if (response == null) {
+        if (player.isPresent() && game.isPresent()) {
+
+               boolean isValidMove = validateMove(game.get(), player.get(), position);
+                if (isValidMove) {
                     boolean isPlayerOne = (player.get().equals(game.get().getPlayerOne()));
-                    resultBoard = board.get();
-                    int theLastPosition = playService.movePlay(resultBoard, isPlayerOne, position);
+                    Board resultBoard = game.get().getBoard();
+                    int theLastPosition = moveService.movePlay(resultBoard, isPlayerOne, position);
+
                     if (resultBoard == null) return ResponseEntity.badRequest().build();
+
                     GameRules gameRules = new GameRules();
-                    if (gameRules.checkGameOver(board.get())) {
+                    if (gameRules.checkGameOver(resultBoard)) {
                         gameService.finishGame(game.get());
                         webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(WebSocketActionEnum.END,
                                 "The game ends.", game.get()), game.get().getId());
@@ -68,7 +69,8 @@ public class PlayResource {
                                 "It is the turn of " + game.get().getTurnOf().getName(), game.get()), game.get().getId());
 
                     }
-                    boardService.updateBoard(board.get());
+                    boardService.updateBoard(resultBoard);
+
                     return ResponseEntity.ok(resultBoard);
                 }
             }
@@ -77,7 +79,7 @@ public class PlayResource {
     }
 
     //TODO: messages should be taken from an i18n properties file instead of hard-coding. Reduce if-else statements if possible.
-    public ResponseEntity<Board> validateMove(Game game, Player player, Integer position) {
+    public boolean validateMove(Game game, Player player, Integer position) {
         String message = "";
 
         if (game.isOver()){
@@ -87,10 +89,10 @@ public class PlayResource {
         }else if (!MoveValidationUtil.isMyTurn(game, player)){
             message = "It is not your turn.";
         }else if (game.getTurnOf().equals(game.getPlayerOne())
-                && (position < PlayService.PIT_0_PLAYER_ONE || position >= PlayService.KALAHA_PLAYER_ONE)){
+                && (position < MoveService.PIT_0_PLAYER_ONE || position >= MoveService.KALAHA_PLAYER_ONE)){
             message = "Your pits are on the top row.";
         } else if (game.getTurnOf().equals(game.getPlayerTwo())
-                && (position < PlayService.PIT_0_PLAYER_TWO || position >= PlayService.KALAHA_PLAYER_TWO)){
+                && (position < MoveService.PIT_0_PLAYER_TWO || position >= MoveService.KALAHA_PLAYER_TWO)){
             message = "Your pits are on the bottom row.";
         } else if (game.getBoard().getPits().get(position-1).getValue()==0){
             message=  "This pit is empty.";
@@ -100,7 +102,7 @@ public class PlayResource {
          throw new ResourceException(HttpStatus.BAD_REQUEST,  message);
 
 
-        return null;
+        return true;
     }
 }
 
