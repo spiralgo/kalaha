@@ -8,7 +8,7 @@ import com.bol.kalaha.service.BoardService;
 import com.bol.kalaha.service.GameService;
 import com.bol.kalaha.service.MoveService;
 import com.bol.kalaha.service.PlayerService;
-import com.bol.kalaha.util.GameRulesService;
+import com.bol.kalaha.service.GameRulesService;
 import com.bol.kalaha.util.MoveValidationUtil;
 import com.bol.kalaha.util.WebSocketUtil;
 import org.springframework.beans.factory.annotation.Autowired;

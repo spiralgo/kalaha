@@ -1,4 +1,4 @@
-package com.bol.kalaha.util;
+package com.bol.kalaha.service;
 
 import com.bol.kalaha.model.Board;
 import com.bol.kalaha.model.Game;

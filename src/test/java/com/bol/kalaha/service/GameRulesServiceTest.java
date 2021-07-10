@@ -1,9 +1,10 @@
-package com.bol.kalaha.util;
+package com.bol.kalaha.service;
 
 import com.bol.kalaha.model.Board;
 import com.bol.kalaha.model.Game;
 import com.bol.kalaha.model.Pit;
 import com.bol.kalaha.model.Player;
+import com.bol.kalaha.service.GameRulesService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,13 +1,11 @@
 package com.bol.kalaha.service;
 
 import com.bol.kalaha.model.Board;
-import com.bol.kalaha.util.GameRulesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class MoveService {
-
     GameRulesService gameRulesService;
 
     @Autowired
@@ -20,6 +18,4 @@ public class MoveService {
         gameRulesService.checkAndCapture(isPlayerOne, theLastPosition, board);
         return theLastPosition;
     }
-
-
 }
