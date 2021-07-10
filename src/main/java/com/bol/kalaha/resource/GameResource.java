@@ -60,11 +60,12 @@ public class GameResource {
         Optional<Game> gameOptional = gameService.findById(gameId);
         Game game = gameOptional.get();
         if(gameOptional.isPresent()){
-            String message = "You need to create a user first.";
 
-            JoinAGameValidationEnum answer = validateJoin(game, player);
+            String message = "";
+            JoinAGameValidationEnum answer = gameService.validateJoin(game, player);
 
             if (answer == JoinAGameValidationEnum.NEED_TO_CREATE_A_PLAYER) {
+                message = "You need to create a user first.";
                 throw new ResourceException(HttpStatus.BAD_REQUEST, message);
             }else if (answer == JoinAGameValidationEnum.JOIN_AS_THE_PLAYER_TWO) {
                 game.setPlayerTwo(player);
@@ -91,27 +92,6 @@ public class GameResource {
     public List<Game> getGamesToJoin() {
         List<Game> games = gameService.getGames();
         return games;
-    }
-
-
-    private JoinAGameValidationEnum validateJoin(Game game, Player player) throws ResourceException {
-        JoinAGameValidationEnum result = JoinAGameValidationEnum.NEED_TO_CREATE_A_PLAYER;
-
-        if (player.getId() == null)
-            return result;
-
-        Player playerOne = game.getPlayerOne();
-        Player playerTwo = game.getPlayerTwo();
-
-        if (player.equals(playerOne) || player.equals(playerTwo)){
-                result = JoinAGameValidationEnum.ALREADY_A_PLAYER;
-        }else if(playerTwo == null){
-            result = JoinAGameValidationEnum.JOIN_AS_THE_PLAYER_TWO;
-        }else {
-            result = JoinAGameValidationEnum.JOIN_AS_A_WIEVER;
-
-        }
-        return result;
     }
 
 }

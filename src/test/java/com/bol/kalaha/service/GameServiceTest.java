@@ -3,6 +3,7 @@ package com.bol.kalaha.service;
 import com.bol.kalaha.model.Game;
 import com.bol.kalaha.model.Player;
 import com.bol.kalaha.repository.GameRepository;
+import com.bol.kalaha.util.JoinAGameValidationEnum;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -88,5 +90,32 @@ class GameServiceTest {
                 .findAllByOrderByIdDesc();
 
         assertThat(gameService.getGames().size(),  Matchers.equalTo(1));
+    }
+    @Test
+    void validateJoin(){
+         Game game = new Game();
+         Player player1 = new Player();
+         Player player2 = new Player();
+         player1.setId(1L);
+
+         game.setPlayerOne(player1);
+
+
+         Player player = new Player();
+         assertEquals(JoinAGameValidationEnum.NEED_TO_CREATE_A_PLAYER,
+                                    gameService.validateJoin(game, player));
+         player.setId(1L);
+         assertEquals(JoinAGameValidationEnum.ALREADY_A_PLAYER,
+                gameService.validateJoin(game, player));
+
+        player.setId(3L);
+        assertEquals(JoinAGameValidationEnum.JOIN_AS_THE_PLAYER_TWO,
+                gameService.validateJoin(game, player));
+
+        player2.setId(2L);
+        game.setPlayerTwo(player2);
+        assertEquals(JoinAGameValidationEnum.JOIN_AS_A_WIEVER,
+                gameService.validateJoin(game, player));
+
     }
 }
