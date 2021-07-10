@@ -1,10 +1,7 @@
 package com.bol.kalaha.service;
 
-import com.bol.kalaha.exception.ResourceException;
 import com.bol.kalaha.model.Game;
-import com.bol.kalaha.model.Player;
 import com.bol.kalaha.repository.GameRepository;
-import com.bol.kalaha.util.JoinAGameValidationEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
