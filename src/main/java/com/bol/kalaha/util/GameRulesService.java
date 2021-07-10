@@ -3,11 +3,13 @@ package com.bol.kalaha.util;
 import com.bol.kalaha.model.Board;
 import com.bol.kalaha.model.Game;
 import com.bol.kalaha.model.Pit;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-public class GameRules {
+@Service
+public class GameRulesService {
 
     public static final Integer KALAHA_PLAYER_ONE = 7;
     public static final Integer KALAHA_PLAYER_TWO = 14;
