@@ -8,12 +8,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.bol.kalaha.util.GameConstantsEnum.KALAHA_PLAYER_ONE;
+import static com.bol.kalaha.util.GameConstantsEnum.KALAHA_PLAYER_TWO;
+
 @Service
 public class GameRulesService {
-
-    public static final Integer KALAHA_PLAYER_ONE = 7;
-    public static final Integer KALAHA_PLAYER_TWO = 14;
-
 
     public int sowPit(Board board, int positionOfPitToPlay, boolean isPlayerOne) {
         List<Pit> pits = board.getPits();
@@ -22,12 +21,12 @@ public class GameRulesService {
         int indexToSow = positionOfPitToPlay - 1;
         int indexOfOpponentsKahala = -1;
         if(isPlayerOne){
-            indexOfOpponentsKahala = KALAHA_PLAYER_TWO-1;
+            indexOfOpponentsKahala = KALAHA_PLAYER_TWO.getValue()-1;
         }else{
-            indexOfOpponentsKahala = KALAHA_PLAYER_ONE-1;
+            indexOfOpponentsKahala = KALAHA_PLAYER_ONE.getValue()-1;
         }
         while (currentNumberOfSeeds > 0) {
-            indexToSow = (++positionOfPitToPlay - 1) % KALAHA_PLAYER_TWO;
+            indexToSow = (++positionOfPitToPlay - 1) % KALAHA_PLAYER_TWO.getValue();
 
             if(indexOfOpponentsKahala==indexToSow){
                 continue;
@@ -51,60 +50,60 @@ public class GameRulesService {
         int opponentIndex = getOpponentIndex(theLastPosition);
         int opponentsPitValue = pits.get(opponentIndex).getValue();
 
-        if (isPlayerOne && theLastPosition >= 1 && theLastPosition < KALAHA_PLAYER_ONE) {
+        if (isPlayerOne && theLastPosition >= 1 && theLastPosition < KALAHA_PLAYER_ONE.getValue()) {
             pits.get(theLastIndex).setValue(0);
             pits.get(opponentIndex).setValue(0);
-            int currentKalahaValue = pits.get(KALAHA_PLAYER_ONE - 1).getValue();
-            pits.get(KALAHA_PLAYER_ONE - 1).setValue(currentKalahaValue + opponentsPitValue + 1);
-        } else if (theLastPosition > KALAHA_PLAYER_ONE && theLastPosition < KALAHA_PLAYER_TWO) {
+            int currentKalahaValue = pits.get(KALAHA_PLAYER_ONE.getValue() - 1).getValue();
+            pits.get(KALAHA_PLAYER_ONE.getValue() - 1).setValue(currentKalahaValue + opponentsPitValue + 1);
+        } else if (theLastPosition > KALAHA_PLAYER_ONE.getValue() && theLastPosition < KALAHA_PLAYER_TWO.getValue()) {
             pits.get(theLastIndex).setValue(0);
             pits.get(opponentIndex).setValue(0);
-            int currentKalahaValue = pits.get(KALAHA_PLAYER_TWO - 1).getValue();
-            pits.get(KALAHA_PLAYER_TWO - 1).setValue(currentKalahaValue + opponentsPitValue + 1);
+            int currentKalahaValue = pits.get(KALAHA_PLAYER_TWO.getValue() - 1).getValue();
+            pits.get(KALAHA_PLAYER_TWO.getValue() - 1).setValue(currentKalahaValue + opponentsPitValue + 1);
         }
 
     }
 
     public boolean checkExtraMove(boolean isPlayerOne, int theLastPosition) {
 
-        return (isPlayerOne && (KALAHA_PLAYER_ONE == theLastPosition))
+        return (isPlayerOne && (KALAHA_PLAYER_ONE.getValue() == theLastPosition))
                 ||
-                (!isPlayerOne && (KALAHA_PLAYER_TWO == theLastPosition));
+                (!isPlayerOne && (KALAHA_PLAYER_TWO.getValue() == theLastPosition));
 
     }
 
     public int getOpponentIndex(int position) {
-        return KALAHA_PLAYER_TWO - position - 1;
+        return KALAHA_PLAYER_TWO.getValue() - position - 1;
     }
     public boolean checkGameOver(Board board) {
         int pitCountPlayer1 = 0;
         int pitCountPlayer2 = 0;
 
         List<Pit> pits = board.getPits();
-        for (int i = 0; i < KALAHA_PLAYER_ONE-1; i++) {
+        for (int i = 0; i < KALAHA_PLAYER_ONE.getValue()-1; i++) {
             pitCountPlayer1 +=  Optional.ofNullable(pits.get(i).getValue()).orElse(0);
 
         }
-       for (int i = KALAHA_PLAYER_ONE; i < KALAHA_PLAYER_TWO-1; i++) {
+       for (int i = KALAHA_PLAYER_ONE.getValue(); i < KALAHA_PLAYER_TWO.getValue()-1; i++) {
            pitCountPlayer2 +=  Optional.ofNullable(pits.get(i).getValue()).orElse(0);
 
        }
 
         boolean isGameOver = true;
             if(pitCountPlayer2 == 0){
-                pitCountPlayer1+= pits.get(KALAHA_PLAYER_ONE-1).getValue();
-                pits.get(KALAHA_PLAYER_ONE-1).setValue(pitCountPlayer1);
+                pitCountPlayer1+= pits.get(KALAHA_PLAYER_ONE.getValue()-1).getValue();
+                pits.get(KALAHA_PLAYER_ONE.getValue()-1).setValue(pitCountPlayer1);
               }else if (pitCountPlayer1 == 0){
-                pitCountPlayer2+= pits.get(KALAHA_PLAYER_TWO-1).getValue();
-                pits.get(KALAHA_PLAYER_TWO-1).setValue(pitCountPlayer2);
+                pitCountPlayer2+= pits.get(KALAHA_PLAYER_TWO.getValue()-1).getValue();
+                pits.get(KALAHA_PLAYER_TWO.getValue()-1).setValue(pitCountPlayer2);
 
             }else{
                 isGameOver = false;
             }
         if(isGameOver) {
 
-            for (int i = 0; i < KALAHA_PLAYER_TWO; i++) {
-                    if(i !=KALAHA_PLAYER_ONE-1 && i!=KALAHA_PLAYER_TWO-1)
+            for (int i = 0; i < KALAHA_PLAYER_TWO.getValue(); i++) {
+                    if(i !=KALAHA_PLAYER_ONE.getValue()-1 && i!=KALAHA_PLAYER_TWO.getValue()-1)
                     pits.get(i).setValue(0);
             }
             board.setPits(pits);

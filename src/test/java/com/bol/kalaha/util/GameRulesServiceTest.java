@@ -12,13 +12,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static com.bol.kalaha.util.GameConstantsEnum.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameRulesServiceTest {
-    public static final Integer KALAHA_PLAYER_ONE = 7;
-    public static final Integer KALAHA_PLAYER_TWO = 14;
-    public static final Integer NUMBER_OF_STONES = 6;
-    public static final Integer EMPTY_KALAHA = 0;
 
     GameRulesService gameRulesService = new GameRulesService();
     Board board;
@@ -32,38 +29,37 @@ class GameRulesServiceTest {
         gameRulesService.sowPit(board, positionOfPitToPlay, true);
         List<Pit> pits = board.getPits();
         assertEquals(0, pits.get(positionOfPitToPlay - 1).getValue());
-        assertEquals(1, pits.get(KALAHA_PLAYER_ONE - 1).getValue());
+        assertEquals(1, pits.get(KALAHA_PLAYER_ONE.getValue() - 1).getValue());
 
         positionOfPitToPlay = 2;
         gameRulesService.sowPit(board, positionOfPitToPlay, true);
         pits = board.getPits();
         assertEquals(0, pits.get(positionOfPitToPlay - 1).getValue());
-        assertEquals(2, pits.get(KALAHA_PLAYER_ONE - 1).getValue());
+        assertEquals(2, pits.get(KALAHA_PLAYER_ONE.getValue() - 1).getValue());
 
         // PLAYER 2's TURN
         positionOfPitToPlay = 13;
         gameRulesService.sowPit(board, positionOfPitToPlay, false);
         pits = board.getPits();
         System.out.println(Arrays.toString(pits.toArray()));
-        //TODO:  pits.forEach(a -> System.out.println(a.getValue()));
         assertEquals(0, pits.get(positionOfPitToPlay - 1).getValue());
-        assertEquals(1, pits.get(KALAHA_PLAYER_TWO - 1).getValue());
+        assertEquals(1, pits.get(KALAHA_PLAYER_TWO.getValue() - 1).getValue());
     }
 
     void setUp() {
         board = new Board();
         board.setId(1L);
         List<Pit> pits = new ArrayList<>();
-        for (int i = 1; i <= KALAHA_PLAYER_TWO; i++) {
-            if (i == KALAHA_PLAYER_ONE || i == KALAHA_PLAYER_TWO) {
+        for (int i = 1; i <= KALAHA_PLAYER_TWO.getValue(); i++) {
+            if (i == KALAHA_PLAYER_ONE.getValue() || i == KALAHA_PLAYER_TWO.getValue()) {
                 Pit kalaha = new Pit();
                 kalaha.setPosition(i);
-                kalaha.setValue(EMPTY_KALAHA);
+                kalaha.setValue(EMPTY_KALAHA.getValue());
                 pits.add(kalaha);
             } else {
                 Pit pit = new Pit();
                 pit.setPosition(i);
-                pit.setValue(NUMBER_OF_STONES);
+                pit.setValue(NUMBER_OF_STONES.getValue());
                 pits.add(pit);
 
             }
@@ -79,8 +75,8 @@ class GameRulesServiceTest {
         int theLastPosition = 3;
         Pit[] pitsArray = new Pit[14];
 
-        pitsArray[KALAHA_PLAYER_ONE - 1] = new Pit();
-        pitsArray[KALAHA_PLAYER_ONE - 1].setValue(0);
+        pitsArray[KALAHA_PLAYER_ONE.getValue() - 1] = new Pit();
+        pitsArray[KALAHA_PLAYER_ONE.getValue() - 1].setValue(0);
 
         pitsArray[theLastPosition - 1] = new Pit();
         pitsArray[theLastPosition - 1].setValue(1);
@@ -92,15 +88,15 @@ class GameRulesServiceTest {
         Board board = new Board();
         board.setPits(pits);
         gameRulesService.checkAndCapture(isPlayerOne, theLastPosition, board);
-        assertEquals(10, pits.get(KALAHA_PLAYER_ONE - 1).getValue());
+        assertEquals(10, pits.get(KALAHA_PLAYER_ONE.getValue() - 1).getValue());
 
         //PLAYER 2's MOVE
         isPlayerOne = false;
         theLastPosition = 10;
         pitsArray = new Pit[14];
 
-        pitsArray[KALAHA_PLAYER_TWO - 1] = new Pit();
-        pitsArray[KALAHA_PLAYER_TWO - 1].setValue(0);
+        pitsArray[KALAHA_PLAYER_TWO.getValue() - 1] = new Pit();
+        pitsArray[KALAHA_PLAYER_TWO.getValue() - 1].setValue(0);
 
         pitsArray[theLastPosition - 1] = new Pit();
         pitsArray[theLastPosition - 1].setValue(1);
@@ -112,7 +108,7 @@ class GameRulesServiceTest {
         new Board();
         board.setPits(pits);
         gameRulesService.checkAndCapture(isPlayerOne, theLastPosition, board);
-        assertEquals(10, pits.get(KALAHA_PLAYER_TWO - 1).getValue());
+        assertEquals(10, pits.get(KALAHA_PLAYER_TWO.getValue() - 1).getValue());
 
     }
 
@@ -120,7 +116,7 @@ class GameRulesServiceTest {
     @DisplayName("Test the check for extra move.")
     void checkExtraMove() {
         boolean isPlayerOne = true;
-        int theLastPosition = KALAHA_PLAYER_ONE;
+        int theLastPosition = KALAHA_PLAYER_ONE.getValue();
 
         assertTrue(gameRulesService.checkExtraMove(isPlayerOne, theLastPosition));
 
@@ -132,13 +128,13 @@ class GameRulesServiceTest {
 
 
         isPlayerOne = false;
-        theLastPosition = KALAHA_PLAYER_ONE;
+        theLastPosition = KALAHA_PLAYER_ONE.getValue();
 
         assertFalse(gameRulesService.checkExtraMove(isPlayerOne, theLastPosition));
 
 
         isPlayerOne = false;
-        theLastPosition = KALAHA_PLAYER_TWO;
+        theLastPosition = KALAHA_PLAYER_TWO.getValue();
 
         assertTrue(gameRulesService.checkExtraMove(isPlayerOne, theLastPosition));
     }
@@ -150,8 +146,8 @@ class GameRulesServiceTest {
 
         Pit[] pitsArray = Stream.generate(Pit::new).limit(14).toArray(Pit[]::new);
 
-        pitsArray[KALAHA_PLAYER_ONE-1].setValue(40);
-        pitsArray[KALAHA_PLAYER_TWO-1].setValue(17);
+        pitsArray[KALAHA_PLAYER_ONE.getValue()-1].setValue(40);
+        pitsArray[KALAHA_PLAYER_TWO.getValue()-1].setValue(17);
 
         pitsArray[7].setValue(1);
         pitsArray[8].setValue(14);
@@ -161,7 +157,7 @@ class GameRulesServiceTest {
 
         assertTrue(gameRulesService.checkGameOver(board));
 
-        assertEquals(32,board.getPits().get(KALAHA_PLAYER_TWO-1).getValue());
+        assertEquals(32,board.getPits().get(KALAHA_PLAYER_TWO.getValue()-1).getValue());
 
         assertEquals(0,board.getPits().get(7).getValue());
         assertEquals(0,board.getPits().get(8).getValue());
@@ -170,7 +166,7 @@ class GameRulesServiceTest {
 
     @Test
     void getOpponentIndex() {
-         assertEquals(KALAHA_PLAYER_ONE, gameRulesService.getOpponentIndex(KALAHA_PLAYER_ONE-1));
+         assertEquals(KALAHA_PLAYER_ONE.getValue(), gameRulesService.getOpponentIndex(KALAHA_PLAYER_ONE.getValue()-1));
     }
 
     @Test

@@ -1,6 +1,5 @@
 package com.bol.kalaha.resource;
-
-import com.bol.kalaha.config.WebSocketActionEnum;
+import static com.bol.kalaha.config.WebSocketActionEnum.*;
 import com.bol.kalaha.config.WebSocketResource;
 import com.bol.kalaha.model.Board;
 import com.bol.kalaha.model.Game;
@@ -10,6 +9,7 @@ import com.bol.kalaha.service.GameService;
 import com.bol.kalaha.service.MoveService;
 import com.bol.kalaha.service.PlayerService;
 import com.bol.kalaha.util.GameRulesService;
+import com.bol.kalaha.util.MoveValidationUtil;
 import com.bol.kalaha.util.WebSocketUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +47,7 @@ public class MoveResource {
 
         if (player.isPresent() && game.isPresent()) {
 
-               boolean isValidMove = moveService.validateMove(game.get(), player.get(), position);
+               boolean isValidMove = MoveValidationUtil.validateMove(game.get(), player.get(), position);
                 if (isValidMove) {
                     boolean isPlayerOne = (player.get().equals(game.get().getPlayerOne()));
                     Board resultBoard = game.get().getBoard();
@@ -57,14 +57,14 @@ public class MoveResource {
 
                     if (gameRulesService.checkGameOver(resultBoard)) {
                         gameService.finishGame(game.get());
-                        webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(WebSocketActionEnum.END,
+                        webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(END,
                                 "The game ends.", game.get()), game.get().getId());
                     } else {
 
                         if (!gameRulesService.checkExtraMove(isPlayerOne, theLastPosition)) {
                             gameRulesService.changeTurn(game.get());
                         }
-                        webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_GAME,
+                        webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(REFRESH_GAME,
                                 "It is the turn of " + game.get().getTurnOf().getName(), game.get()), game.get().getId());
 
                     }
