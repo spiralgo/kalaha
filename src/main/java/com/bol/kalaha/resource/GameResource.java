@@ -8,6 +8,7 @@ import com.bol.kalaha.model.Game;
 import com.bol.kalaha.model.Player;
 import com.bol.kalaha.service.GameService;
 import com.bol.kalaha.util.BoardUtil;
+import com.bol.kalaha.util.GameValidationUtil;
 import com.bol.kalaha.util.JoinAGameValidationEnum;
 import com.bol.kalaha.util.WebSocketUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +63,7 @@ public class GameResource {
         if(gameOptional.isPresent()){
 
             String message = "";
-            JoinAGameValidationEnum answer = gameService.validateJoin(game, player);
+            JoinAGameValidationEnum answer = GameValidationUtil.validateJoin(game, player);
 
             if (answer == JoinAGameValidationEnum.NEED_TO_CREATE_A_PLAYER) {
                 message = "You need to create a user first.";
