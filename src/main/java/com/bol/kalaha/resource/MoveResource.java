@@ -1,5 +1,5 @@
 package com.bol.kalaha.resource;
-import static com.bol.kalaha.config.WebSocketActionEnum.*;
+
 import com.bol.kalaha.config.WebSocketResource;
 import com.bol.kalaha.model.Board;
 import com.bol.kalaha.model.Game;
@@ -13,9 +13,15 @@ import com.bol.kalaha.util.MoveValidationUtil;
 import com.bol.kalaha.util.WebSocketUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
+
+import static com.bol.kalaha.config.WebSocketActionEnum.END;
+import static com.bol.kalaha.config.WebSocketActionEnum.REFRESH_GAME;
 
 @RestController
 @RequestMapping("/move")

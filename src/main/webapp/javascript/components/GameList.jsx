@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect} from 'react'
 import {connect} from "react-redux";
 import {fetchGames, joinAGame, refreshGame} from "../actions/games-action";
 import SockJsClient from 'react-stomp';
@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 import {properties} from "../config/properties";
 import {showNotification} from "../config/notification";
 import TableScrollbar from 'react-table-scrollbar';
-import {Container, Col, Row, Table} from "react-bootstrap";
+import {Col, Container, Row, Table} from "react-bootstrap";
 import Board from "./Board";
 import axios from "axios";
 

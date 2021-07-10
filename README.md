@@ -34,7 +34,7 @@ http://localhost:8080/swagger-ui.html
 TDD is used as much as possible, in order to achieve a nice percent of test coverage, a readble, meaningful but quite a
 minimalistic code.
 
-GameRulesTest is the starting point to code the project as a test-case is provided for each rule of the game.
+GameRulesServiceTest is the starting point to code the project as a test-case is provided for each rule of the game.
  
  
 # TODO: further possible improvements

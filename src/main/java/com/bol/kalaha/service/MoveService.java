@@ -1,14 +1,8 @@
 package com.bol.kalaha.service;
 
-import com.bol.kalaha.exception.ResourceException;
 import com.bol.kalaha.model.Board;
-import com.bol.kalaha.model.Game;
-import com.bol.kalaha.model.Player;
 import com.bol.kalaha.util.GameRulesService;
-import com.bol.kalaha.util.MessagesEnum;
-import com.bol.kalaha.util.MoveValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service

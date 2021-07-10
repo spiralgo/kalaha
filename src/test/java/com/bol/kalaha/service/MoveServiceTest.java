@@ -6,8 +6,6 @@ import com.bol.kalaha.util.GameRulesService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class MoveServiceTest {
     GameRulesService gameRulesService = new GameRulesService();
     MoveService moveService = new MoveService(gameRulesService);
