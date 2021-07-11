@@ -2,7 +2,7 @@ package com.bol.kalaha.util;
 
 //TODO: In the future, these messages should be taken from an i18n properties file.
 public enum MessagesEnum {
-
+    NONEMPTY("Player name should be non-empty."),
     GAME_OVER("The game is over."),
     NEED_OPPONENT("You need an opponent."),
     NOT_YOUR_TURN("It is not your turn."),
