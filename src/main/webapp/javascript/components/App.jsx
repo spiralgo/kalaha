@@ -16,11 +16,11 @@ function App() {
 
             <Switch>
                 <Route exact path="/">
-                    <Player/>
+                    <GameList/>
                 </Route>
 
-                <Route exact path="/games">
-                    <GameList></GameList>
+                <Route exact path="/createPlayer">
+                    <Player/>
                 </Route>
             </Switch>
         </div>

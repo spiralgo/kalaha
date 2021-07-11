@@ -2,7 +2,9 @@ package com.bol.kalaha.util;
 
 //TODO: In the future, these messages should be taken from an i18n properties file.
 public enum MessagesEnum {
-    NONEMPTY("Player name should be non-empty."),
+    PLAYER_CREATED("The player is created successfully"),
+    PLAYER_NAME_3_LETTERS("Player name should have at least 3 letters."),
+    NONEMPTY("Please provide a player name."),
     GAME_OVER("The game is over."),
     NEED_OPPONENT("You need an opponent."),
     NOT_YOUR_TURN("It is not your turn."),

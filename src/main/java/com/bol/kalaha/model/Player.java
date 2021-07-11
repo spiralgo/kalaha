@@ -15,8 +15,8 @@ import javax.validation.constraints.Size;
 @RequiredArgsConstructor
 public class Player extends BasicModel {
 
-    @NotNull
-    @Size(min = 3, max = 50)
+    @NotNull(message = "Please provide a player name.")
+    @Size(min = 3, max = 50, message = "Player name should have at least 3 letters.")
     @Getter
     @Setter
     private String name;

@@ -1,18 +1,22 @@
 import React from 'react';
 import {Nav, Navbar} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
+import {connect} from "react-redux";
 
 function NavbarComponent(props) {
     let endPart = '';
+    let playerLink = '';
+    if(localStorage.getItem("playerName")!=null || props.player.name!=null){
+        endPart =  <Navbar.Collapse className="justify-content-end">
+            <Navbar.Text>
+                { "Welcome " +localStorage.getItem("playerName")+"!"}
+            </Navbar.Text>
+            <Button onClick={logout.bind(this)}>Logout</Button>
+        </Navbar.Collapse>;
+    }else {
+        playerLink = <Nav.Link href="#/createPlayer">Create Player</Nav.Link>;
+    }
 
-    if(localStorage.getItem("playerName")!=null)
-    endPart =  <Navbar.Collapse className="justify-content-end">
-        <Navbar.Text>
-            { "Welcome " +localStorage.getItem("playerName")+"!"}
-        </Navbar.Text>
-        <Button onClick={logout.bind(this)}>Logout</Button>
-
-    </Navbar.Collapse>;
 
     function logout() {
         localStorage.removeItem("playerId");
@@ -23,8 +27,8 @@ function NavbarComponent(props) {
         <Navbar bg="primary" variant="dark">
             <Navbar.Brand>Kalaha</Navbar.Brand>
             <Nav className="mr-auto">
-                <Nav.Link href="#/">Create Player</Nav.Link>
-                <Nav.Link href="#/games">Games</Nav.Link>
+                {playerLink}
+                <Nav.Link href="#/">Games</Nav.Link>
             </Nav>
             {endPart}
         </Navbar>
@@ -32,4 +36,11 @@ function NavbarComponent(props) {
 
 }
 
-export default NavbarComponent;
+
+const mapStateToProps = state => {
+    return {
+        player: state.player
+    }
+}
+
+export default connect(mapStateToProps)(NavbarComponent);

@@ -1,12 +1,11 @@
 import React from 'react'
 import "regenerator-runtime/runtime";
-
 import {connect} from "react-redux";
+import {createAPlayer} from "../actions/player-action";
 
-function Player(props) {
+function Player({createAPlayer}) {
     const [state, setState] = React.useState({
-        name: "",
-        password: ""
+        name: ""
     })
 
     function handleChange(evt) {
@@ -17,36 +16,12 @@ function Player(props) {
         });
     }
 
-
     function handleSubmit(evt) {
         evt.preventDefault();
-
-        fetch("/player/create", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer my-token'
-            },
-            body: JSON.stringify({"name": state.name, "password": state.password})
-        }).then(async (response) => {
-                if (response.ok) {
-                    const body = await response.json();
-
-                    localStorage.setItem("playerId", body.id);
-                    localStorage.setItem("playerName", body.name);
-
-                } else {
-                    alert("Failed to create a user.");
-                }
-            }
-        ).catch((error) => {
-            // Network errors
-            alert(error);
-        });
+        createAPlayer(state.name);
         evt.target.reset();
         return false;
     }
-
 
     return (
         <div>
@@ -68,4 +43,8 @@ const mapStateToProps = state => {
         player: state.player
     }
 }
-export default connect(mapStateToProps)(Player);
+
+const mapDispatchToProps = dispatch => ({
+    createAPlayer: (name) => dispatch(createAPlayer(name))
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Player);
