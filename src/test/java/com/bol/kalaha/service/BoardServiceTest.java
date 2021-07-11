@@ -2,7 +2,6 @@ package com.bol.kalaha.service;
 
 import com.bol.kalaha.model.Board;
 import com.bol.kalaha.model.Pit;
-import com.bol.kalaha.model.Player;
 import com.bol.kalaha.repository.BoardRepository;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.bol.kalaha.util.GameConstantsEnum.*;
-import static com.bol.kalaha.util.GameConstantsEnum.NUMBER_OF_STONES;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.doReturn;
 

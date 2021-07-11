@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.bol.kalaha.util.GameConstantsEnum.*;
-import static com.bol.kalaha.util.GameConstantsEnum.NUMBER_OF_STONES;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MoveServiceTest {

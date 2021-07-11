@@ -57,7 +57,7 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin, refreshGame}) => {
         const playerId = localStorage.getItem("playerId");
         const playerName = localStorage.getItem("playerName");
 
-        axios.post("/game/create",                 {"id": localStorage.getItem("playerId"), "name": localStorage.getItem("playerName")})
+        axios.post("/game/create",                 {"id": playerId, "name": playerName})
             .then((response) => {
                 if (!response.ok) {
 
@@ -90,9 +90,9 @@ const GameList = ({fetchGames, games, joinAGame, gameToJoin, refreshGame}) => {
                 debug={true}
             />
 
-
-                <Button  onClick={startAGame.bind(this)}>Start a Game</Button>
-
+            <br/>
+            <Button  onClick={startAGame.bind(this)}>Start a Game</Button>
+            <br/>
              <Container fluid>
                 <Row>
                     <Col sm={3}>

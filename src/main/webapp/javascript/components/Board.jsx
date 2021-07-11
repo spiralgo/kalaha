@@ -1,6 +1,6 @@
 import React from 'react'
 import Pit from './Pit';
-import {Table} from "react-bootstrap";
+import {Alert, Table} from "react-bootstrap";
 import Mancala from "./Mancala";
 
 function Board(props) {
@@ -14,15 +14,27 @@ function Board(props) {
             </td>
         )
     }
-
+    let description;
     let board;
     if (props.gameToJoin == null) {
         return <div></div>;
     } else {
         board = props.gameToJoin.board;
+        description = "Game #"+props.gameToJoin.id + " by " + props.gameToJoin.playerOne.name+ " ";
+        if(props.gameToJoin.isOver){
+            description += "is already over.";
+        }else{
+            description += "continues.";
+
+        }
     }
 
     return (
+        <div>
+            <Alert variant="dark">
+                {description}
+            </Alert>
+
              <Table striped bordered hover variant="dark" responsive="sm">
                 <tbody>
                 <tr>
@@ -46,7 +58,7 @@ function Board(props) {
                 </tr>
                 </tbody>
             </Table>
-
+        </div>
     )
 }
 

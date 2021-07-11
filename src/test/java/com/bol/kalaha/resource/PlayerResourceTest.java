@@ -15,11 +15,11 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import static org.junit.jupiter.api.Assertions.*;
 
 import static com.bol.kalaha.util.JsonUtil.asJsonString;
 import static com.bol.kalaha.util.JsonUtil.asObject;
 import static com.bol.kalaha.util.MessagesEnum.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @AutoConfigureMockMvc
