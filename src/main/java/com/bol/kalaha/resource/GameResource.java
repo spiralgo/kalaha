@@ -20,6 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
 
+import static com.bol.kalaha.util.MessagesEnum.*;
+
 
 @RestController
 @RequestMapping("/game")
@@ -39,7 +41,7 @@ public class GameResource {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Game> createNewGame(@RequestBody Player playerOne, HttpServletResponse response) {
          if (playerOne.getId() == null)
-            throw new ResourceException(HttpStatus.BAD_REQUEST,  "You need to create a user first.");
+            throw new ResourceException(HttpStatus.BAD_REQUEST, SHOULD_CREATE_PLAYER.getValue());
 
         Game createdGame = new Game();
         createdGame.setPlayerOne(playerOne);
@@ -52,7 +54,6 @@ public class GameResource {
                 "Game #" + createdGame.getId() + " is created by " + playerOne.getName(), null));
 
         return ResponseEntity.ok(createdGame);
-
     }
 
     @PatchMapping(value = "/join/{gameId}")
@@ -60,32 +61,16 @@ public class GameResource {
     public ResponseEntity<Game> joinGame(@PathVariable Long gameId, @RequestBody Player player) {
         Optional<Game> gameOptional = gameService.findById(gameId);
         Game game = gameOptional.get();
-        if(gameOptional.isPresent()){
-
-            String message = "";
+        if(gameOptional.isPresent()) {
             JoinAGameValidationEnum answer = GameValidationUtil.validateJoin(game, player);
-
-            if (answer == JoinAGameValidationEnum.NEED_TO_CREATE_A_PLAYER) {
-                message = "You need to create a user first.";
-                throw new ResourceException(HttpStatus.BAD_REQUEST, message);
-            }else if (answer == JoinAGameValidationEnum.JOIN_AS_THE_PLAYER_TWO) {
-                game.setPlayerTwo(player);
-                gameService.joinGame(game);
-                message = player.getName() +" joins the game as the opponent.";
-            }else if (answer == JoinAGameValidationEnum.ALREADY_A_PLAYER) {
-                message = player.getName() +" rejoins the game.";
-            }else{
-                message = player.getName() +" joins the game as a viewer.";
-             }
+            String message = gameService.startJoinProcess(answer, game, player);
             webSocketResource.publishWebSocket(
-                    WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_GAME,message, game), game.getId());
+                    WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_GAME, message, game), game.getId());
 
         }else {
             throw new ResourceException(HttpStatus.BAD_REQUEST, "Game not found.");
         }
-
-
-        return ResponseEntity.ok(game);
+            return ResponseEntity.ok(game);
     }
 
     @GetMapping

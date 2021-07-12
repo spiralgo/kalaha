@@ -14,15 +14,20 @@ public class MoveValidationUtil {
         boolean result = game.getTurnOf().equals(player);
         return result;
     }
+    public static boolean isAViewer(Game game, Player player) {
+      return (!game.getPlayerOne().equals(player)
+              && game.getPlayerTwo()!=null
+              && !game.getPlayerTwo().equals(player));
+    }
     public static boolean isWrongPit(Game game, Player player, int position) {
         boolean result = false;
         boolean isPlayerOne = player.equals(game.getPlayerOne());
         if (isPlayerOne && isPlayersTurn(game, player)
-                && (position < PIT_0_PLAYER_ONE.getValue()
+                && (position < FIRST_PIT_POS_PLAYER_ONE.getValue()
                 || position >= KALAHA_PLAYER_ONE.getValue())){
             result = true;
         }else if (!isPlayerOne && isPlayersTurn(game, player)
-                && (position < PIT_0_PLAYER_TWO.getValue()
+                && (position < FIRST_PIT_POS_PLAYER_TWO.getValue()
                 || position >= KALAHA_PLAYER_TWO.getValue())){
             result = true;
         }
@@ -36,6 +41,8 @@ public class MoveValidationUtil {
             message = GAME_OVER.getValue();
         } else if (game.getPlayerTwo() == null) {
             message = NEED_OPPONENT.getValue();
+        } else if (isAViewer(game, player)) {
+            message = A_VIEWER.getValue();
         } else if (!isPlayersTurn(game, player)) {
             message = NOT_YOUR_TURN.getValue();
         } else if (isWrongPit(game, game.getPlayerOne(),

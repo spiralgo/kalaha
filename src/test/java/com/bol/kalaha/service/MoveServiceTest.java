@@ -52,9 +52,9 @@ class MoveServiceTest {
     @Test
     void movePlay() {
         prepareBoard();
-        assertEquals(KALAHA_PLAYER_ONE.getValue(), moveService.movePlay(board, true, PIT_0_PLAYER_ONE.getValue()));
+        assertEquals(KALAHA_PLAYER_ONE.getValue(), moveService.movePlay(board, true, FIRST_PIT_POS_PLAYER_ONE.getValue()));
 
-        moveService.movePlay(board, true, PIT_0_PLAYER_ONE.getValue()+1);
+        moveService.movePlay(board, true, FIRST_PIT_POS_PLAYER_ONE.getValue()+1);
         assertEquals(board.getPits().get(KALAHA_PLAYER_ONE.getValue()-1).getValue(), 2);
 
     }

@@ -45,24 +45,44 @@ class MoveValidationUtilTest {
 
     @Test
     void validateMove() {
-        game.setPlayerOne(playerOne);
-        game.setPlayerTwo(playerTwo);
 
-        game.setTurnOf(playerOne);
         game.setBoard(new Board());
         game.getBoard().setPits(new ArrayList<>());
         game.getBoard().getPits().add(new Pit());
-        game.getBoard().getPits().get(PIT_0_PLAYER_ONE.getValue()-1).setValue(0);
+
+        game.setOver(true);
         Exception exception = assertThrows(ResourceException.class, () -> {
-            MoveValidationUtil.validateMove(game,
-                    playerOne,
-                    PIT_0_PLAYER_ONE.getValue());
+            MoveValidationUtil.validateMove(game, playerOne,1);
         });
-        assertEquals(PIT_IS_EMPTY.getValue(), exception.getMessage());
+        assertEquals(GAME_OVER.getValue(), exception.getMessage());
+        game.setOver(false);
+
+        game.setPlayerOne(playerOne);
+        game.setPlayerTwo(null);
+        exception = assertThrows(ResourceException.class, () -> {
+            MoveValidationUtil.validateMove(game, playerOne,1);
+        });
+        assertEquals(NEED_OPPONENT.getValue(), exception.getMessage());
+
+
+        game.setPlayerOne(playerOne);
+        game.setPlayerTwo(playerTwo);
+        exception = assertThrows(ResourceException.class, () -> {
+            MoveValidationUtil.validateMove(game, new Player(),1);
+        });
+        assertEquals(A_VIEWER.getValue(), exception.getMessage());
+
+        game.setPlayerTwo(playerTwo);
+        game.setTurnOf(playerOne);
+        exception = assertThrows(ResourceException.class, () -> {
+            MoveValidationUtil.validateMove(game, playerTwo,KALAHA_PLAYER_TWO.getValue()-1);
+        });
+        assertEquals(NOT_YOUR_TURN.getValue(), exception.getMessage());
+
 
 
         game.setTurnOf(playerTwo);
-         exception = assertThrows(ResourceException.class, () -> {
+        exception = assertThrows(ResourceException.class, () -> {
             MoveValidationUtil.validateMove(game,
                     playerTwo,
                     KALAHA_PLAYER_ONE.getValue()-1);
@@ -78,27 +98,22 @@ class MoveValidationUtilTest {
         });
         assertEquals(YOUR_PITS_TOP.getValue(), exception.getMessage());
 
+        game.getBoard().getPits().get(FIRST_PIT_POS_PLAYER_ONE.getValue()-1).setValue(0);
+        exception = assertThrows(ResourceException.class, () -> {
+            MoveValidationUtil.validateMove(game,
+                    playerOne,
+                    FIRST_PIT_POS_PLAYER_ONE.getValue());
+        });
+        assertEquals(PIT_IS_EMPTY.getValue(), exception.getMessage());
 
+
+
+    }
+
+    @Test
+    void isAViewer() {
+        game.setPlayerOne(playerOne);
         game.setPlayerTwo(playerTwo);
-        game.setTurnOf(playerTwo);
-        exception = assertThrows(ResourceException.class, () -> {
-            MoveValidationUtil.validateMove(game, playerOne,1);
-        });
-        assertEquals(NOT_YOUR_TURN.getValue(), exception.getMessage());
-
-
-        game.setPlayerTwo(null);
-        exception = assertThrows(ResourceException.class, () -> {
-            MoveValidationUtil.validateMove(game, playerOne,1);
-        });
-        assertEquals(NEED_OPPONENT.getValue(), exception.getMessage());
-
-
-        game.setOver(true);
-        exception = assertThrows(ResourceException.class, () -> {
-            MoveValidationUtil.validateMove(game, playerOne,1);
-        });
-        assertEquals(GAME_OVER.getValue(), exception.getMessage());
-
+        assertTrue(MoveValidationUtil.isAViewer(game, new Player()));
     }
 }
