@@ -1,5 +1,9 @@
 # A humble documentation on the Kahala project.
 
+# System Design Diagram
+![arch](https://user-images.githubusercontent.com/60903744/125266775-d48d2800-e30e-11eb-9bfa-2920382953ce.png)
+
+
 # Run the project using Docker:
 
 - `docker build --tag=kalaha:latest .`
