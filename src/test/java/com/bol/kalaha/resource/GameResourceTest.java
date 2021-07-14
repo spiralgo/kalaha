@@ -22,7 +22,6 @@ import java.util.List;
 
 import static com.bol.kalaha.util.JsonUtil.asJsonString;
 import static com.bol.kalaha.util.MessagesEnum.SHOULD_CREATE_PLAYER;
-import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
