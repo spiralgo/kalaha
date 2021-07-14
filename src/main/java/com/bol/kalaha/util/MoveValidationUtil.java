@@ -1,6 +1,6 @@
 package com.bol.kalaha.util;
 
-import com.bol.kalaha.exception.ResourceException;
+import com.bol.kalaha.exception.KalahaException;
 import com.bol.kalaha.model.Game;
 import com.bol.kalaha.model.Player;
 import org.springframework.http.HttpStatus;
@@ -34,7 +34,7 @@ public class MoveValidationUtil {
 
         return result;
     }
-    public static boolean validateMove(Game game, Player player, Integer position) {
+    public static boolean validateMove(Game game, Player player, Integer position) throws KalahaException {
         String message = "";
 
         if (game.isOver()) {
@@ -56,7 +56,7 @@ public class MoveValidationUtil {
         }
 
         if (message.length() > 0)
-            throw new ResourceException(HttpStatus.BAD_REQUEST, message);
+            throw new KalahaException(HttpStatus.BAD_REQUEST, message);
 
 
         return true;

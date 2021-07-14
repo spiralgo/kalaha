@@ -1,6 +1,6 @@
 package com.bol.kalaha.util;
 
-import com.bol.kalaha.exception.ResourceException;
+import com.bol.kalaha.exception.KalahaException;
 import com.bol.kalaha.model.Board;
 import com.bol.kalaha.model.Game;
 import com.bol.kalaha.model.Pit;
@@ -51,7 +51,7 @@ class MoveValidationUtilTest {
         game.getBoard().getPits().add(new Pit());
 
         game.setOver(true);
-        Exception exception = assertThrows(ResourceException.class, () -> {
+        Exception exception = assertThrows(KalahaException.class, () -> {
             MoveValidationUtil.validateMove(game, playerOne,1);
         });
         assertEquals(GAME_OVER.getValue(), exception.getMessage());
@@ -59,7 +59,7 @@ class MoveValidationUtilTest {
 
         game.setPlayerOne(playerOne);
         game.setPlayerTwo(null);
-        exception = assertThrows(ResourceException.class, () -> {
+        exception = assertThrows(KalahaException.class, () -> {
             MoveValidationUtil.validateMove(game, playerOne,1);
         });
         assertEquals(NEED_OPPONENT.getValue(), exception.getMessage());
@@ -67,14 +67,14 @@ class MoveValidationUtilTest {
 
         game.setPlayerOne(playerOne);
         game.setPlayerTwo(playerTwo);
-        exception = assertThrows(ResourceException.class, () -> {
+        exception = assertThrows(KalahaException.class, () -> {
             MoveValidationUtil.validateMove(game, new Player(),1);
         });
         assertEquals(A_VIEWER.getValue(), exception.getMessage());
 
         game.setPlayerTwo(playerTwo);
         game.setTurnOf(playerOne);
-        exception = assertThrows(ResourceException.class, () -> {
+        exception = assertThrows(KalahaException.class, () -> {
             MoveValidationUtil.validateMove(game, playerTwo,KALAHA_PLAYER_TWO.getValue()-1);
         });
         assertEquals(NOT_YOUR_TURN.getValue(), exception.getMessage());
@@ -82,7 +82,7 @@ class MoveValidationUtilTest {
 
 
         game.setTurnOf(playerTwo);
-        exception = assertThrows(ResourceException.class, () -> {
+        exception = assertThrows(KalahaException.class, () -> {
             MoveValidationUtil.validateMove(game,
                     playerTwo,
                     KALAHA_PLAYER_ONE.getValue()-1);
@@ -91,7 +91,7 @@ class MoveValidationUtilTest {
 
 
         game.setTurnOf(playerOne);
-        exception = assertThrows(ResourceException.class, () -> {
+        exception = assertThrows(KalahaException.class, () -> {
             MoveValidationUtil.validateMove(game,
                                             playerOne,
                                             KALAHA_PLAYER_TWO.getValue()-1);
@@ -99,7 +99,7 @@ class MoveValidationUtilTest {
         assertEquals(YOUR_PITS_TOP.getValue(), exception.getMessage());
 
         game.getBoard().getPits().get(FIRST_PIT_POS_PLAYER_ONE.getValue()-1).setValue(0);
-        exception = assertThrows(ResourceException.class, () -> {
+        exception = assertThrows(KalahaException.class, () -> {
             MoveValidationUtil.validateMove(game,
                     playerOne,
                     FIRST_PIT_POS_PLAYER_ONE.getValue());

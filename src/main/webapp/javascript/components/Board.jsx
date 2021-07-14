@@ -16,15 +16,16 @@ function Board(props) {
     }
     let description;
     let board;
+    let status;
     if (props.gameToJoin == null) {
         return <div></div>;
     } else {
         board = props.gameToJoin.board;
-        description = "Game #"+props.gameToJoin.id + " by " + props.gameToJoin.playerOne.name+ " ";
+        description = <strong> Game #{props.gameToJoin.id} by {props.gameToJoin.playerOne.name} </strong>;
         if(props.gameToJoin.isOver){
-            description += "is already over.";
+            status = " is already over.";
         }else{
-            description += "continues.";
+            status = " continues.";
 
         }
     }
@@ -32,7 +33,7 @@ function Board(props) {
     return (
         <div>
             <Alert variant="dark">
-                {description}
+                {description} {status}
             </Alert>
 
              <Table striped bordered hover variant="dark" responsive="sm">

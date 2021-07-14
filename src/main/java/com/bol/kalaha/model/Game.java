@@ -1,5 +1,6 @@
 package com.bol.kalaha.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -33,6 +34,7 @@ public class Game extends BasicModel {
 
     @Getter
     @Setter
+    @JsonProperty(value="isOver")
     private boolean isOver;
 
     @OneToOne(cascade = CascadeType.ALL)

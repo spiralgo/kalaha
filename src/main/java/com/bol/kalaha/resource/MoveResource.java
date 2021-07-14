@@ -1,6 +1,7 @@
 package com.bol.kalaha.resource;
 
 import com.bol.kalaha.config.WebSocketResource;
+import com.bol.kalaha.exception.KalahaException;
 import com.bol.kalaha.model.Board;
 import com.bol.kalaha.model.Game;
 import com.bol.kalaha.model.Player;
@@ -43,7 +44,7 @@ public class MoveResource {
     }
 
     @RequestMapping(value = "/{gameId}/{playerId}/{position}", method = RequestMethod.POST)
-    public ResponseEntity<Board> movePlay(@PathVariable Long gameId, @PathVariable Long playerId, @PathVariable Integer position) {
+    public ResponseEntity<Board> movePlay(@PathVariable Long gameId, @PathVariable Long playerId, @PathVariable Integer position) throws KalahaException {
         Optional<Game> game = gameService.findById(gameId);
         Optional<Player> player = playerService.findById(playerId);
 

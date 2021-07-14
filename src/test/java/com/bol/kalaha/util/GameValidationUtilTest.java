@@ -1,5 +1,6 @@
 package com.bol.kalaha.util;
 
+import com.bol.kalaha.exception.KalahaException;
 import com.bol.kalaha.model.Game;
 import com.bol.kalaha.model.Player;
 import org.junit.jupiter.api.DisplayName;
@@ -10,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class GameValidationUtilTest {
     @Test
     @DisplayName("Validate joining a game room.")
-    void validateJoin(){
+    void validateJoin() throws KalahaException {
         Game game = new Game();
         Player player1 = new Player();
         Player player2 = new Player();

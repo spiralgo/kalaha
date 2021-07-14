@@ -1,13 +1,13 @@
 package com.bol.kalaha.util;
 
-import com.bol.kalaha.exception.ResourceException;
+import com.bol.kalaha.exception.KalahaException;
 import com.bol.kalaha.model.Game;
 import com.bol.kalaha.model.Player;
 
 import static com.bol.kalaha.util.JoinAGameValidationEnum.*;
 
 public class GameValidationUtil {
-    public static JoinAGameValidationEnum validateJoin(Game game, Player player) throws ResourceException {
+    public static JoinAGameValidationEnum validateJoin(Game game, Player player) throws KalahaException {
 
         if (player.getId() == null){
             return NEED_TO_CREATE_A_PLAYER;
