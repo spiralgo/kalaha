@@ -11,8 +11,8 @@ import com.bol.kalaha.util.WebSocketUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
@@ -25,57 +25,37 @@ import static com.bol.kalaha.config.WebSocketActionEnum.REFRESH_GAME;
 public class MoveResource {
     private final GameService gameService;
     private final PlayerService playerService;
-    private final BoardService boardService;
     private final MoveService moveService;
     private final WebSocketResource webSocketResource;
-    private final GameRulesService gameRulesService;
 
     @Autowired
-    public MoveResource(GameService gameService, PlayerService playerService,
-                        BoardService boardService, MoveService moveService,
-                        WebSocketResource webSocketResource,
-                        GameRulesService gameRulesService) {
+    public MoveResource(GameService gameService,
+                        PlayerService playerService,
+                        MoveService moveService,
+                        WebSocketResource webSocketResource) {
         this.gameService = gameService;
         this.playerService = playerService;
-        this.boardService = boardService;
         this.moveService = moveService;
         this.webSocketResource = webSocketResource;
-        this.gameRulesService = gameRulesService;
-    }
+     }
 
-    @RequestMapping(value = "/{gameId}/{playerId}/{position}", method = RequestMethod.POST)
+    @PostMapping(value = "/{gameId}/{playerId}/{position}")
     public ResponseEntity<Board> movePlay(@PathVariable Long gameId, @PathVariable Long playerId, @PathVariable Integer position) throws KalahaException {
         Optional<Game> game = gameService.findById(gameId);
         Optional<Player> player = playerService.findById(playerId);
 
         if (player.isPresent() && game.isPresent()) {
 
-               boolean isValidMove = MoveValidationUtil.validateMove(game.get(), player.get(), position);
-                if (isValidMove) {
-                    boolean isPlayerOne = (player.get().equals(game.get().getPlayerOne()));
-                    Board resultBoard = game.get().getBoard();
-                    int theLastPosition = moveService.movePlay(resultBoard, isPlayerOne, position);
-
-                    if (resultBoard == null) return ResponseEntity.badRequest().build();
-
-                    if (gameRulesService.checkGameOver(resultBoard)) {
-                        gameService.finishGame(game.get());
-                        webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(END,
-                                "The game ends.", game.get()), game.get().getId());
-                    } else {
-
-                        if (!gameRulesService.checkExtraMove(isPlayerOne, theLastPosition)) {
-                            gameRulesService.changeTurn(game.get());
-                        }
-                        webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(REFRESH_GAME,
-                                "It is the turn of " + game.get().getTurnOf().getName(), game.get()), game.get().getId());
-
-                    }
-                    boardService.updateBoard(resultBoard);
-
-                    return ResponseEntity.ok(resultBoard);
-                }
+            boolean isValidMove = MoveValidationUtil.validateMove(game.get(), player.get(), position);
+            if (isValidMove) {
+                boolean isPlayerOne = (player.get().equals(game.get().getPlayerOne()));
+                Board resultBoard = game.get().getBoard();
+                int theLastPosition = moveService.movePlay(resultBoard, isPlayerOne, position);
+                String message = gameService.updateGameState(resultBoard, isPlayerOne, theLastPosition);
+                webSocketResource.publishWebSocket(message, game.get().getId());
+                return ResponseEntity.ok(resultBoard);
             }
+        }
 
         return ResponseEntity.badRequest().build();
     }

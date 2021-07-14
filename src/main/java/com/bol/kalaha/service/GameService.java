@@ -2,10 +2,12 @@ package com.bol.kalaha.service;
 
 import com.bol.kalaha.exception.KalahaException;
 import com.bol.kalaha.exception.ResponseData;
+import com.bol.kalaha.model.Board;
 import com.bol.kalaha.model.Game;
 import com.bol.kalaha.model.Player;
 import com.bol.kalaha.repository.GameRepository;
 import com.bol.kalaha.util.JoinAGameValidationEnum;
+import com.bol.kalaha.util.WebSocketUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -13,19 +15,25 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+import static com.bol.kalaha.config.WebSocketActionEnum.END;
+import static com.bol.kalaha.config.WebSocketActionEnum.REFRESH_GAME;
 import static com.bol.kalaha.util.GameValidationUtil.validateJoin;
-import static com.bol.kalaha.util.JoinAGameValidationEnum.*;
-import static com.bol.kalaha.util.JoinAGameValidationEnum.JOIN_AS_A_WIEVER;
 import static com.bol.kalaha.util.MessagesEnum.*;
 import static com.bol.kalaha.util.MessagesEnum.JOINS_VIEWER;
 
 @Service
 public class GameService {
     private GameRepository gameRepository;
+    private GameRulesService gameRulesService;
+    private BoardService boardService;
 
     @Autowired
-    public GameService(GameRepository gameRepository) {
+    public GameService(GameRepository gameRepository,
+                       GameRulesService gameRulesService,
+                       BoardService boardService) {
         this.gameRepository = gameRepository;
+        this.gameRulesService = gameRulesService;
+        this.boardService = boardService;
     }
 
     public Game createNewGame(Game game) {
@@ -92,5 +100,30 @@ public class GameService {
             message.append(player.getName()).append(JOINS_VIEWER.getValue());
         }
         return message.toString();
+    }
+
+    public String updateGameState(Board resultBoard, boolean isPlayerOne, int theLastPosition) {
+
+            String message = "";
+            Game game = resultBoard.getGame();
+            if (gameRulesService.checkGameOver(resultBoard)) {
+                finishGame(resultBoard.getGame());
+                message = WebSocketUtil.getMessageJSON(END,
+                        "The game ends.", game);
+            } else {
+
+                if (!gameRulesService.checkExtraMove(isPlayerOne, theLastPosition)) {
+                    gameRulesService.changeTurn(game);
+                }
+                message = WebSocketUtil.getMessageJSON(REFRESH_GAME,
+                        "It is the turn of "
+                                + game.getTurnOf().getName()
+                        , game);
+
+            }
+
+            boardService.updateBoard(resultBoard);
+            return message;
+
     }
 }

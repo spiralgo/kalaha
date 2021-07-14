@@ -29,6 +29,11 @@ import static org.mockito.Mockito.doReturn;
 class GameServiceTest {
     @Mock
     private GameRepository gameRepository;
+    @Mock
+    private GameRulesService gameRulesService;
+    @Mock
+    private BoardService boardService;
+
     private GameService gameService;
     private Game game;
 
@@ -37,7 +42,9 @@ class GameServiceTest {
     {
         game = new Game();
         game.setId(1L);
-        gameService = new GameService(gameRepository);
+        gameService = new GameService(gameRepository,
+                                      gameRulesService,
+                                      boardService);
     }
 
     @Test
