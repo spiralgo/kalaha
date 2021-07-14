@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ExceptionHandlerAdvice {
 
-    @ExceptionHandler(ResourceException.class)
-    public ResponseEntity handleException(ResourceException e) {
+    @ExceptionHandler(KalahaException.class)
+    public ResponseEntity handleException(KalahaException e) {
         return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
     }
     @ExceptionHandler(MethodArgumentNotValidException.class)

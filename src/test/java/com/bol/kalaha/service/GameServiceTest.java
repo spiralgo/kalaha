@@ -1,19 +1,20 @@
 package com.bol.kalaha.service;
 
-import com.bol.kalaha.exception.ResourceException;
+import static org.junit.jupiter.api.Assertions.*;
+import com.bol.kalaha.exception.KalahaException;
+import com.bol.kalaha.exception.ResponseData;
 import com.bol.kalaha.model.Game;
 import com.bol.kalaha.model.Player;
 import com.bol.kalaha.repository.GameRepository;
 import com.bol.kalaha.util.JoinAGameValidationEnum;
-import com.bol.kalaha.util.MoveValidationUtil;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -28,7 +29,6 @@ import static org.mockito.Mockito.doReturn;
 class GameServiceTest {
     @Mock
     private GameRepository gameRepository;
-
     private GameService gameService;
     private Game game;
 
@@ -98,29 +98,67 @@ class GameServiceTest {
     }
 
     @Test
-    void startJoinProcess() {
+    void generateMessageFromAnswer() throws KalahaException {
 
-        Exception exception = assertThrows(ResourceException.class, () -> {
-            gameService.startJoinProcess(JoinAGameValidationEnum.NEED_TO_CREATE_A_PLAYER
-                    , game, null);
+        Exception exception = assertThrows(KalahaException.class, () -> {
+            gameService.generateMessageFromAnswer(JoinAGameValidationEnum.NEED_TO_CREATE_A_PLAYER
+                        , null);
 
         });
         assertEquals(SHOULD_CREATE_PLAYER.getValue(), exception.getMessage());
 
         Player test = new Player();
         test.setName("test");
-        String message = gameService.startJoinProcess(JoinAGameValidationEnum.JOIN_AS_THE_PLAYER_TWO
-                , game, test);
+        String message = gameService.generateMessageFromAnswer(JoinAGameValidationEnum.JOIN_AS_THE_PLAYER_TWO
+                    , test);
         assertEquals(message, test.getName() + JOINS_OPPONENT.getValue());
 
 
-        message = gameService.startJoinProcess(JoinAGameValidationEnum.ALREADY_A_PLAYER
-                , game, test);
+        message = gameService.generateMessageFromAnswer(JoinAGameValidationEnum.ALREADY_A_PLAYER
+                 , test);
         assertEquals(message, test.getName() + REJOINS.getValue());
 
-        message = gameService.startJoinProcess(JoinAGameValidationEnum.JOIN_AS_A_WIEVER
-                , game, test);
+        message = gameService.generateMessageFromAnswer(JoinAGameValidationEnum.JOIN_AS_A_WIEVER
+                 , test);
         assertEquals(message, test.getName() + JOINS_VIEWER.getValue());
 
     }
+
+    @Test
+    void startJoinProcess() throws KalahaException {
+
+        Exception exception = assertThrows(KalahaException.class, () -> {
+            gameService.startJoinProcess(null, null);
+
+        });
+        assertEquals(GAME_NOT_FOUND.getValue(), exception.getMessage());
+
+        doReturn(Optional.of(game))
+                .when(gameRepository)
+                .findById(ArgumentMatchers.anyLong());
+
+        Player playerOne = new Player();
+        playerOne.setId(1L);
+        game.setPlayerOne(playerOne);
+
+        doReturn(game)
+                .when(gameRepository)
+                .save(ArgumentMatchers.any(Game.class));
+
+
+        Game game = new Game();
+        Player playerTwo = new Player();
+        playerTwo.setName("test");
+        playerTwo.setId(2L);
+
+        game.setPlayerOne(playerOne);
+
+
+       Optional<ResponseData<Game>> responseDataOptional = gameService.startJoinProcess(1L, playerTwo);
+        assertEquals(playerTwo.getName() + JOINS_OPPONENT.getValue(),
+                responseDataOptional.get().getMessage());
+
+
+    }
+
 }

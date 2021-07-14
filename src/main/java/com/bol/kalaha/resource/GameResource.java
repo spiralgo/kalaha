@@ -2,34 +2,32 @@ package com.bol.kalaha.resource;
 
 import com.bol.kalaha.config.WebSocketActionEnum;
 import com.bol.kalaha.config.WebSocketResource;
-import com.bol.kalaha.exception.ResourceException;
+import com.bol.kalaha.exception.KalahaException;
+import com.bol.kalaha.exception.ResponseData;
 import com.bol.kalaha.model.Board;
 import com.bol.kalaha.model.Game;
 import com.bol.kalaha.model.Player;
 import com.bol.kalaha.service.GameService;
 import com.bol.kalaha.util.BoardUtil;
-import com.bol.kalaha.util.GameValidationUtil;
-import com.bol.kalaha.util.JoinAGameValidationEnum;
 import com.bol.kalaha.util.WebSocketUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
 
-import static com.bol.kalaha.util.MessagesEnum.*;
+import static com.bol.kalaha.util.MessagesEnum.SHOULD_CREATE_PLAYER;
 
 
 @RestController
 @RequestMapping("/game")
 public class GameResource {
 
-    private GameService gameService;
+    private final GameService gameService;
 
-    private WebSocketResource webSocketResource;
+    private final WebSocketResource webSocketResource;
 
     @Autowired
     public GameResource(GameService gameService, WebSocketResource webSocketResource) {
@@ -39,9 +37,9 @@ public class GameResource {
 
     @PostMapping(value = "/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Game> createNewGame(@RequestBody Player playerOne, HttpServletResponse response) {
+    public ResponseEntity<Game> createNewGame(@RequestBody Player playerOne) throws KalahaException {
          if (playerOne.getId() == null)
-            throw new ResourceException(HttpStatus.BAD_REQUEST, SHOULD_CREATE_PLAYER.getValue());
+            throw new KalahaException(HttpStatus.BAD_REQUEST, SHOULD_CREATE_PLAYER.getValue());
 
         Game createdGame = new Game();
         createdGame.setPlayerOne(playerOne);
@@ -53,31 +51,33 @@ public class GameResource {
         webSocketResource.publishWebSocket(WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_GAME_LIST,
                 "Game #" + createdGame.getId() + " is created by " + playerOne.getName(), null));
 
-        return ResponseEntity.ok(createdGame);
+        return ResponseEntity.status(HttpStatus.OK).body(createdGame);
     }
 
     @PatchMapping(value = "/join/{gameId}")
     @ResponseBody
-    public ResponseEntity<Game> joinGame(@PathVariable Long gameId, @RequestBody Player player) {
-        Optional<Game> gameOptional = gameService.findById(gameId);
-        Game game = gameOptional.get();
-        if(gameOptional.isPresent()) {
-            JoinAGameValidationEnum answer = GameValidationUtil.validateJoin(game, player);
-            String message = gameService.startJoinProcess(answer, game, player);
-            webSocketResource.publishWebSocket(
-                    WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_GAME, message, game), game.getId());
+    public ResponseEntity<Game> joinGame(@PathVariable Long gameId, @RequestBody Player player) throws KalahaException {
 
-        }else {
-            throw new ResourceException(HttpStatus.BAD_REQUEST, "Game not found.");
-        }
-            return ResponseEntity.ok(game);
+            Optional<ResponseData<Game>> responseDataOptional = gameService.startJoinProcess(gameId, player);
+            Game game = new Game();
+            if(responseDataOptional.isPresent()){
+
+                ResponseData<Game> responseData = responseDataOptional.get();
+                game = responseData.getBody();
+                webSocketResource.publishWebSocket(
+                        WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_GAME
+                                , responseData.getMessage(), game)
+                        , game.getId());
+
+            }
+
+        return ResponseEntity.ok(game);
+
     }
 
     @GetMapping
-    @ResponseBody
     public List<Game> getGamesToJoin() {
-        List<Game> games = gameService.getGames();
-        return games;
+        return gameService.getGames();
     }
 
 }
