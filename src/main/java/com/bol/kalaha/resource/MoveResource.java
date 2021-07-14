@@ -23,12 +23,12 @@ import static com.bol.kalaha.config.WebSocketActionEnum.REFRESH_GAME;
 @RestController
 @RequestMapping("/move")
 public class MoveResource {
-    private GameService gameService;
-    private PlayerService playerService;
-    private BoardService boardService;
-    private MoveService moveService;
-    private WebSocketResource webSocketResource;
-    private GameRulesService gameRulesService;
+    private final GameService gameService;
+    private final PlayerService playerService;
+    private final BoardService boardService;
+    private final MoveService moveService;
+    private final WebSocketResource webSocketResource;
+    private final GameRulesService gameRulesService;
 
     @Autowired
     public MoveResource(GameService gameService, PlayerService playerService,

@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PitRepository extends JpaRepository<Pit, Long> {
 
-    public Pit findByBoardAndPosition(Board board, Integer position);
+    Pit findByBoardAndPosition(Board board, Integer position);
 
 }

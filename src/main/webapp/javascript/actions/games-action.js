@@ -2,7 +2,7 @@ import axios from "axios";
 import {showNotification} from "../config/notification";
 
 const GAME_API = "/game";
-const MOVE_API = "/move";;
+const MOVE_API = "/move";
 const GAME_JOIN = GAME_API + "/join";
 
 export const fetchGames = () => {

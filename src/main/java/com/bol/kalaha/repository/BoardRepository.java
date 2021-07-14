@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
-    public Optional<Board> findByGame(Game game);
+    Optional<Board> findByGame(Game game);
 
 }

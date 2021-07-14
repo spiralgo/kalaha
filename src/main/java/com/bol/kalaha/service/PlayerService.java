@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 @Transactional
 public class PlayerService {
-    private PlayerRepository playerRepository;
+    private final PlayerRepository playerRepository;
 
     @Autowired
     public PlayerService(PlayerRepository playerRepoository) {
