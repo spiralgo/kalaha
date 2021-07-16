@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 public class ExceptionHandlerAdvice {
 
     @ExceptionHandler(KalahaException.class)
-    public ResponseEntity handleException(KalahaException e) {
+    public ResponseEntity<?> handleException(KalahaException e) {
         return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException ex) {
+    protected ResponseEntity<?> handleMethodArgumentNotValid(final MethodArgumentNotValidException ex) {
 
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()

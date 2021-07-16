@@ -62,9 +62,9 @@ public class GameService {
             throws KalahaException {
 
         Optional<Game> gameOptional = findById(gameId);
-        String message = "";
+        String message;
 
-        ResponseData<Game> responseData = null;
+        ResponseData<Game> responseData;
 
         if (gameOptional.isPresent()) {
 
@@ -104,7 +104,7 @@ public class GameService {
 
     public String updateGameState(Board resultBoard, boolean isPlayerOne, int theLastPosition) {
 
-        String message = "";
+        String message;
         Game game = resultBoard.getGame();
         if (gameRulesService.checkGameOver(resultBoard)) {
             finishGame(resultBoard.getGame());

@@ -19,7 +19,7 @@ public class GameRulesService {
         int currentNumberOfSeeds = pits.get(positionOfPitToPlay - 1).getValue();
         pits.get(positionOfPitToPlay - 1).setValue(0);
         int indexToSow = positionOfPitToPlay - 1;
-        int indexOfOpponentsKahala = -1;
+        int indexOfOpponentsKahala;
         if (isPlayerOne) {
             indexOfOpponentsKahala = KALAHA_PLAYER_TWO.getValue() - 1;
         } else {

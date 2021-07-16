@@ -1,7 +1,9 @@
 package com.bol.kalaha.service;
 
+import com.bol.kalaha.exception.KalahaException;
 import com.bol.kalaha.model.Player;
 import com.bol.kalaha.repository.PlayerRepository;
+import com.bol.kalaha.util.MoveValidationUtil;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,7 +15,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
+import static com.bol.kalaha.util.MessagesEnum.GAME_OVER;
+import static com.bol.kalaha.util.MessagesEnum.PLAYER_ALREADY_EXISTS;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
 
@@ -36,12 +42,28 @@ class PlayerServiceTest {
 
     @Test
     @DisplayName("Creating a new player.")
-    void createPlayer(){
+    void createPlayer() throws KalahaException {
+        doReturn(Optional.of(player))
+                .when(playerRepository)
+                .findByName(ArgumentMatchers.any(String.class));
+
+
         doReturn(player)
                 .when(playerRepository)
                 .save(ArgumentMatchers.any(Player.class));
 
         Player test = new Player();
+        test.setName("PlayerOneActual");
+
+        Exception exception = assertThrows(KalahaException.class, () -> {
+            playerService.createPlayer(test);
+        });
+        assertEquals(PLAYER_ALREADY_EXISTS.getValue(), exception.getMessage());
+
+        doReturn(Optional.ofNullable(null))
+                .when(playerRepository)
+                .findByName(ArgumentMatchers.any(String.class));
+
         assertThat(playerService.createPlayer(test).getName(),
                 Matchers.equalTo("PlayerOneActual"));
     }

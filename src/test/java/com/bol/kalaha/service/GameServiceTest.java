@@ -9,7 +9,6 @@ import com.bol.kalaha.repository.GameRepository;
 import com.bol.kalaha.util.JoinAGameValidationEnum;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -18,11 +17,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
 import java.util.Optional;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import static com.bol.kalaha.util.MessagesEnum.*;
-import static com.bol.kalaha.util.MessagesEnum.JOINS_VIEWER;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
 @ExtendWith(MockitoExtension.class)

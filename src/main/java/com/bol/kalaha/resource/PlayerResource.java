@@ -1,5 +1,6 @@
 package com.bol.kalaha.resource;
 
+import com.bol.kalaha.exception.KalahaException;
 import com.bol.kalaha.exception.ResponseData;
 import com.bol.kalaha.model.Player;
 import com.bol.kalaha.service.PlayerService;
@@ -25,7 +26,7 @@ public class PlayerResource {
 
     @PostMapping(value = "create")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ResponseData> createNewPlayer(@Valid @RequestBody Player player) {
+    public ResponseEntity<?> createNewPlayer(@Valid @RequestBody Player player) throws KalahaException {
         Player savedPlayer = playerService.createPlayer(player);
         ResponseData<Player> data = new ResponseData<>(PLAYER_CREATED.getValue(), savedPlayer);
         return ResponseEntity.ok(data);

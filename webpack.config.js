@@ -8,8 +8,7 @@ function path(env){
     }else{
         path+= ".production";
     }
-    console.log(path);
-    return path;
+     return path;
 }
 module.exports = (env) =>( {
     plugins: [

@@ -20,8 +20,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.Optional;
 
 import static com.bol.kalaha.util.GameConstantsEnum.FIRST_PIT_POS_PLAYER_ONE;
-import static com.bol.kalaha.util.JsonUtil.asJsonString;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

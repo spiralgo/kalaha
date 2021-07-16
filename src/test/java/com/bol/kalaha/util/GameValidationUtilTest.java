@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class GameValidationUtilTest {
     @Test
     @DisplayName("Validate joining a game room.")
-    void validateJoin() throws KalahaException {
+    void validateJoin() {
         Game game = new Game();
         Player player1 = new Player();
         Player player2 = new Player();

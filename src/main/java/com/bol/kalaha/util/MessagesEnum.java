@@ -2,6 +2,7 @@ package com.bol.kalaha.util;
 
 //TODO: In the future, these messages should be taken from an i18n properties file.
 public enum MessagesEnum {
+    PLAYER_ALREADY_EXISTS("The player already exists."),
     GAME_NOT_FOUND("Game not found."),
     REJOINS(" rejoins the game."),
     JOINS_VIEWER(" joins the game as a viewer."),

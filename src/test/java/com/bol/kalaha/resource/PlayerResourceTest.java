@@ -3,12 +3,9 @@ package com.bol.kalaha.resource;
 import com.bol.kalaha.exception.ResponseData;
 import com.bol.kalaha.model.Player;
 import com.bol.kalaha.service.PlayerService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -74,7 +71,7 @@ class PlayerResourceTest {
                             .andExpect(MockMvcResultMatchers.status().is(HttpStatus.OK.value())).andReturn();
 
         String content = result.getResponse().getContentAsString();
-        ResponseData data = (ResponseData) asObject(content, ResponseData.class);
+        ResponseData<?> data = (ResponseData<?>) asObject(content, ResponseData.class);
         assertEquals(PLAYER_CREATED.getValue(), data.getMessage());
 
     }
