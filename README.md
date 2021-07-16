@@ -1,5 +1,5 @@
 # A humble documentation on the Kahala project.
-#DEMO:
+# DEMO:
 
 The latest version of the Kalaha game project is deployed here:
 https://kalahagame.herokuapp.com/
