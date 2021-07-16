@@ -1,5 +1,6 @@
 # A humble documentation on the Kahala project.
 #DEMO:
+
 The latest version of the Kalaha game project is deployed here:
 https://kalahagame.herokuapp.com/
 - You can create a player.
