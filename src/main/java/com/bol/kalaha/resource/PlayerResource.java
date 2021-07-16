@@ -22,6 +22,7 @@ public class PlayerResource {
     public PlayerResource(PlayerService playerService) {
         this.playerService = playerService;
     }
+
     @PostMapping(value = "create")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ResponseData> createNewPlayer(@Valid @RequestBody Player player) {

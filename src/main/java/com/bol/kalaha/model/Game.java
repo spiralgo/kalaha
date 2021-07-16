@@ -34,7 +34,7 @@ public class Game extends BasicModel {
 
     @Getter
     @Setter
-    @JsonProperty(value="isOver")
+    @JsonProperty(value = "isOver")
     private boolean isOver;
 
     @OneToOne(cascade = CascadeType.ALL)

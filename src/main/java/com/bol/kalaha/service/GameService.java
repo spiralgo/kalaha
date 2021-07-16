@@ -19,13 +19,12 @@ import static com.bol.kalaha.config.WebSocketActionEnum.END;
 import static com.bol.kalaha.config.WebSocketActionEnum.REFRESH_GAME;
 import static com.bol.kalaha.util.GameValidationUtil.validateJoin;
 import static com.bol.kalaha.util.MessagesEnum.*;
-import static com.bol.kalaha.util.MessagesEnum.JOINS_VIEWER;
 
 @Service
 public class GameService {
-    private GameRepository gameRepository;
-    private GameRulesService gameRulesService;
-    private BoardService boardService;
+    private final GameRepository gameRepository;
+    private final GameRulesService gameRulesService;
+    private final BoardService boardService;
 
     @Autowired
     public GameService(GameRepository gameRepository,
@@ -42,22 +41,23 @@ public class GameService {
     }
 
     public Optional<Game> findById(Long gameId) {
-           return gameRepository.findById(gameId);
+        return gameRepository.findById(gameId);
     }
+
     public Game joinGame(Game game) {
-        Game result = gameRepository.save(game);
-        return result;
+        return gameRepository.save(game);
     }
+
     public Game finishGame(Game game) {
         game.setOver(true);
-        Game result = gameRepository.save(game);
-        return result;
+        return gameRepository.save(game);
 
     }
+
     public List<Game> getGames() {
-        List<Game> games = gameRepository.findAllByOrderByIdDesc();
-        return games;
+        return gameRepository.findAllByOrderByIdDesc();
     }
+
     public Optional<ResponseData<Game>> startJoinProcess(Long gameId, Player player)
             throws KalahaException {
 
@@ -66,21 +66,21 @@ public class GameService {
 
         ResponseData<Game> responseData = null;
 
-        if(gameOptional.isPresent()) {
+        if (gameOptional.isPresent()) {
 
-          Game game = gameOptional.get();
-          JoinAGameValidationEnum answer = validateJoin(game, player);
-          message = generateMessageFromAnswer(answer, player);
-          if (answer == JoinAGameValidationEnum.JOIN_AS_THE_PLAYER_TWO) {
+            Game game = gameOptional.get();
+            JoinAGameValidationEnum answer = validateJoin(game, player);
+            message = generateMessageFromAnswer(answer, player);
+            if (answer == JoinAGameValidationEnum.JOIN_AS_THE_PLAYER_TWO) {
                 game.setPlayerTwo(player);
                 joinGame(game);
-          }
+            }
 
             responseData = new ResponseData<>();
             responseData.setBody(game);
             responseData.setMessage(message);
 
-        }else {
+        } else {
             throw new KalahaException(HttpStatus.BAD_REQUEST, GAME_NOT_FOUND.getValue());
         }
 
@@ -104,26 +104,26 @@ public class GameService {
 
     public String updateGameState(Board resultBoard, boolean isPlayerOne, int theLastPosition) {
 
-            String message = "";
-            Game game = resultBoard.getGame();
-            if (gameRulesService.checkGameOver(resultBoard)) {
-                finishGame(resultBoard.getGame());
-                message = WebSocketUtil.getMessageJSON(END,
-                        "The game ends.", game);
-            } else {
+        String message = "";
+        Game game = resultBoard.getGame();
+        if (gameRulesService.checkGameOver(resultBoard)) {
+            finishGame(resultBoard.getGame());
+            message = WebSocketUtil.getMessageJSON(END,
+                    "The game ends.", game);
+        } else {
 
-                if (!gameRulesService.checkExtraMove(isPlayerOne, theLastPosition)) {
-                    gameRulesService.changeTurn(game);
-                }
-                message = WebSocketUtil.getMessageJSON(REFRESH_GAME,
-                        "It is the turn of "
-                                + game.getTurnOf().getName()
-                        , game);
-
+            if (!gameRulesService.checkExtraMove(isPlayerOne, theLastPosition)) {
+                gameRulesService.changeTurn(game);
             }
+            message = WebSocketUtil.getMessageJSON(REFRESH_GAME,
+                    "It is the turn of "
+                            + game.getTurnOf().getName()
+                    , game);
 
-            boardService.updateBoard(resultBoard);
-            return message;
+        }
+
+        boardService.updateBoard(resultBoard);
+        return message;
 
     }
 }

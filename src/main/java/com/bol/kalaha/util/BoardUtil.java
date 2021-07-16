@@ -16,7 +16,7 @@ public class BoardUtil {
         List<Pit> pits = new ArrayList<>();
         for (int i = 1; i <= KALAHA_PLAYER_TWO.getValue(); i++) {
             if (i == KALAHA_PLAYER_ONE.getValue()
-             || i == KALAHA_PLAYER_TWO.getValue()) {
+                    || i == KALAHA_PLAYER_TWO.getValue()) {
                 Pit kalaha = new Pit();
                 kalaha.setPosition(i);
                 kalaha.setValue(EMPTY_KALAHA.getValue());

@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameRulesServiceTest {
 
-    GameRulesService gameRulesService = new GameRulesService();
+    final GameRulesService gameRulesService = new GameRulesService();
     Board board;
 
     @Test

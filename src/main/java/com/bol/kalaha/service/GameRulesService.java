@@ -20,15 +20,15 @@ public class GameRulesService {
         pits.get(positionOfPitToPlay - 1).setValue(0);
         int indexToSow = positionOfPitToPlay - 1;
         int indexOfOpponentsKahala = -1;
-        if(isPlayerOne){
-            indexOfOpponentsKahala = KALAHA_PLAYER_TWO.getValue()-1;
-        }else{
-            indexOfOpponentsKahala = KALAHA_PLAYER_ONE.getValue()-1;
+        if (isPlayerOne) {
+            indexOfOpponentsKahala = KALAHA_PLAYER_TWO.getValue() - 1;
+        } else {
+            indexOfOpponentsKahala = KALAHA_PLAYER_ONE.getValue() - 1;
         }
         while (currentNumberOfSeeds > 0) {
             indexToSow = (++positionOfPitToPlay - 1) % KALAHA_PLAYER_TWO.getValue();
 
-            if(indexOfOpponentsKahala==indexToSow){
+            if (indexOfOpponentsKahala == indexToSow) {
                 continue;
             }
             Pit pit = pits.get(indexToSow);
@@ -75,35 +75,36 @@ public class GameRulesService {
     public int getOpponentIndex(int position) {
         return KALAHA_PLAYER_TWO.getValue() - position - 1;
     }
+
     public boolean checkGameOver(Board board) {
         int pitCountPlayer1 = 0;
         int pitCountPlayer2 = 0;
 
         List<Pit> pits = board.getPits();
-        for (int i = 0; i < KALAHA_PLAYER_ONE.getValue()-1; i++) {
-            pitCountPlayer1 +=  Optional.ofNullable(pits.get(i).getValue()).orElse(0);
+        for (int i = 0; i < KALAHA_PLAYER_ONE.getValue() - 1; i++) {
+            pitCountPlayer1 += Optional.ofNullable(pits.get(i).getValue()).orElse(0);
 
         }
-       for (int i = KALAHA_PLAYER_ONE.getValue(); i < KALAHA_PLAYER_TWO.getValue()-1; i++) {
-           pitCountPlayer2 +=  Optional.ofNullable(pits.get(i).getValue()).orElse(0);
+        for (int i = KALAHA_PLAYER_ONE.getValue(); i < KALAHA_PLAYER_TWO.getValue() - 1; i++) {
+            pitCountPlayer2 += Optional.ofNullable(pits.get(i).getValue()).orElse(0);
 
-       }
+        }
 
         boolean isGameOver = true;
-            if(pitCountPlayer2 == 0){
-                pitCountPlayer1+= pits.get(KALAHA_PLAYER_ONE.getValue()-1).getValue();
-                pits.get(KALAHA_PLAYER_ONE.getValue()-1).setValue(pitCountPlayer1);
-              }else if (pitCountPlayer1 == 0){
-                pitCountPlayer2+= pits.get(KALAHA_PLAYER_TWO.getValue()-1).getValue();
-                pits.get(KALAHA_PLAYER_TWO.getValue()-1).setValue(pitCountPlayer2);
+        if (pitCountPlayer2 == 0) {
+            pitCountPlayer1 += pits.get(KALAHA_PLAYER_ONE.getValue() - 1).getValue();
+            pits.get(KALAHA_PLAYER_ONE.getValue() - 1).setValue(pitCountPlayer1);
+        } else if (pitCountPlayer1 == 0) {
+            pitCountPlayer2 += pits.get(KALAHA_PLAYER_TWO.getValue() - 1).getValue();
+            pits.get(KALAHA_PLAYER_TWO.getValue() - 1).setValue(pitCountPlayer2);
 
-            }else{
-                isGameOver = false;
-            }
-        if(isGameOver) {
+        } else {
+            isGameOver = false;
+        }
+        if (isGameOver) {
 
             for (int i = 0; i < KALAHA_PLAYER_TWO.getValue(); i++) {
-                    if(i !=KALAHA_PLAYER_ONE.getValue()-1 && i!=KALAHA_PLAYER_TWO.getValue()-1)
+                if (i != KALAHA_PLAYER_ONE.getValue() - 1 && i != KALAHA_PLAYER_TWO.getValue() - 1)
                     pits.get(i).setValue(0);
             }
             board.setPits(pits);
@@ -112,11 +113,10 @@ public class GameRulesService {
 
     }
 
-    public Game changeTurn(Game game) {
+    public void changeTurn(Game game) {
         if (game.getTurnOf().equals(game.getPlayerOne()))
             game.setTurnOf(game.getPlayerTwo());
         else
             game.setTurnOf(game.getPlayerOne());
-        return game;
     }
 }

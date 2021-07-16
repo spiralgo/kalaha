@@ -19,8 +19,9 @@ public class WebSocketResource {
     public void publishWebSocket(String data) {
         template.convertAndSend("/update", data);
     }
+
     public void publishWebSocket(String data, Long gameId) {
-        template.convertAndSend("/update/"+gameId, data);
+        template.convertAndSend("/update/" + gameId, data);
     }
 
 

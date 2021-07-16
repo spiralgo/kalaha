@@ -15,12 +15,12 @@ public class WebSocketUtil {
         rootNode.put("action", action.getValue());
         rootNode.put("message", message);
 
-        if(game!=null){
+        if (game != null) {
 
             JsonNode gameNode = mapper.convertValue(game, JsonNode.class);
             rootNode.set("game", gameNode);
-        }else{
-            rootNode.put("game","");
+        } else {
+            rootNode.put("game", "");
         }
 
         String result = "";

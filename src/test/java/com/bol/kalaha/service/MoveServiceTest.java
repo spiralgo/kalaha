@@ -14,8 +14,8 @@ import static com.bol.kalaha.util.GameConstantsEnum.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MoveServiceTest {
-    GameRulesService gameRulesService = new GameRulesService();
-    MoveService moveService = new MoveService(gameRulesService);
+    final GameRulesService gameRulesService = new GameRulesService();
+    final MoveService moveService = new MoveService(gameRulesService);
     Game game;
     Player playerOne;
     Player playerTwo;

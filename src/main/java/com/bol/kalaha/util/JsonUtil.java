@@ -12,7 +12,8 @@ public class JsonUtil {
             throw new RuntimeException(e);
         }
     }
-    public static Object asObject(final String content, Class type) {
+
+    public static Object asObject(final String content, Class<Object> type) {
         try {
             return new ObjectMapper().readValue(content, type);
         } catch (JsonProcessingException e) {

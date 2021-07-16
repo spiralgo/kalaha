@@ -38,7 +38,7 @@ public class GameResource {
     @PostMapping(value = "/create")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Game> createNewGame(@RequestBody Player playerOne) throws KalahaException {
-         if (playerOne.getId() == null)
+        if (playerOne.getId() == null)
             throw new KalahaException(HttpStatus.BAD_REQUEST, SHOULD_CREATE_PLAYER.getValue());
 
         Game createdGame = new Game();
@@ -58,18 +58,18 @@ public class GameResource {
     @ResponseBody
     public ResponseEntity<Game> joinGame(@PathVariable Long gameId, @RequestBody Player player) throws KalahaException {
 
-            Optional<ResponseData<Game>> responseDataOptional = gameService.startJoinProcess(gameId, player);
-            Game game = new Game();
-            if(responseDataOptional.isPresent()){
+        Optional<ResponseData<Game>> responseDataOptional = gameService.startJoinProcess(gameId, player);
+        Game game = new Game();
+        if (responseDataOptional.isPresent()) {
 
-                ResponseData<Game> responseData = responseDataOptional.get();
-                game = responseData.getBody();
-                webSocketResource.publishWebSocket(
-                        WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_GAME
-                                , responseData.getMessage(), game)
-                        , game.getId());
+            ResponseData<Game> responseData = responseDataOptional.get();
+            game = responseData.getBody();
+            webSocketResource.publishWebSocket(
+                    WebSocketUtil.getMessageJSON(WebSocketActionEnum.REFRESH_GAME
+                            , responseData.getMessage(), game)
+                    , game.getId());
 
-            }
+        }
 
         return ResponseEntity.ok(game);
 

@@ -11,30 +11,32 @@ import static com.bol.kalaha.util.MessagesEnum.*;
 public class MoveValidationUtil {
 
     public static boolean isPlayersTurn(Game game, Player player) {
-        boolean result = game.getTurnOf().equals(player);
-        return result;
+        return game.getTurnOf().equals(player);
     }
+
     public static boolean isAViewer(Game game, Player player) {
-      return (!game.getPlayerOne().equals(player)
-              && game.getPlayerTwo()!=null
-              && !game.getPlayerTwo().equals(player));
+        return (!game.getPlayerOne().equals(player)
+                && game.getPlayerTwo() != null
+                && !game.getPlayerTwo().equals(player));
     }
+
     public static boolean isWrongPit(Game game, Player player, int position) {
         boolean result = false;
         boolean isPlayerOne = player.equals(game.getPlayerOne());
         if (isPlayerOne && isPlayersTurn(game, player)
                 && (position < FIRST_PIT_POS_PLAYER_ONE.getValue()
-                || position >= KALAHA_PLAYER_ONE.getValue())){
+                || position >= KALAHA_PLAYER_ONE.getValue())) {
             result = true;
-        }else if (!isPlayerOne && isPlayersTurn(game, player)
+        } else if (!isPlayerOne && isPlayersTurn(game, player)
                 && (position < FIRST_PIT_POS_PLAYER_TWO.getValue()
-                || position >= KALAHA_PLAYER_TWO.getValue())){
+                || position >= KALAHA_PLAYER_TWO.getValue())) {
             result = true;
         }
 
         return result;
     }
-    public static boolean validateMove(Game game, Player player, Integer position) throws KalahaException {
+
+    public static void validateMove(Game game, Player player, Integer position) throws KalahaException {
         String message = "";
 
         if (game.isOver()) {
@@ -58,8 +60,6 @@ public class MoveValidationUtil {
         if (message.length() > 0)
             throw new KalahaException(HttpStatus.BAD_REQUEST, message);
 
-
-        return true;
     }
 
 }

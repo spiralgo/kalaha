@@ -16,6 +16,7 @@ public class ExceptionHandlerAdvice {
     public ResponseEntity handleException(KalahaException e) {
         return ResponseEntity.status(e.getHttpStatus()).body(e.getMessage());
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException ex) {
 
@@ -27,5 +28,5 @@ public class ExceptionHandlerAdvice {
 
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors.get(0));
-   }
+    }
 } 

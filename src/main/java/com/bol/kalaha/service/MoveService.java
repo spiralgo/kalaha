@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MoveService {
-    GameRulesService gameRulesService;
+    final GameRulesService gameRulesService;
 
     @Autowired
     MoveService(GameRulesService gameRulesService) {
