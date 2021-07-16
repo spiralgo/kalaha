@@ -1,4 +1,11 @@
 # A humble documentation on the Kahala project.
+#DEMO:
+The latest version of the Kalaha game project is deployed here:
+https://kalahagame.herokuapp.com/
+- You can create a player.
+- You can join an already existing game as a player or a viewer. 
+- You can start a new game.
+- As you need an opponent, you can invite a friend or create a player (from another browser) for yourself.
 
 # System Design Diagram
 ![arch](https://user-images.githubusercontent.com/60903744/125266775-d48d2800-e30e-11eb-9bfa-2920382953ce.png)
