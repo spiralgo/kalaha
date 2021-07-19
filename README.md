@@ -21,6 +21,20 @@ In order to stop the project:
 
 - `docker-compose down`
 
+> Note: For Docker configuration, you should set the application mode as "development" in build.gradle:
+```javascript
+task buildReactApp(type: NodeTask, dependsOn: 'npmInstall') {
+    script = project.file('node_modules/webpack/bin/webpack.js')
+    args = [
+            '--env', 'development',
+            '--mode', 'development',
+            '--entry', './src/main/webapp/javascript/index.jsx',
+            '-o', './src/main/resources/static/dist'
+    ]
+}
+```
+
+
 # Database configuration:
 
 The reviewer can find the basic database configuration in `application.properties` file.
