@@ -1,4 +1,4 @@
-# A humble documentation on the Kahala project.
+# A humble documentation on the Kalaha project.
 # DEMO:
 
 The latest version of the Kalaha game project is deployed here:
