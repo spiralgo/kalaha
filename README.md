@@ -3,6 +3,8 @@
 
 The latest version of the Kalaha game project is deployed here:
 https://kalahagame.herokuapp.com/
+
+(Note: You can find the rules of the game here: http://www.myld.se/kalahagame/kalaharules.html)
 - You can create a player.
 - You can join an already existing game as a player or a viewer. 
 - You can start a new game.
