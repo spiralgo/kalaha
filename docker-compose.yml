@@ -6,9 +6,9 @@ services:
     image: mysql:latest
     environment:
       - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=converterdb
+      - MYSQL_DATABASE=gameStateDB
     ports:
-      - 3306:3306
+      - 3307:3306
 
   myapp-main:
     image: kalaha:latest
