@@ -2,7 +2,7 @@
 # DEMO:
 
 The latest version of the Kalaha game project is deployed here:
-https://kalahagame.herokuapp.com/
+(Deployment link will be updated soon.)
 
 (Note: You can find the rules of the game here: http://www.myld.se/kalahagame/kalaharules.html)
 - You can create a player.
